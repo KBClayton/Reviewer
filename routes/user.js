@@ -1,7 +1,9 @@
-const User = require("./models/User");
+//const User = require("./models/User");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-
-
+module.exports = function(app) {
 app.post("/api/user/new", (req, res) => {
     console.log(req.body);
     var user = new User({
@@ -40,3 +42,4 @@ app.post("/api/user/new", (req, res) => {
       }
     });
   })
+}

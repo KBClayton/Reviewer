@@ -11,9 +11,17 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
+    "cookie-encrypter": "^1.0.1",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "helmet": "^3.13.0",
     "mongoose": "^5.2.9",
-    "nodemon": "^1.18.3"
+    "mongoose-type-email": "^1.0.9",
+    "nodemon": "^1.18.3",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
   }
 }

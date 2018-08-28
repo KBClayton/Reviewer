@@ -7,21 +7,25 @@ dotenv.config();
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+
 //db stuff
 const mongoose = require("mongoose");
-const Review = require("./models/Review");
-const Product = require("./models/Product");
-const User = require("./models/User");
+//const User = require("./models/User");
+//const Product = require("./models/Product");
+//const Review = require("./models/Review");
+//const Reply = require("./models/Reply");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/testdb");
+
 
 //Security stuff
 const cookieParser = require('cookie-parser');
-const cookieEncrypter = require('./cook');
+const cookieEncrypter = require('cookie-encrypter');
 const helmet = require('helmet')
 const secretKey = process.env.secretKey || 'this should not be live';
 const passport = require("passport");
 const { Strategy:JwtStrategy, ExtractJwt } = require("passport-jwt");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const passportOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -59,7 +63,8 @@ app.use((req, res) => {
 //api routes
 require("./routes/user")(app);
 require("./routes/product")(app);
-require("./routes/review")(app);
+//require("./routes/review")(app);
+//require("./routes/reply")(app);
 //require("./routes/admin")(app);
 
 //html routes

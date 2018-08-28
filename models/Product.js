@@ -7,7 +7,7 @@ const productSchema = new Schema({
   picture:{type:String, default:"https://via.placeholder.com/300x300"},
   link:{ type: String, default: "https://via.placeholder.com" },
   address: {type: String, default: "301 W 2nd St, Austin, TX 78701"},
-  gpsdata:{type: Array, default:[lat:30.2672, long:97.7431]},
+  gpsdata:{type: Object, default:{lat:30.2672, long:97.7431}},
 });
 
 const Product = mongoose.model("Product", productSchema);
