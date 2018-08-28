@@ -7,7 +7,3 @@ import registerServiceWorker from './registerServiceWorker';
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
 
-
-showmodal = ()=> {
-  document.getElementById('modal-rating').show();
-}

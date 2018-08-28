@@ -2,13 +2,28 @@ import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
+import CreateUserForm from '../components/CreateUserForm/createuserform';
 
-class AboutPage extends Component {
+
+class CreateUserPage extends Component {
 
   // State
   state = {
     title: 'Review Site',
     subpage: 'AboutPage'
+   }
+
+   handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target)
+    console.log(data)
+    debugger;
+
+    fetch('/api/user/new', {
+      method: "POST",
+      body: data
+    });
+    // console.log(data);
    }
 
   // Render to Screen
@@ -19,6 +34,10 @@ class AboutPage extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
+
+        <CreateUserForm 
+          handleSubmit={this.handleSubmit}
+        />
         <Footer
         />
       </div>
@@ -27,4 +46,4 @@ class AboutPage extends Component {
   }
 }
  
-export default AboutPage;
+export default CreateUserPage;
