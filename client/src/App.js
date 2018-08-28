@@ -1,37 +1,18 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import AlbumNew from "./components/Album"
-import Axios from "axios"
+import { BrowserRouter, Route, Link } from 'react-router-dom'
+import './Main.css'
+import Homepage from './pages/Homepage'
+import AboutPage from './pages/About-Page';
 
-class App extends Component {
-  state={
-    title:"",
-    artist:"",
-    date:'',
-    albums:[],
-  }
-  componentDidMount= ()=>{
-    this.loadAlbums();
-  }
-  handleChange= event=>{
-    event.target.name
-
-  }
-  submitForm= event=>{
-    event.preventdefault();
-  }
-
-  loadAlbums= ()=>{
-    Axios.request("")
-  }
-  render() {
-    let thing=<AlbumNew/>;
-    return( <div>
-      <AlbumNew  released={"date"} title={"title1"} artist= {"artists"} submitForm={this.submitForm} handleChange={this.handleChange}/>
-      <DisplayAlbum/>
-    </div>);
-  }
-}
-
+const App = () => (
+  <BrowserRouter>
+    <div>
+      <Route path='/' component = {Homepage} exact/>
+      <Route path ='/About' component = {AboutPage} exact/>
+      {/* <Route path="/login" component = {LoginPage} exact/>
+      <Route path="/articles/:_id" component = {OneArticle} exact/> */}
+    </div>
+  </BrowserRouter>
+)
 export default App;
+
