@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+// import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 class AboutPage extends Component {
 
@@ -27,4 +27,4 @@ class AboutPage extends Component {
   }
 }
  
-export default AboutPage;
+export default LoginPage;

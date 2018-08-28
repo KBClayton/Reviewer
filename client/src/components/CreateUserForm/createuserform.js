@@ -2,17 +2,6 @@ import React from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 import {Checkbox, Radio, FormGroup, ControlLabel, FormControl, Button, HelpBlock } from 'react-bootstrap'
 
-function FieldGroup({id, label, help, ...props}){
-  return (
-    <FormGroup controlId={id}>
-    <ControlLabel>{label}</ControlLabel>
-    <FormControl {...props} />
-    {help && <HelpBlock>{help}</HelpBlock>}
-    </FormGroup>
-  );
-}
-
-
 const CreateUserForm = props => (
   
   <form>
@@ -23,7 +12,7 @@ const CreateUserForm = props => (
   <input id="email" name="email" type="email" />
 
   <label htmlFor="birthdate">Enter your birth date</label>
-  <input id="birthdate" name="birthdate" type="text" />
+  <input id="birthdate" name="birthdate" type="password" />
 
   <button onClick = {props.handleSubmit}>Send data!</button>
 </form>
