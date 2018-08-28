@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema({
   text: { type: String, required: true},
-  parent: {type:Schema.Types.ObjectId, required:true}
+  parentProduct: {type:Schema.Types.ObjectId, ref:'Product'},
 });
 
 const Review = mongoose.model("Review", reviewSchema);

@@ -1,4 +1,6 @@
 module.exports={
-    Song:require('./songs'),
-    Album:require('./Album')
+    User:require('./User'),
+    Product:require('./Product'),
+    Review:require('./Review'),
+    Reply:require('./Reply'),
 }
