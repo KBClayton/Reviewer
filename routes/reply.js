@@ -1,13 +1,15 @@
-const Product = require("../models/Product");
+const Reply= require("../models/Reply");
 const mongoose = require("mongoose");
 module.exports = function(app) {
 
-app.get("/api/product", function(req, res){
-  console.log(req.body);
+app.get("/api/reply/id", function(req, res){
+    console.log(req.body);
+
     Product.find({}).then(dbModel => res.json(dbModel));
   });
-app.post("/api/product",  function(req, res){
+app.post("/api/reply",  function(req, res){
     console.log(req.body);
+
     Product.create(req.body).then(dbModel => res.json(dbModel));
   });
 }
