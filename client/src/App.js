@@ -4,6 +4,7 @@ import './Main.css'
 import Homepage from './pages/Homepage'
 import AboutPage from './pages/About-Page';
 import CreateUserPage from './pages/CreateUserPage';
+import LoginPage from './pages/LoginPage'
 
 const App = () => (
   <BrowserRouter>
@@ -11,8 +12,7 @@ const App = () => (
       <Route path='/' component = {Homepage} exact/>
       <Route path ='/About' component = {AboutPage} exact/>
       <Route path='/createUser' component = {CreateUserPage}/>
-      {/* <Route path="/login" component = {LoginPage} exact/>
-      <Route path="/articles/:_id" component = {OneArticle} exact/> */}
+      <Route path="/login" component = {LoginPage} exact/>
     </div>
   </BrowserRouter>
 )
