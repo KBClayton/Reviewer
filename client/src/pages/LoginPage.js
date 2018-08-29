@@ -12,33 +12,33 @@ class LoginPage extends Component {
     username: '',
     password: '',
     errorMsg: ''
-   }
+  }
 
   handleSubmit = (event) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  // Check Passwords are the same
-  // if (this.state.password === this.state.password_v){
-  //   return true;
-  // }
-  // else{
-  //   console.log(this.state.password);
-  //   console.log(this.state.password_v);
-  //   return false;
-  // }
-  let data = {
-    username: this.state.username,
-    password: this.state.password
-  }
-  console.log(data)
+    // Check Passwords are the same
+    // if (this.state.password === this.state.password_v){
+    //   return true;
+    // }
+    // else{
+    //   console.log(this.state.password);
+    //   console.log(this.state.password_v);
+    //   return false;
+    // }
+    let data = {
+      username: this.state.username,
+      password: this.state.password
+    }
+    console.log(data)
   
-  axios.post('http://localhost:3001/api/user/new', data)
-    .then(function(response){
+    axios.post('http://localhost:3001/api/user/new', data)
+      .then(function(response){
       console.log(response)
-    })
-    .catch(function(error){
+      })
+      .catch(function(error){
       console.log(error);
-    })
+      })
   }
 
   // Render to Screen

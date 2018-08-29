@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
@@ -16,35 +16,59 @@ class CreateUserPage extends Component {
     email: '',
     password: '',
     password_v: '',
-    errorMsg:''
+    errorMsg: {
+      emailError: '',
+      usernameError: '',
+      passwordTooShortError: '',
+      passwordDoesntMatchError: ''
+    }
    }
 
+  // Handle Form Submit
   handleSubmit = (event) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  // Check Passwords are the same
-  // if (this.state.password === this.state.password_v){
-  //   return true;
-  // }
-  // else{
-  //   console.log(this.state.password);
-  //   console.log(this.state.password_v);
-  //   return false;
-  // }
-  let data = {
-    username: this.state.name,
-    email: this.state.email,
-    password: this.state.password
-  }
-  console.log(data)
-  
-  axios.post('http://localhost:3001/api/user/new', data)
-    .then(function(response){
-      console.log(response)
-    })
-    .catch(function(error){
-      console.log(error);
-    })
+    // UserName length validation
+    if (this.state.name.trim().length < 5){
+      this.setState({errorMsg: {usernameError: 'Username must be 5 or more characters'}})
+      return false;
+    }
+
+    //Email Regex Validation
+    const regexEmail = /^([A-Za-z0-9_\-\.+])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,})$/;
+    if (!regexEmail.test(this.state.email)){
+      this.setState({errorMsg: {emailError: 'Email is not valid'}})
+      return false;
+    }
+
+    // Password Complexity Verification
+    var regexPassword = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/
+    if (!regexPassword.test(this.state.password.trim())){
+    	this.setState({errorMsg: {passwordTooShortError: 'Password needs to contain: 8+ characters, 1+ uppercase letter, 1+ numbers and at least one symbol'}})
+    	return false;
+    }
+
+    //Password Matches Verification
+    if (this.state.password !== this.state.password_v){
+      this.setState({errorMsg: {passwordDoesntMatchError: 'Passwords Do Not Match'}})
+      return false;
+    }
+
+    // Create newUser Post
+    const newUser = {
+      username: this.state.name.trim(),
+      email: this.state.email.trim(),
+      password: this.state.password.trim()
+    }
+    console.log(newUser)
+    
+    axios.post('http://localhost:3001/api/user/new', newUser)
+      .then(function(response){
+        console.log(response)
+      })
+      .catch(function(error){
+        console.log(error);
+      })
   }
 
   // Render to Screen
@@ -57,15 +81,17 @@ class CreateUserPage extends Component {
         />
 
         <form className='container'>
-          <p className='m-0 p-0 text-danger'>{this.state.errorMsg}</p>
+
+          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.usernameError}</p>
           <input 
-            className='m-2'
+            className='m-2 animated bounce'
             name='fullname'
             placeholder='Full Name'
             type='text' 
             value={this.state.name}
             onChange={e => this.setState({ name: e.target.value})}
           />
+          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.emailError}</p>
           <input
             className='m-2'
             name='email'
@@ -74,6 +100,7 @@ class CreateUserPage extends Component {
             value={this.state.email}
             onChange={e => this.setState({ email: e.target.value})}
           />
+          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordTooShortError}</p>
           <input
             className='m-2'
             name='password'
@@ -82,6 +109,7 @@ class CreateUserPage extends Component {
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value})}
           />
+          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordDoesntMatchError}</p>
           <input
             className='m-2'
             name='password_v'
