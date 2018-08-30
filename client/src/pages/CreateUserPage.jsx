@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+
+import { Redirect, withRouter } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
@@ -21,7 +23,8 @@ class CreateUserPage extends Component {
       usernameError: '',
       passwordTooShortError: '',
       passwordDoesntMatchError: ''
-    }
+    },
+    accountAccepted: false
    }
 
   // Handle Form Submit
@@ -60,15 +63,31 @@ class CreateUserPage extends Component {
       email: this.state.email.trim(),
       password: this.state.password.trim()
     }
+
     console.log(newUser)
     
     axios.post('/api/user/new', newUser)
-      .then(function(response){
+      .then((response) => {
         console.log(response)
+        if (response.data.success === true){
+          console.log(this)
+          // this.setState({accountAccepted: true });
+          this.props.history.push('/login')
+        }
+        else{
+          alert(`This username or email is taken. Please try another.  May We Suggest BananaMan78!`)
+        }
+
       })
       .catch(function(error){
         console.log(error);
       })
+  }
+
+  redirect = (event) => {
+    if (this.state.accountAccepted){
+      return <Redirect to='/login'/>
+    }
   }
 
   // Render to Screen
@@ -134,4 +153,4 @@ class CreateUserPage extends Component {
   }
 }
  
-export default CreateUserPage;
+export default withRouter(CreateUserPage);
