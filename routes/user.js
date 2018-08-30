@@ -1,22 +1,24 @@
-//const User = require("./models/User");
+const User = require("../models/User");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 module.exports = function(app) {
-app.post("/api/user/new", (req, res) => {
-    console.log(req.body);
-    var user = new User({
-      username: req.body.username,
-      email:req.body.email,
-      password: req.body.password
-    });
-    user.save(err => {
-      if(err){
-        return res.json({success: false, message: "Username taken"});
-      }
-      return res.json({success: true, message: "Successfully created new user"});
-    })
+  app.post("/api/user/new", (req, res) => {
+      console.log(`The post has hit the server, here is the body`);
+      console.log(req.body);
+      var user = new User({
+        username: req.body.username,
+        email:req.body.email,
+        password: req.body.password
+      });
+      user.save(err => {
+        if(err){
+          console.log(err);
+          return res.json({success: false, message: "Username or email taken"});
+        }
+        return res.json({success: true, message: "Successfully created new user"});
+      })
   });
 
   app.post("/api/user/login", (req, res) => {
@@ -42,4 +44,19 @@ app.post("/api/user/new", (req, res) => {
       }
     });
   })
+
+  app.put("/api/user/", (req, res) => {
+    console.log(req.body);
+    var user = new User({
+      username: req.body.username,
+      email:req.body.email,
+      password: req.body.password
+    });
+    user.save(err => {
+      if(err){
+        return res.json({success: false, message: "Username taken"});
+      }
+      return res.json({success: true, message: "Successfully created new user"});
+    })
+  });
 }

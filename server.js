@@ -14,7 +14,7 @@ const mongoose = require("mongoose");
 //const Product = require("./models/Product");
 //const Review = require("./models/Review");
 //const Reply = require("./models/Reply");
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/testdb");
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reviewdb");
 
 
 //Security stuff
@@ -54,17 +54,20 @@ app.use(cookieParser(secretKey));
 app.use(cookieEncrypter(secretKey));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, "client/build/index.html"));
+  });
 }
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
-});
+// app.use((req, res) => {
+//   res.sendFile(path.join(__dirname, "client/build/index.html"));
+// });
 
 
 //api routes
 require("./routes/user")(app);
 require("./routes/product")(app);
-//require("./routes/review")(app);
-//require("./routes/reply")(app);
+require("./routes/review")(app);
+require("./routes/reply")(app);
 //require("./routes/admin")(app);
 
 //html routes

@@ -10,7 +10,8 @@ const UserSchema = new Schema({
   picture:{type:String, default:"https://via.placeholder.com/200x200"},
   email:{type:mongoose.SchemaTypes.Email, required:true, unique:true},
   emailVerified:{type:Boolean, default:false},
-  passwordReset:{type:Date, default:Date.now}
+  passwordReset:{type:Date, default:Date.now},
+  averageRating:{type:Number}
 });
 
 UserSchema.pre('save', function(next){
@@ -35,6 +36,6 @@ UserSchema.methods.comparePassword = function(pass, cb){
 
 const User = mongoose.model("User", UserSchema);
 //exports.User=User;
-//module.exports = User;
+module.exports = User;
 //export default User;
-exports.User=User;
+//exports.User=User;
