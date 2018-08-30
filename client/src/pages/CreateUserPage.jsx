@@ -62,7 +62,7 @@ class CreateUserPage extends Component {
     }
     console.log(newUser)
     
-    axios.post('http://localhost:3001/api/user/new', newUser)
+    axios.post('/api/user/new', newUser)
       .then(function(response){
         console.log(response)
       })
