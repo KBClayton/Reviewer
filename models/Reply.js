@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const replySchema = new Schema({
   text: { type: String, required: true},
-  parentProduct: {type:Schema.Types.ObjectId, ref:'Review'},
+  parentReview: {type:Schema.Types.ObjectId, ref:'Review', required:true},
+  upDown:{type:Number}
 });
 
 const Reply = mongoose.model("Reply", replySchema);
