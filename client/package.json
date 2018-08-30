@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "proxy": "http://localhost:3001",
   "private": true,
+  "proxy": "http://localhost:3001/",
   "dependencies": {
     "animate.css": "^3.7.0",
     "axios": "^0.18.0",
