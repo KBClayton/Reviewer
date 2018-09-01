@@ -11,7 +11,7 @@ const productSchema = new Schema({
   //parentProduct: {type:Schema.Types.ObjectId, ref:'Product', required:true},
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
   user: {type:Schema.Types.ObjectId, ref:'User'},
-  catagoryies:{type: Array},
+  catagories:{type: Array},
   gpsdata:{type: Object, default:{lat:30.2672, long:97.7431}},
 });
 
