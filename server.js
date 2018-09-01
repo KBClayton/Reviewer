@@ -7,7 +7,6 @@ dotenv.config();
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-
 //db stuff
 const mongoose = require("mongoose");
 //const User = require("./models/User");
@@ -73,6 +72,7 @@ require("./routes/user")(app);
 require("./routes/product")(app);
 require("./routes/review")(app);
 require("./routes/reply")(app);
+require("./routes/recommend")(app);
 //require("./routes/admin")(app);
 
 //html routes
