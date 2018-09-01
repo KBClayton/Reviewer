@@ -74,7 +74,7 @@ class ShowOneLocation extends Component {
             addComment = {this.handleSubmit}
             textComment = {this.onChange}
           />
-          {/* {this.state.locations..map(location => (
+          {/* {this.state.locations.reviews.map(location => (
             <CommentDisplay
               // key = { location._id}
               // id = {location._id}

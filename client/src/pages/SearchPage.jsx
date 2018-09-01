@@ -26,7 +26,6 @@ class SearchPage extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
-          
         <Footer /> 
       </div>
       
