@@ -8,7 +8,9 @@ const recommendSchema = new Schema ({
   time: {type: String},
   image:{type:String, default:"https://via.placeholder.com/300x300"},
   link:{ type: String, default: "https://via.placeholder.com" },
-  do512: {type: Boolean, required: true, default: false}
+  do512: {type: Boolean, required: true, default: false},
+  food: {type: Boolean, required:true, default: false},
+  music: {type: Boolean, required: true, default: false}
 })
 
 const Recommend = mongoose.model("Recommend", recommendSchema);

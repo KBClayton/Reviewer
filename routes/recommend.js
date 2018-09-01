@@ -6,8 +6,8 @@ module.exports = function(app) {
 
   app.get("/recommend/acFood", function(req, res) {
     // First, we grab the body of the html with request
-    axios.get("http://www.austinchronicle.com/food/reviews/").then(function(response) {;
-      var $ = cheerio.load(response.data);
+    axios.get("http://www.austinchronicle.com/food/reviews/").then(function(response) {
+      const $ = cheerio.load(response.data);
       // Now, we grab every h2 within an article tag, and do the following:
       $("section#CenterColumn").children("h2").each(function(i, element) {
         // Save an empty result object
@@ -24,7 +24,7 @@ module.exports = function(app) {
         .replace("\'", "")
         .replace("Restaurant Review: ", "")
         .replace("Far Flung Correspondence: ", "")
-        .replace("Review: ");
+        .replace("Review: ", "");
         result.summary = $(this)
           .next("div.description")
           .text()
@@ -43,7 +43,45 @@ module.exports = function(app) {
               console.log(err);;
           });
       });
-      
+  app.get("/recommend/acMusic", function(req, res) {
+    // First, we grab the body of the html with request
+    axios.get("http://www.austinchronicle.com/music/reviews/").then(function(response) {
+      const $ = cheerio.load(response.data);
+      // Now, we grab every h2 within an article tag, and do the following:
+      $("section#CenterColumn").children("h2").each(function(i, element) {
+        // Save an empty result object
+        var result = {};
+        if ($(this)
+        .children("a")
+        .text() == ""){
+          return;
+        }
+        // Add the text and href of every link, and save them as properties of the result object
+        result.title = $(this)
+        .children("a")
+        .text();
+        result.summary = $(this)
+          .next("div.description")
+          .text();
+        result.link = "http://www.austinchronicle.com" + $(this)
+          .children("a")
+          .attr("href");
+        })
+        .catch(function(err) {
+          // If an error occurred, log it
+          console.log(err);
+          });
+        result.music = true;
+          
+        console.log(result);
+        
+            });
+            })
+            .catch(function(err) {
+              // If an error occurred, log it
+              console.log(err);
+          });
+      });
   /*app.get("/recommend/do512", function(req, res) {
     // First, we grab the body of the html with request
     axios.get("https://do512.com").then(function(response) {
