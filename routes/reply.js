@@ -4,7 +4,7 @@ module.exports = function(app) {
 
   app.get("/api/reply/", function(req, res){
       console.log(req.body);
-      console.log(vault.read(req));
+     // console.log(vault.read(req));
       Product.find({}).then(dbModel => res.json(dbModel));
   });
 
