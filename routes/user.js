@@ -12,17 +12,27 @@ module.exports = function(app) {
         email:req.body.email,
         password: req.body.password
       });
-      user.save(err => {
+      user.save((err,dbreply) => {
+        //console.log(dbreply);
         if(err){
           console.log(err);
           return res.json({success: false, message: "Username or email taken"});
         }
-        return res.json({success: true, message: "Successfully created new user"});
+        const token = jwt.sign({
+          _id: user._id,
+          username: user.username
+        }, process.env.JWT_SECRET);
+        req.session.token="JWT "+token;
+        req.session.uid= user.id;
+        //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
+        //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
+        return res.json({success: true, message: "Successfully created new user", token: "JWT " + token});
       })
   });
 
   app.post("/api/user/login", (req, res) => {
-      console.log(req.body)
+     // console.log(req.body)
+      //console.log(vault.read(req))
     User.findOne({
       username: req.body.username
     }, (err, user) => {
@@ -33,9 +43,11 @@ module.exports = function(app) {
             if(!err && isMatch){
               const token = jwt.sign({
                 _id: user._id,
-                username: user.username
+                username: user.username 
               }, process.env.JWT_SECRET);
-  
+              req.session.token="JWT "+token;
+              //res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
+              //vault.write(req, JSON.stringify({token: "JWT " + token, username:isMatch.username}));
               res.json({success: true, token: "JWT " + token});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
@@ -46,7 +58,7 @@ module.exports = function(app) {
   })
 
   app.put("/api/user/", (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     var user = new User({
       username: req.body.username,
       email:req.body.email,
@@ -59,4 +71,31 @@ module.exports = function(app) {
       return res.json({success: true, message: "Successfully created new user"});
     })
   });
+
+  app.delete("/api/user/logout", (req, res) => {
+   // console.log(req.body);
+    //console.log('Decrypted cookies: ', req.signedCookies)
+    //res.cookie('supercookie2', {token: false, username:false}, cookieParams);
+    if(!req.session.token){
+      res.send({success:false, message:"You weren't logged in"})
+    }
+    req.session.token=null;
+    req.session.uid= null;
+    res.status(200).send({success:true, message:"loggedout"});
+  })
+
+  app.get("/api/user/allstuff", (req, res) => {
+    User.findOne({_id:req.session.uid}).populate("products")
+    .populate("reviews")
+    .populate("replies")
+    .populate("chats")
+    .exec( function(err, dbreply) {
+      if (err) {res.json(err)};
+      res.json(dbreply);
+    });
+    // .then(dbreply=>
+    //   {
+    //     res.json(dbreply)}
+    // );
+  })
 }
