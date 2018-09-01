@@ -18,14 +18,26 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reviewdb");
 
 
 //Security stuff
-const cookieParser = require('cookie-parser');
-const cookieEncrypter = require('cookie-encrypter');
+//const cookieParser = require('cookie-parser');
+//const cookieEncrypter = require('cookie-encrypter');
+var session = require("express-session");
 const helmet = require('helmet')
 const secretKey = process.env.secretKey || 'this should not be live';
 const passport = require("passport");
 const { Strategy:JwtStrategy, ExtractJwt } = require("passport-jwt");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const cookieParams = {
+  httpOnly: true,
+  signed: true,
+  maxAge: 300000,
+};
+// var vault = cookieEncrypter(process.env.cookieSecret, {
+//   cipher: 'aes-256-cbc',
+//   encoding: 'base64',
+//   cookie: 'oauth-secrets',
+//   httpOnly: true
+// });
 
 const passportOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -67,7 +79,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-
+//require("./routes/user")(app, vault, cookieParams);
 //api routes
 require("./routes/user")(app);
 require("./routes/product")(app);
