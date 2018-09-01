@@ -112,6 +112,7 @@ require("./routes/user")(app);
 require("./routes/product")(app);
 require("./routes/review")(app);
 require("./routes/reply")(app);
+require("./routes/chat")(app);
 //require("./routes/admin")(app);
 
 //html routes

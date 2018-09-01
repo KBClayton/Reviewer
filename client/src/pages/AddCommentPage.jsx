@@ -83,12 +83,9 @@ class ShowOneLocation extends Component {
               id = {review._id}
               textComment = {review.text}
             />
-          ))}
-          {/* <CommentDisplay 
-            // key = { this.state.locations}
-            id = {this.state.locations._id}
-            commentText = {this.state.locations.reviews.length}
-          /> */}
+          ))} */
+          
+          }
         <Footer /> 
       </div>
       

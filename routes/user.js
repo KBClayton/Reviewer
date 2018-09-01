@@ -6,14 +6,14 @@ const jwt = require("jsonwebtoken");
 module.exports = function(app) {
   app.post("/api/user/new", (req, res) => {
       //console.log(`The post has hit the server, here is the body`);
-      console.log(req.body);
+      //console.log(req.body);
       var user = new User({
         username: req.body.username,
         email:req.body.email,
         password: req.body.password
       });
       user.save((err,dbreply) => {
-        console.log(dbreply);
+        //console.log(dbreply);
         if(err){
           console.log(err);
           return res.json({success: false, message: "Username or email taken"});
@@ -31,7 +31,7 @@ module.exports = function(app) {
   });
 
   app.post("/api/user/login", (req, res) => {
-      console.log(req.body)
+     // console.log(req.body)
       //console.log(vault.read(req))
     User.findOne({
       username: req.body.username
@@ -58,7 +58,7 @@ module.exports = function(app) {
   })
 
   app.put("/api/user/", (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     var user = new User({
       username: req.body.username,
       email:req.body.email,
@@ -73,8 +73,8 @@ module.exports = function(app) {
   });
 
   app.delete("/api/user/logout", (req, res) => {
-    console.log(req.body);
-    console.log('Decrypted cookies: ', req.signedCookies)
+   // console.log(req.body);
+    //console.log('Decrypted cookies: ', req.signedCookies)
     //res.cookie('supercookie2', {token: false, username:false}, cookieParams);
     if(!req.session.token){
       res.send({success:false, message:"You weren't logged in"})
@@ -88,6 +88,7 @@ module.exports = function(app) {
     User.findOne({_id:req.session.uid}).populate("products")
     .populate("reviews")
     .populate("replies")
+    .populate("chats")
     .exec( function(err, dbreply) {
       if (err) {res.json(err)};
       res.json(dbreply);
