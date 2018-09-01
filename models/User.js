@@ -5,7 +5,17 @@ require('mongoose-type-email');
 
 const UserSchema = new Schema({
   username: { type: String, required: true, unique: true},
-  password: { type: String, required: true },
+  password: { type: String, required: true, minlength:8,
+    // validate: {
+    //   validator: function(v) {
+    //     if(v.search(/^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]+$/g)){
+    //       return true;
+    //     }else{
+    //      return false};
+    //   },
+    //   message: props => `password is insufficently complex`
+    // }, 
+  },
   roles:{type:Array, default:["user"]},
   picture:{type:String, default:"https://via.placeholder.com/200x200"},
   email:{type:mongoose.SchemaTypes.Email, required:true, unique:true},

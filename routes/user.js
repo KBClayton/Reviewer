@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-module.exports = function(app, vault, cookieParams) {
+module.exports = function(app) {
   app.post("/api/user/new", (req, res) => {
       //console.log(`The post has hit the server, here is the body`);
       //console.log(req.body);
@@ -22,7 +22,8 @@ module.exports = function(app, vault, cookieParams) {
           _id: user._id,
           username: user.username
         }, process.env.JWT_SECRET);
-        res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
+        req.session.token="JWT "+token;
+        //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
         return res.json({success: true, message: "Successfully created new user", token: "JWT " + token});
       })
@@ -43,7 +44,8 @@ module.exports = function(app, vault, cookieParams) {
                 _id: user._id,
                 username: user.username 
               }, process.env.JWT_SECRET);
-              res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
+              req.session.token="JWT "+token;
+              //res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
               //vault.write(req, JSON.stringify({token: "JWT " + token, username:isMatch.username}));
               res.json({success: true, token: "JWT " + token});
             } else {
@@ -72,10 +74,11 @@ module.exports = function(app, vault, cookieParams) {
   app.delete("/api/user/logout", (req, res) => {
     console.log(req.body);
     console.log('Decrypted cookies: ', req.signedCookies)
-    res.cookie('supercookie2', {token: false, username:false}, cookieParams);
-    if(!req.signedCookies.username){
+    //res.cookie('supercookie2', {token: false, username:false}, cookieParams);
+    if(!req.session.token){
       res.send({success:false, message:"You weren't logged in"})
     }
+    req.session.token=false;
     res.status(200).send({success:true, message:"loggedout"});
   })
 }

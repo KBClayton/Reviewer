@@ -1,5 +1,5 @@
-module.exports = function(app, vault) {
-    loggedin=function(app, vault){
+module.exports = function(app) {
+    loggedin=function(app){
         if(vault.read(req)){
             return true;
         }

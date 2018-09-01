@@ -1,17 +1,18 @@
 const Review = require("../models/Review");
 const mongoose = require("mongoose");
-module.exports = function(app, vault) {
+const Product = require("../models/Product");
+module.exports = function(app) {
 
-  app.get("/api/review/id", function(req, res){
+  app.get("/api/review/:id", function(req, res){
       console.log(req.body);
-      Product.findOne({_id:req.params.id}).populate('Reply').then(dbModel => res.json(dbModel));
+      Review.findOne({_id:req.params.id}).populate('Reply').then(dbModel => res.json(dbModel));
   });
   app.get("/api/review/", function(req, res){
     console.log(req.body);
-    Product.find({}).populate('Reply').then(dbModel => res.json(dbModel));
+    Review.find({}).populate('Reply').then(dbModel => res.json(dbModel));
   });
   app.post("/api/review",  function(req, res){
-      console.log(req.body);
-      Product.create(req.body).then(dbModel => res.json(dbModel));
+      console.log(req);
+      Review.create(req.body).then(dbModel => res.json(dbModel));
   });
 }
