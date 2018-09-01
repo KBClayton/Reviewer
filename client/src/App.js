@@ -18,7 +18,7 @@ const App = () => (
       <Route path='/createNewLocation' component = {CreateWierdLocation}/>
       <Route path="/login" component = {LoginPage} exact/>
       <Route path='/allproducts' component = {ShowAllProducts} exact/>
-      <Route path='/location/:_id' component = {ShowOneLocation} exact/>
+      <Route path='/location/:_id' component = {ShowOneLocation}  exact/>
     </div>
   </BrowserRouter>
 )
