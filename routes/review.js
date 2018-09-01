@@ -7,11 +7,11 @@ module.exports = function(app) {
 
   app.get("/api/review/:id", function(req, res){
       console.log(req.body);
-      Review.findOne({_id:req.params.id}).populate('Reply').then(dbModel => res.json(dbModel));
+      Review.findOne({_id:req.params.id}).populate('replies').then(dbModel => res.json(dbModel));
   });
   app.get("/api/review/", function(req, res){
     console.log(req.body);
-    Review.find({}).populate('Reply').then(dbModel => res.json(dbModel));
+    Review.find({}).populate('replies').then(dbModel => res.json(dbModel));
   });
   app.post("/api/review",  function(req, res){
       console.log(req.body);

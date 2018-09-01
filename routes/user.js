@@ -83,4 +83,18 @@ module.exports = function(app) {
     req.session.uid= null;
     res.status(200).send({success:true, message:"loggedout"});
   })
+
+  app.get("/api/user/allstuff", (req, res) => {
+    User.findOne({_id:req.session.uid}).populate("products")
+    .populate("reviews")
+    .populate("replies")
+    .exec( function(err, dbreply) {
+      if (err) {res.json(err)};
+      res.json(dbreply);
+    });
+    // .then(dbreply=>
+    //   {
+    //     res.json(dbreply)}
+    // );
+  })
 }

@@ -36,7 +36,7 @@ var sess = {
     secure: false,
     resave: false,
     saveUninitialized: true,
-    maxAge: 3600000,
+    maxAge: 36000000,
     rolling: true
   },
   genid: function(req) {
