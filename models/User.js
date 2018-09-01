@@ -25,7 +25,7 @@ const UserSchema = new Schema({
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   chats: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
-  replys: [{ type: Schema.Types.ObjectId, ref: 'Reply' }],
+  replies: [{ type: Schema.Types.ObjectId, ref: 'Reply' }],
 });
 
 UserSchema.pre('save', function(next){
