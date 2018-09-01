@@ -12,7 +12,7 @@ module.exports = function(app) {
     Review.find({}).populate('Reply').then(dbModel => res.json(dbModel));
   });
   app.post("/api/review",  function(req, res){
-      console.log(req);
+      console.log(req.body);
       Review.create(req.body).then(dbModel => res.json(dbModel));
   });
 }
