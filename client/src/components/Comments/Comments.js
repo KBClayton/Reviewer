@@ -6,8 +6,9 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 const CommentDisplay = props => (
   <div>
     <div className = 'card p-3 m-3'>
-    <h4>I am a Comment</h4>
-      <p>{prop.commentText}</p>
+    <h4  key={props._id} id={props._id}>I am a Comment</h4>
+      <p>{props.textComment}</p>
+      <p><small>{props.lengthNo} Comments</small></p>
     </div>
   </div>
 );

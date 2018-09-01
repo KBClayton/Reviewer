@@ -5,7 +5,7 @@ import Footer from '../components/Footer/Footer'
 import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ProductComment from '../components/ProductComment/productComment'
-// import CommentDisplay from '../components/Comments/Comments'
+import CommentDisplay from '../components/Comments/Comments'
 
 // import './main.css'
 import axios from 'axios'
@@ -18,6 +18,7 @@ class ShowOneLocation extends Component {
     subpage: 'Show All Products',
     backBtn: '/allproducts',
     locations: [],
+    comments: [],
     newComment: ''
    }
 
@@ -30,7 +31,8 @@ class ShowOneLocation extends Component {
       // console.log(res.data);
       console.log('Something Hapened')
         this.setState({locations: res.data})
-        console.log(this.state.locations)
+        this.setState({comments: res.data.reviews})
+        console.log(this.state.comments.length)
       })
   }
 
@@ -68,18 +70,25 @@ class ShowOneLocation extends Component {
             title = {this.state.locations.title}
             description = {this.state.locations.description}
             urlLink = {this.state.backBtn}
+            lengthNo = {this.state.comments.length}
           />
           <ProductComment 
             addComment = {this.handleSubmit}
             textComment = {this.onChange}
+
           />
-          {/* {this.state.locations.reviews.map(location => (
+          {this.state.comments.map(review => (
             <CommentDisplay
-              // key = { location._id}
-              // id = {location._id}
-              // textComment = {}
+              key = {review._id}
+              id = {review._id}
+              textComment = {review.text}
             />
-          ))} */}
+          ))}
+          {/* <CommentDisplay 
+            // key = { this.state.locations}
+            id = {this.state.locations._id}
+            commentText = {this.state.locations.reviews.length}
+          /> */}
         <Footer /> 
       </div>
       
