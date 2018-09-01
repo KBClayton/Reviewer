@@ -30,7 +30,7 @@ const bcrypt = require("bcrypt");
 const MongoStore = require('connect-mongo')(session);
 
 var sess = {
-  secret: process.env.cookiesecret,
+  secret: process.env.cookiesecret || "this should not be live",
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
   cookie: {
     secure: false,
