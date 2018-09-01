@@ -4,11 +4,9 @@ const axios = require("axios");
 const cheerio = require('cheerio');
 module.exports = function(app) {
 
-  app.get("/recommend/do512", function(req, res) {
+  app.get("/recommend/acFood", function(req, res) {
     // First, we grab the body of the html with request
-    axios.get("http://www.austinchronicle.com/food/reviews/").then(function(response) {
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
-      console.log("HEYHEYHEYHEYHEYHEYHEYHEYHEY");
+    axios.get("http://www.austinchronicle.com/food/reviews/").then(function(response) {;
       var $ = cheerio.load(response.data);
       // Now, we grab every h2 within an article tag, and do the following:
       $("section#CenterColumn").children("h2").each(function(i, element) {
@@ -29,16 +27,12 @@ module.exports = function(app) {
         .replace("Review: ");
         result.summary = $(this)
           .next("div.description")
-          .text();
-        result.link = "https://www.austinchronicle.com/" + $(this)
+          .text()
+          .replace("\'", "");
+        result.link = "https://www.austinchronicle.com" + $(this)
           .children("a")
           .attr("href");
-        /*result.imagelink = $(this)
-          .children("figure.photo")
-          .children("a")
-          .children("img")
-          .attr("src");
-        result.food = true;*/
+        result.food = true;
           
         console.log(result);
         
@@ -49,6 +43,7 @@ module.exports = function(app) {
               console.log(err);;
           });
       });
+      
   /*app.get("/recommend/do512", function(req, res) {
     // First, we grab the body of the html with request
     axios.get("https://do512.com").then(function(response) {
