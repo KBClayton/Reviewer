@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 
 module.exports = function(app) {
   app.post("/api/user/new", (req, res) => {
-      //console.log(`The post has hit the server, here is the body`);
-      //console.log(req.body);
+      console.log(`The post has hit the server, here is the body`);
+      console.log(req.body);
       var user = new User({
         username: req.body.username,
         email:req.body.email,
