@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const reviewSchema = new Schema({
   text: { type: String, required: true},
   parentProduct: {type:Schema.Types.ObjectId, ref:'Product', required:true},
-  rating:{type: Number}
+  rating:{type: Number, min:0, max:5}
 });
 
 const Review = mongoose.model("Review", reviewSchema);
