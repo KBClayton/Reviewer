@@ -4,10 +4,11 @@ module.exports = function(app) {
 
   app.get("/api/reply/", function(req, res){
       console.log(req.body);
+      console.log(vault.read(req));
       Product.find({}).then(dbModel => res.json(dbModel));
   });
 
-  app.get("/api/reply/id", function(req, res){
+  app.get("/api/reply/:id", function(req, res){
     console.log(req.body);
     Product.findOne({id:req.params.id}).then(dbModel => res.json(dbModel));
   });
