@@ -23,6 +23,7 @@ module.exports = function(app) {
           username: user.username
         }, process.env.JWT_SECRET);
         req.session.token="JWT "+token;
+        req.session.uid= user.id;
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
         return res.json({success: true, message: "Successfully created new user", token: "JWT " + token});
@@ -78,7 +79,8 @@ module.exports = function(app) {
     if(!req.session.token){
       res.send({success:false, message:"You weren't logged in"})
     }
-    req.session.token=false;
+    req.session.token=null;
+    req.session.uid= null;
     res.status(200).send({success:true, message:"loggedout"});
   })
 }
