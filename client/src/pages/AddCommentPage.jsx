@@ -5,7 +5,7 @@ import Footer from '../components/Footer/Footer'
 import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ProductComment from '../components/ProductComment/productComment'
-import CommentDisplay from '../components/Comments/Comments'
+// import CommentDisplay from '../components/Comments/Comments'
 
 // import './main.css'
 import axios from 'axios'
