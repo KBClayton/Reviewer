@@ -1,9 +1,10 @@
 const Product = require("../models/Product");
 const mongoose = require("mongoose");
-module.exports = function(app) {
+module.exports = function(app, vault) {
 
   app.get("/api/product", function(req, res){
     console.log(req.body);
+    console.log(vault.read(req));
       Product.find({}).then(dbModel => res.json(dbModel));
   });
 

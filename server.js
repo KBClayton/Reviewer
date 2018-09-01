@@ -27,6 +27,13 @@ const { Strategy:JwtStrategy, ExtractJwt } = require("passport-jwt");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+var vault = cookieEncrypter(process.env.cookieSecret, {
+  cipher: 'aes-256-cbc',
+  encoding: 'base64',
+  cookie: 'oauth-secrets',
+  httpOnly: true
+});
+
 const passportOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET
@@ -69,10 +76,10 @@ app.use(function(req, res, next) {
 
 
 //api routes
-require("./routes/user")(app);
-require("./routes/product")(app);
-require("./routes/review")(app);
-require("./routes/reply")(app);
+require("./routes/user")(app, vault);
+require("./routes/product")(app, vault);
+require("./routes/review")(app, vault);
+require("./routes/reply")(app, vault);
 //require("./routes/admin")(app);
 
 //html routes

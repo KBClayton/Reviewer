@@ -1,9 +1,10 @@
 const Reply= require("../models/Reply");
 const mongoose = require("mongoose");
-module.exports = function(app) {
+module.exports = function(app, vault) {
 
   app.get("/api/reply/", function(req, res){
       console.log(req.body);
+      console.log(vault.read(req));
       Product.find({}).then(dbModel => res.json(dbModel));
   });
 

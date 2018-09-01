@@ -1,6 +1,6 @@
 const Review = require("../models/Review");
 const mongoose = require("mongoose");
-module.exports = function(app) {
+module.exports = function(app, vault) {
 
   app.get("/api/review/id", function(req, res){
       console.log(req.body);
