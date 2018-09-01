@@ -2,11 +2,14 @@ const User = require("../models/User");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const logger = require('heroku-logger');
+
 
 module.exports = function(app) {
   app.post("/api/user/new", (req, res) => {
-      console.log(`The post has hit the server, here is the body`);
-      console.log(req.body);
+      //console.log(`The post has hit the server, here is the body`);
+      //console.log(req.body);
+      logger.info(req.body);
       var user = new User({
         username: req.body.username,
         email:req.body.email,
