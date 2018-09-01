@@ -5,7 +5,7 @@ const reviewSchema = new Schema({
   text: { type: String, required: true},
   parentProduct: {type:Schema.Types.ObjectId, ref:'Product', required:true},
   user: {type:Schema.Types.ObjectId, ref:'User'},
-  reply: [{type:Schema.Types.ObjectId, ref:'Reply'}],
+  replies: [{type:Schema.Types.ObjectId, ref:'Reply'}],
   rating:{type: Number, min:0, max:5}
 });
 
