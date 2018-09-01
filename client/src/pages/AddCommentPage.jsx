@@ -19,7 +19,6 @@ class ShowOneLocation extends Component {
     backBtn: '/allproducts',
     locations: [],
     newComment: ''
-
    }
 
   // Loads All Articles
