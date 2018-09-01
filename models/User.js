@@ -21,7 +21,11 @@ const UserSchema = new Schema({
   email:{type:mongoose.SchemaTypes.Email, required:true, unique:true},
   emailVerified:{type:Boolean, default:false},
   passwordReset:{type:Date, default:Date.now},
-  averageRating:{type:Number}
+  averageRating:{type:Number},
+  products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+  chats: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
+  reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  replys: [{ type: Schema.Types.ObjectId, ref: 'Reply' }],
 });
 
 UserSchema.pre('save', function(next){

@@ -8,6 +8,7 @@ import CreateWierdLocation from './pages/CreateWierdLocationPage';
 import LoginPage from './pages/LoginPage'
 import ShowAllProducts from './pages/ShowAllProductsPage';
 import ShowOneLocation from './pages/AddCommentPage'
+import SearchPage from './pages/SearchPage';
 
 const App = () => (
   <BrowserRouter>
@@ -18,7 +19,8 @@ const App = () => (
       <Route path='/createNewLocation' component = {CreateWierdLocation}/>
       <Route path="/login" component = {LoginPage} exact/>
       <Route path='/allproducts' component = {ShowAllProducts} exact/>
-      <Route path='/location/:_id' component = {ShowOneLocation} exact/>
+      <Route path='/location/:_id' component = {ShowOneLocation}  exact/>
+      <Route path='/search' component = {SearchPage}/>
     </div>
   </BrowserRouter>
 )
