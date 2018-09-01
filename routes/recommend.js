@@ -6,37 +6,34 @@ module.exports = function(app) {
 
   app.get("/recommend/do512", function(req, res) {
     // First, we grab the body of the html with request
-    axios.get("http://www.austinchronicle.com/screens/reviews/").then(function(response) {
+    axios.get("http://www.austinchronicle.com/food/reviews/").then(function(response) {
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       console.log("HEYHEYHEYHEYHEYHEYHEYHEYHEY");
       var $ = cheerio.load(response.data);
       // Now, we grab every h2 within an article tag, and do the following:
-      $("div.ds-events-group").each(function(i, element) {
+      $("section#CenterColumn").children("h2").each(function(i, element) {
         // Save an empty result object
         var result = {};
-        /*if ($(this)
-        .children("div.story-body")
-        .children("h2.headline")
+        if ($(this)
         .children("a")
         .text() == ""){
           return;
         }
         // Add the text and href of every link, and save them as properties of the result object
         result.title = $(this)
-          .children("div.story-body")
-          .children("h2.headline")
-          .children("a")
-          .text();
+        .children("a")
+        .text()
+        .replace("\'", "")
+        .replace("Restaurant Review: ", "")
+        .replace("Far Flung Correspondence: ", "")
+        .replace("Review: ");
         result.summary = $(this)
-          .children("div.story-body")
-          .children("p.summary")
+          .next("div.description")
           .text();
-        result.link = $(this)
-          .children("div.story-body")
-          .children("h2.headline")
+        result.link = "https://www.austinchronicle.com/" + $(this)
           .children("a")
           .attr("href");
-        result.imagelink = $(this)
+        /*result.imagelink = $(this)
           .children("figure.photo")
           .children("a")
           .children("img")
