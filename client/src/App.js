@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-//import { BrowserRouter, Route} from 'react-router-dom'
+
 import { BrowserRouter, Route, Switch, Link} from 'react-router-dom'
 import './Main.css'
 import Homepage from './pages/Homepage'
@@ -8,10 +8,6 @@ import AboutPage from './pages/About-Page';
 import CreateUserPage from './pages/CreateUserPage';
 import CreateWierdLocation from './pages/CreateWierdLocationPage';
 import LoginPage from './pages/LoginPage'
-//import { BrowserRouter, Route, Link } from 'react-router-dom'
-import './Main.css'
-import Homepage from './pages/Homepage'
-import AboutPage from './pages/About-Page';
 import ShowAllProducts from './pages/ShowAllProductsPage';
 import ShowOneLocation from './pages/AddCommentPage'
 import SearchPage from './pages/SearchPage';
