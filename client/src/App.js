@@ -26,7 +26,7 @@ const App = () => (
       <Route path='/allproducts' component = {ShowAllProducts} exact/>
       <Route path='/location/:_id' component = {ShowOneLocation}  exact/>
       <Route path='/search' component = {SearchPage} exact/>
-      <Route component = {Homepage}/>
+      {/* <Route component = {Homepage}/> */}
     </Switch>
   </BrowserRouter>
 )
