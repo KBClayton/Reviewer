@@ -113,6 +113,9 @@ require("./routes/product")(app);
 require("./routes/review")(app);
 require("./routes/reply")(app);
 require("./routes/chat")(app);
+app.get("/api/thing", (req, res) => {
+  res.json({success:true, message:"this is hitting the server"})
+})
 //require("./routes/admin")(app);
 
 //html routes
