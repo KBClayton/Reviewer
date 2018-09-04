@@ -52,6 +52,7 @@ class ShowAllProducts extends Component {
             title = {location.title}
             description = {location.description}
             urlLink = {'/location/' + location._id}
+            lengthNo = {location.reviews.length}
           />
         ))}
         <Footer /> 

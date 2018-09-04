@@ -10,7 +10,7 @@ const LocationDisplay = props => (
       <p>{props.description}</p>
       {/* <a href='localhost:3001/api/articles'><button className = 'btn-danger'>Save</button></a> */}
       <Link to={props.urlLink}><button className = "btn btn-info m-3" >Comments</button></Link>
-      {/* <p><small>{props.comments} Comments</small></p> */}
+      <p><small>{props.lengthNo} Comments</small></p>
     </div>
   </div>
 );

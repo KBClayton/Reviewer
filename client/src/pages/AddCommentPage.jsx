@@ -4,6 +4,8 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
+import ProductComment from '../components/ProductComment/productComment'
+import CommentDisplay from '../components/Comments/Comments'
 
 // import './main.css'
 import axios from 'axios'
@@ -15,9 +17,11 @@ class ShowOneLocation extends Component {
     title: "Reviewer",
     subpage: 'Show All Products',
     backBtn: '/allproducts',
-    locations: []
+    locations: [],
+    comments: [],
+    newComment: ''
    }
-  
+
   // Loads All Articles
   loadLocations = () => {
 
@@ -27,7 +31,8 @@ class ShowOneLocation extends Component {
       // console.log(res.data);
       console.log('Something Hapened')
         this.setState({locations: res.data})
-        console.log(this.state.locations)
+        this.setState({comments: res.data.reviews})
+        console.log(this.state.comments.length)
       })
   }
 
@@ -35,9 +40,20 @@ class ShowOneLocation extends Component {
     this.loadLocations();
   }
 
-  // saveArticle = () => {
-  //   axios.put('/api/savedArticles')
-  // }
+  handleSubmit = (event) => {
+    const newComment = {
+      text: this.state.newComment,
+      parentProduct: this.state.locations._id
+    }
+    axios.post('/api/review', newComment)
+      .then(res=>{
+        console.log(res);
+      })
+  }
+
+  onChange = (event) => {
+    this.setState({ newComment: event.target.value})
+  }
 
   // Render to Screen
   render() { 
@@ -54,7 +70,22 @@ class ShowOneLocation extends Component {
             title = {this.state.locations.title}
             description = {this.state.locations.description}
             urlLink = {this.state.backBtn}
+            lengthNo = {this.state.comments.length}
           />
+          <ProductComment 
+            addComment = {this.handleSubmit}
+            textComment = {this.onChange}
+
+          />
+          {this.state.comments.map(review => (
+            <CommentDisplay
+              key = {review._id}
+              id = {review._id}
+              textComment = {review.text}
+            />
+          ))} */
+          
+          }
         <Footer /> 
       </div>
       

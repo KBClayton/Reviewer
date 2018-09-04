@@ -36,7 +36,7 @@ var sess = {
     secure: false,
     resave: false,
     saveUninitialized: true,
-    maxAge: 3600000,
+    maxAge: 36000000,
     rolling: true
   },
   genid: function(req) {
@@ -88,12 +88,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //app.use(cookieParser(secretKey));
 //app.use(cookieEncrypter(secretKey));
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.use((req, res) => {
-    res.sendFile(path.join(__dirname, "client/build/index.html"));
-  });
-}
+
 // app.use((req, res) => {
 //   res.sendFile(path.join(__dirname, "client/build/index.html"));
 // });
@@ -112,6 +107,10 @@ require("./routes/user")(app);
 require("./routes/product")(app);
 require("./routes/review")(app);
 require("./routes/reply")(app);
+require("./routes/chat")(app);
+app.get("/api/thing", (req, res) => {
+  res.json({success:true, message:"this is hitting the server"})
+})
 //require("./routes/admin")(app);
 
 //html routes
@@ -123,7 +122,12 @@ app.get("/api/test", passport.authenticate('jwt', {session: false}), (req, res) 
   res.json({accessible: true});
 });
 
-
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, "client/build/index.html"));
+  });
+}
 
 
 //start the party
