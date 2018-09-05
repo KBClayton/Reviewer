@@ -6,7 +6,9 @@ const reviewSchema = new Schema({
   parentProduct: {type:Schema.Types.ObjectId, ref:'Product', required:true},
   user: {type:Schema.Types.ObjectId, ref:'User'},
   replies: [{type:Schema.Types.ObjectId, ref:'Reply'}],
-  rating:{type: Number, min:0, max:5}
+  rating:{type: Number, min:0, max:5},
+  dateCreated:{type:Date, default:Date.now},
+  dateUpdated:{type:Date, default:Date.now}
 });
 
 const Review = mongoose.model("Review", reviewSchema);

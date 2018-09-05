@@ -11,8 +11,10 @@ const productSchema = new Schema({
   //parentProduct: {type:Schema.Types.ObjectId, ref:'Product', required:true},
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
   user: {type:Schema.Types.ObjectId, ref:'User'},
-  catagoryies:{type: Array},
+  catagories:{type: Array},
   gpsdata:{type: Object, default:{lat:30.2672, long:97.7431}},
+  dateCreated:{type:Date, default:Date.now},
+  dateUpdated:{type:Date, default:Date.now}
 });
 
 const Product = mongoose.model("Product", productSchema);
