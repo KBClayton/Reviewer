@@ -6,6 +6,8 @@ import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
+import Replies from '../components/Replies/Replies'
+//import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 
 // import './main.css'
 import axios from 'axios'
@@ -19,7 +21,8 @@ class ShowOneLocation extends Component {
     backBtn: '/allproducts',
     locations: [],
     comments: [],
-    newComment: ''
+    newComment: '',
+    newReply: ''
    }
 
   // Loads All Articles
@@ -28,13 +31,14 @@ class ShowOneLocation extends Component {
     const { match: { params } } = this.props;
     axios.get( `/api/product/${params._id}`)
       .then(res => {
-      // console.log(res.data);
+      console.log(res.data);
       console.log('Something Hapened')
         this.setState({locations: res.data})
         this.setState({comments: res.data.reviews})
         console.log(this.state.comments.length)
       })
   }
+      // Run loadLocations after posting *****
 
   componentDidMount(){
     this.loadLocations();
@@ -72,7 +76,7 @@ class ShowOneLocation extends Component {
             urlLink = {this.state.backBtn}
             lengthNo = {this.state.comments.length}
           />
-          <ProductComment 
+          <ProductComment
             addComment = {this.handleSubmit}
             textComment = {this.onChange}
 
@@ -82,8 +86,10 @@ class ShowOneLocation extends Component {
               key = {review._id}
               id = {review._id}
               textComment = {review.text}
+              replies = {review.replies}
+              onChange={e => this.setState({ newReply: e.target.value})}
             />
-          ))} */
+          ))}
           
           }
         <Footer /> 
