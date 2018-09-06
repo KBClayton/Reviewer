@@ -35,4 +35,10 @@ module.exports = function(app) {
         //res.json(dbModel)
       });
   });
+  app.post("/api/reply/search/:query", function(req, res){
+    var re = new RegExp(req.params.query, 'i');
+    Reply.find().or([{ 'description': { $regex: re }}, { 'title': { $regex: re }}, { 'catagories': { $regex: re }}]).sort({'dateCreated': 1}).exec(function(err, users) {
+      res.json(JSON.stringify(users));
+  });
+  });
 }

@@ -44,4 +44,10 @@ module.exports = function(app) {
       }
     })
   });
+  app.post("/api/review/search/:query", function(req, res){
+    var re = new RegExp(req.params.query, 'i');
+    Review.find().or([{ 'description': { $regex: re }}, { 'title': { $regex: re }}, { 'catagories': { $regex: re }}]).sort({'dateCreated': 1}).exec(function(err, users) {
+      res.json(JSON.stringify(users));
+  });
+  });
 }

@@ -3,5 +3,6 @@ module.exports={
     Product:require('./Product'),
     Review:require('./Review'),
     Reply:require('./Reply'),
+    Recommend:require('./Recommend'),
     Chat:require('./Chat'),
 }
