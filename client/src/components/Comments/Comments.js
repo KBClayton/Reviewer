@@ -1,7 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Link } from 'react-router-dom'
-import 
-
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 // console.log(this.props.location.search);
 // console.log(props.reviews)
 
@@ -23,7 +21,6 @@ const CommentDisplay = props => (
       >
         Send Reply
       </button>
-      {props.reviews.map(reply=>)}
     </div>
     <br/>
 
