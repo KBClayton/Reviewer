@@ -11,6 +11,8 @@ import LoginPage from './pages/LoginPage'
 import ShowAllProducts from './pages/ShowAllProductsPage';
 import ShowOneLocation from './pages/AddCommentPage'
 import SearchPage from './pages/SearchPage';
+import Chat from './pages/ChatPage';
+
 
 const App = () => (
   <BrowserRouter>
@@ -27,6 +29,7 @@ const App = () => (
       <Route path='/location/:_id' component = {ShowOneLocation}  exact/>
       <Route path='/search' component = {SearchPage} exact/>
       {/* <Route component = {Homepage}/> */}
+      <Route path='/chat' component = {Chat} exact/>
     </Switch>
   </BrowserRouter>
 )
