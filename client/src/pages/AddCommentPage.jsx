@@ -47,8 +47,8 @@ class ShowOneLocation extends Component {
 
   handleSubmit = (event) => {
     const newComment = {
-      text: this.state.newComment
-      // parentProduct: this.state.locations._id
+      text: this.state.newComment,
+      parentProduct: this.state.locations._id
     }
     axios.post('/api/review', newComment)
       .then(res=>{
