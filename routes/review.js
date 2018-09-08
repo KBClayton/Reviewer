@@ -2,6 +2,7 @@ const Review = require("../models/Review");
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const User = require("../models/User");
+const verify=require("./verify");
 
 module.exports = function(app) {
 
@@ -17,7 +18,10 @@ module.exports = function(app) {
      // console.log(req.body);
      // console.log(req.session.uid);
       //console.log(req.body.parentProduct);
-      Review.create(req.body).then(dbModel => {
+      newreview=req.body;
+      //newprod.user=req.session.uid;
+      newreview.username=req.session.username;
+      Review.create(newreview).then(dbModel => {
         //update user
         //console.log(dbModel.id)
         User.findByIdAndUpdate(req.session.uid, { "$push": { "reviews": dbModel._id } },

@@ -7,6 +7,7 @@ const reviewSchema = new Schema({
   user: {type:Schema.Types.ObjectId, ref:'User'},
   replies: [{type:Schema.Types.ObjectId, ref:'Reply'}],
   rating:{type: Number, min:0, max:5},
+  username:{type:String},
   dateCreated:{type:Date, default:Date.now},
   dateUpdated:{type:Date, default:Date.now}
 });
