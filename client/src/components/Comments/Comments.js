@@ -6,23 +6,20 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 const CommentDisplay = props => (
   <div>
     <div className = 'card p-3 m-3'>
-    <h4  key={props._id} id={props._id}><small><u>Comment</u></small></h4>
+    <h4 key={props.id} id={props.id}><small><u>Comment</u></small></h4>
       <p>{props.textComment}</p>
-      <textarea
+      {/* <textarea
         name='reply'
         className='border border-dark'
         placeholder='Reply Here'
         onChange=''
       >
-      </textarea>
-      <button
-        className='btn btn-outline-info mt-3'
-        type='submit'
-      >
-        Send Reply
-      </button>
+      </textarea> */}
+      <a href={'/reply/' + props.id}>Reply</a>
+      <p><b>{props.length}</b></p>
     </div>
     <br/>
+    
 
   </div>
 );

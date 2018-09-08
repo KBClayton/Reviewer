@@ -6,11 +6,18 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 const LocationDisplay = props => (
   <div>
     <div className = 'card p-3 m-3'>
-      <a href={props.link}><h5><b>{props.title}</b></h5></a>
+      <a href={`//${props.link}`} target='_blank'><h5><b>{props.title}</b></h5></a>
       <p>{props.description}</p>
       {/* <a href='localhost:3001/api/articles'><button className = 'btn-danger'>Save</button></a> */}
       <Link to={props.urlLink}><button className = "btn btn-info m-3" >Comments</button></Link>
       <p><small>{props.lengthNo} Comments</small></p>
+      <select className = 'border border-dark' name="Rating" id="r1">
+        <option value="1">1 Star</option>
+        <option value="2">2 Star</option>
+        <option value="3">3 Star</option>
+        <option value="4">4 Star</option>
+        <option value="5">5 Star</option>
+      </select>
     </div>
   </div>
 );
