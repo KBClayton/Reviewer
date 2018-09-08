@@ -41,4 +41,13 @@ module.exports = function(app) {
       res.json(JSON.stringify(users));
   });
   });
+
+  app.delete("/api/reply/:id", function(req, res){
+    Reply.deleteOne({id:req.params.id}).then(dbreply=>{
+      res.json(dbreply)
+    })
+  })
+
+  
+
 }

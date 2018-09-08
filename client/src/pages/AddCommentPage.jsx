@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
 import Replies from '../components/Replies/Replies'
-//import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
+import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 
 // import './main.css'
 import axios from 'axios'
@@ -23,7 +23,7 @@ class ShowOneLocation extends Component {
     comments: [],
     newComment: '',
     newReply: ''
-   }
+  }
 
   // Loads All Articles
   loadLocations = () => {
@@ -32,7 +32,7 @@ class ShowOneLocation extends Component {
     axios.get( `/api/product/${params._id}`)
       .then(res => {
       console.log(res.data);
-      console.log('Something Hapened')
+      // console.log('Something Hapened')
         this.setState({locations: res.data})
         this.setState({comments: res.data.reviews})
         console.log(this.state.comments.length)
@@ -52,6 +52,7 @@ class ShowOneLocation extends Component {
     axios.post('/api/review', newComment)
       .then(res=>{
         console.log(res);
+        this.loadLocations();
       })
   }
 
@@ -89,10 +90,10 @@ class ShowOneLocation extends Component {
               replies = {review.replies}
               onChange={e => this.setState({ newReply: e.target.value})}
             />
-          ))}
-          
-          }
-        <Footer /> 
+          ))}          
+          {/* <AddCommentModal/> */}
+          <Footer /> 
+
       </div>
       
     );

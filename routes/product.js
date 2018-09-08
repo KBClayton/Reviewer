@@ -9,7 +9,7 @@ module.exports = function(app) {
   app.get("/api/product", function(req, res){
     //console.log(req.body);
    // console.log(vault.read(req));
-      Product.find({}).then(dbModel => res.json(dbModel));
+      Product.find({}).sort({'dateCreated': -1}).then(dbModel => res.json(dbModel));
   });
 
   app.get("/api/product/:id", function(req, res){
@@ -30,7 +30,9 @@ module.exports = function(app) {
   app.post("/api/product",  function(req, res){
       //console.log(req.body);
      // console.log(req.session.uid);
-      Product.create(req.body).then(dbModel => {
+      newprod=req.body;
+      newprod.user=req.session.uid;
+      Product.create(newprod).then(dbModel => {
         //update user
         User.findByIdAndUpdate(req.session.uid, { "$push": { "products": dbModel._id } },
         { "new": true, "upsert": true }).then(dbreply=> {
@@ -47,4 +49,23 @@ module.exports = function(app) {
       res.json(JSON.stringify(users));
   });
   });
+
+  app.get("/api/product/bad", function(req, res){
+    Product.find().populate.then((dbreply, err)=>{
+      if(err){
+        console.log(err);
+        res.json({sucess:false, message:"failed"})
+      }else{
+        res.json(dbreply)
+      }
+    })
+  });
+
+  app.delete("/api/product/:id", function(req, res){
+    Product.deleteOne({id:req.params.id}).then(dbreply=>{
+      res.json(dbreply)
+    })
+  })
+
+
 }
