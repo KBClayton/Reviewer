@@ -698,4 +698,35 @@ module.exports = function(app) {
         console.log(err);
     });
     });
+
+//route to get all restaurant recommendations
+app.get("/recommend/acFood/all", function(req, res){
+  // console.log(req.body);
+     Recommend.find({food:true}).then(dbModel => res.json(dbModel));
+ });
+ //route to get all album recommendations
+app.get("/recommend/acMusic/all", function(req, res){
+  // console.log(req.body);
+     Recommend.find({music:true}).then(dbModel => res.json(dbModel));
+ });
+ //route to get all book recommendations
+app.get("/recommend/acBooks/all", function(req, res){
+  // console.log(req.body);
+     Recommend.find({books:true}).then(dbModel => res.json(dbModel));
+ });
+ //route to get all do512 event recommendations
+app.get("/recommend/daily/all", function(req, res){
+  // console.log(req.body);
+     Recommend.find({do512:true}).then(dbModel => res.json(dbModel));
+ });
+ //route to get all atlas obscura recommendations
+app.get("/recommend/obscura/all", function(req, res){
+  // console.log(req.body);
+     Recommend.find({obscura:true}).then(dbModel => res.json(dbModel));
+ });
+//route to get all alltrail recommendations
+app.get("/recommend/trails/all", function(req, res){
+  // console.log(req.body);
+     Recommend.find({outdoor:true}).then(dbModel => res.json(dbModel));
+ });
 }
