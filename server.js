@@ -7,6 +7,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3001;
 const app = express();
 const session = require("express-session");
+const socket = require("socket.io");
 
 //db stuff
 const mongoose = require("mongoose");
@@ -114,11 +115,6 @@ app.get("/api/thing", (req, res) => {
 })
 //require("./routes/admin")(app);
 
-//html routes
-
-
-
-
 app.get("/api/test", passport.authenticate('jwt', {session: false}), (req, res) => {
   res.json({accessible: true});
 });
@@ -132,6 +128,18 @@ if (process.env.NODE_ENV === "production") {
 
 
 //start the party
-app.listen(PORT, () => {
+server = app.listen(PORT, () => {
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
+});
+
+//Open websocket to listen for realtime chatting
+
+io = socket(server);
+ 
+io.on('connection', (socket) => { 
+    console.log('Socket connected');
+    socket.on('SEND_MESSAGE', function (data) { 
+        console.log('Received data');
+        io.emit('RECEIVE_MESSAGE', data);
+    })
 });

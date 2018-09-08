@@ -3,20 +3,21 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const logger = require('heroku-logger');
-
+const verify=require("./verify")
 
 module.exports = function(app) {
   app.post("/api/user/new", (req, res) => {
-      console.log(`The post has hit the server, here is the body`);
-      console.log(req.body);
-      logger.info("The request has hit the server for new user");
-      logger.info(req.body);
+      console.log(`The post has hit the server, here is new User`);
+      //console.log(req.body);
+      //logger.info("The request has hit the server for new user");
+      //logger.info(req.body);
 
       var user = new User({
         username: req.body.username,
         email:req.body.email,
         password: req.body.password
       });
+      console.log(user);
       user.save((err,dbreply) => {
         //console.log(dbreply);
         if(err){
@@ -26,9 +27,13 @@ module.exports = function(app) {
         const token = jwt.sign({
           _id: user._id,
           username: user.username
-        }, process.env.JWT_SECRET);
+        }, process.env.JWT_SECRET, {expiresIn:"10h"});
         req.session.token="JWT "+token;
+
+        
+
         req.session.uid= user.id;
+        req.session.username= user.username;
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
         return res.json({success: true, message: "Successfully created new user", token: "JWT " + token});
