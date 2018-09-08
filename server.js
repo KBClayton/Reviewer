@@ -65,7 +65,7 @@ if (app.get("env") === "production") {
 
 const passportOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET
+  secretOrKey: process.env.JWT_SECRET || "this should not be live"
 };
 
 passport.use(new JwtStrategy(passportOpts,

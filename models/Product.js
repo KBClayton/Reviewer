@@ -10,6 +10,7 @@ const productSchema = new Schema({
   address: {type: String, default: "301 W 2nd St, Austin, TX 78701"},
   //parentProduct: {type:Schema.Types.ObjectId, ref:'Product', required:true},
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  ratings:[{type:Schema.Types.ObjectId, ref:'ProductRating'}],
   user: {type:Schema.Types.ObjectId, ref:'User'},
   username:{type:String},
   catagories:{type: Array},

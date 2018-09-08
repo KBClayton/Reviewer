@@ -28,9 +28,15 @@ module.exports = function(app) {
           _id: user._id,
           username: user.username
         }, process.env.JWT_SECRET, {expiresIn:"10h"});
-        req.session.token="JWT "+token;
+        req.session.token=token;
 
-        
+        // jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+        //   if(err){
+        //       console.log(err);
+        //   }else{
+        //   console.log(decoded); // bar
+        //   }
+        // });
 
         req.session.uid= user.id;
         req.session.username= user.username;
@@ -54,8 +60,8 @@ module.exports = function(app) {
               const token = jwt.sign({
                 _id: user._id,
                 username: user.username 
-              }, process.env.JWT_SECRET);
-              req.session.token="JWT "+token;
+              }, process.env.JWT_SECRET, {expiresIn:"10h"});
+              req.session.token=token;
               //res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
               //vault.write(req, JSON.stringify({token: "JWT " + token, username:isMatch.username}));
               res.json({success: true, token: "JWT " + token});
@@ -91,6 +97,7 @@ module.exports = function(app) {
     }
     req.session.token=null;
     req.session.uid= null;
+    req.session.username=null;
     res.status(200).send({success:true, message:"loggedout"});
   })
 
