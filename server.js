@@ -110,9 +110,11 @@ require("./routes/review")(app);
 require("./routes/reply")(app);
 require("./routes/recommend")(app);
 require("./routes/chat")(app);
-app.get("/api/thing", (req, res) => {
-  res.json({success:true, message:"this is hitting the server"})
-})
+require("./routes/reviewRating")(app);
+require("./routes/productRating")(app);
+// app.get("/api/thing", (req, res) => {
+//   res.json({success:true, message:"this is hitting the server"})
+// })
 //require("./routes/admin")(app);
 
 app.get("/api/test", passport.authenticate('jwt', {session: false}), (req, res) => {

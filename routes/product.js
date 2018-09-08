@@ -19,8 +19,10 @@ module.exports = function(app) {
    // console.log(req.body);
       Product.findOne({_id:req.params.id})
       .populate({path:'reviews', options: { sort: { 'dateCreated': -1 } },
-      populate: { path: 'replies' }
+      populate: { path: 'replies' },
+      populate: {path:'ratings'}
     })
+    .populate("ratings")
       //.populate('replies')
       .exec( function(err, dbreply) {
        // console.log(dbreply);
