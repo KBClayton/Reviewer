@@ -30,8 +30,9 @@ module.exports = function(app) {
   app.post("/api/product",  function(req, res){
       //console.log(req.body);
      // console.log(req.session.uid);
-      newreq.body
-      Product.create(req.body).then(dbModel => {
+      newprod=req.body;
+      newprod.user=req.session.uid;
+      Product.create(newprod).then(dbModel => {
         //update user
         User.findByIdAndUpdate(req.session.uid, { "$push": { "products": dbModel._id } },
         { "new": true, "upsert": true }).then(dbreply=> {
