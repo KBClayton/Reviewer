@@ -9,7 +9,7 @@ module.exports = function(app) {
   app.get("/api/product", function(req, res){
     //console.log(req.body);
    // console.log(vault.read(req));
-      Product.find({}).sort({'dateCreated': 1}).then(dbModel => res.json(dbModel));
+      Product.find({}).sort({'dateCreated': -1}).then(dbModel => res.json(dbModel));
   });
 
   app.get("/api/product/:id", function(req, res){

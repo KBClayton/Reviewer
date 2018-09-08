@@ -7,11 +7,11 @@ module.exports = function(app) {
 
   app.get("/api/review/:id", function(req, res){
      // console.log(req.body);
-      Review.findOne({_id:req.params.id}).populate('replies').then(dbModel => res.json(dbModel));
+      Review.findOne({_id:req.params.id}).sort({'dateCreated': -1}).populate('replies').then(dbModel => res.json(dbModel));
   });
   app.get("/api/review/", function(req, res){
    // console.log(req.body);
-    Review.find({}).populate('replies').then(dbModel => res.json(dbModel));
+    Review.find({}).sort({'dateCreated': -1}).populate('replies').then(dbModel => res.json(dbModel));
   });
   app.post("/api/review",  function(req, res){
      // console.log(req.body);
@@ -35,7 +35,7 @@ module.exports = function(app) {
       });
   });
   app.get("/api/review/bad", function(req, res){
-    Review.find({rating:{$lt:0}}).then((dbreply, err)=>{
+    Review.find({rating:{$lt:0}}).sort({'dateCreated': 1}).then((dbreply, err)=>{
       if(err){
         console.log(err);
         res.json({sucess:false, message:"failed"})

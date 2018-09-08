@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 
-import { BrowserRouter, Route, Switch, Redirect, Link} from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect, withRouter, Link} from 'react-router-dom'
 import './Main.css'
 import Homepage from './pages/Homepage'
 import AboutPage from './pages/About-Page';
@@ -32,7 +32,7 @@ const App = () => (
       <Route path='/location/:_id' component = {ShowOneLocation} name="location" exact/>
       <Route path='/search' component = {SearchPage} name="search" exact/>
 
-      {/* begin I want this to be protected */}
+      {/* beginI want this to be protected */}
       <Route path="/test/" component={App} onEnter={requireAuth}>
         <Route path="allproducts" component={ShowAllProducts}/>
       </Route> {/*  end I want this to be protected */}
