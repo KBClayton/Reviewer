@@ -11,14 +11,11 @@ import LoginPage from './pages/LoginPage'
 import ShowAllProducts from './pages/ShowAllProductsPage';
 import ShowOneLocation from './pages/AddCommentPage'
 import SearchPage from './pages/SearchPage';
-<<<<<<< HEAD
 import Chat from './pages/ChatPage';
-=======
 import requireAuth from './components/Auth'
 
 
 
->>>>>>> b537036ee5595ac2a96730af3695322fb16dc058
 
 
 const App = () => (
