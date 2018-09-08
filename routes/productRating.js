@@ -19,7 +19,7 @@ module.exports = function(app) {
           //console.log(req.session.uid);
           newprodRating=req.body;
           newprodRating.user=req.session.uid;
-          newprodRating.username=req.session.username;
+          //newprodRating.username=req.session.username;
           ProductRating.create(newprodRating).then(dbModel => {
             //update user
             User.findByIdAndUpdate(req.session.uid, { "$push": { "productRatings": dbModel._id } },

@@ -106,6 +106,8 @@ module.exports = function(app) {
     .populate("reviews")
     .populate("replies")
     .populate("chats")
+    .populate("productRatings")
+    .populate("reviewRatings")
     .exec( function(err, dbreply) {
       if (err) {res.json(err)};
       res.json(dbreply);

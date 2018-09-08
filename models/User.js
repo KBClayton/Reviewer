@@ -27,7 +27,7 @@ const UserSchema = new Schema({
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
   replies: [{ type: Schema.Types.ObjectId, ref: 'Reply' }],
   productRatings:[{ type: Schema.Types.ObjectId, ref: 'ProductRating' }],
-  reviewRatings:[{ type: Schema.Types.ObjectId, ref: 'ReviwRating' }]
+  reviewRatings:[{ type: Schema.Types.ObjectId, ref: 'ReviewRating' }]
 });
 
 UserSchema.pre('save', function(next){
