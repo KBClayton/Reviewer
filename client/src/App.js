@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage'
 import ShowAllProducts from './pages/ShowAllProductsPage';
 import ShowOneLocation from './pages/AddCommentPage'
 import SearchPage from './pages/SearchPage';
+import Chat from './pages/ChatPage';
 import requireAuth from './components/Auth'
 
 
@@ -37,6 +38,7 @@ const App = () => (
         <Route path="allproducts" component={ShowAllProducts}/>
       </Route> {/*  end I want this to be protected */}
       {/* <Route component = {Homepage}/> */}
+      <Route path='/chat' component = {Chat} exact/>
     </Switch>
   </BrowserRouter>
 )
