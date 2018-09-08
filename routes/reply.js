@@ -2,6 +2,7 @@ const Reply= require("../models/Reply");
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const Review = require("../models/Review");
+const verify=require("./verify");
 
 module.exports = function(app) {
 
@@ -19,7 +20,11 @@ module.exports = function(app) {
   app.post("/api/reply",  function(req, res){
       //console.log(req.body);
       //console.log(req.session.uid);
-      Reply.create(req.body).then(dbModel => {
+      newreply=req.body;
+      //newreply.user=req.session.uid;
+      newreply.username=req.session.username;
+
+      Reply.create(newreply).then(dbModel => {
        // //update user
         User.findByIdAndUpdate(req.session.uid, { "$push": { "replies": dbModel._id } },
         { "new": true, "upsert": true }).then(dbreply=> {

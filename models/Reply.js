@@ -6,6 +6,7 @@ const replySchema = new Schema({
   parentReview: {type:Schema.Types.ObjectId, ref:'Review', required:true},
   user: {type:Schema.Types.ObjectId, ref:'User'},
   upDown:{type:Number},
+  username:{type:String},
   dateCreated:{type:Date, default:Date.now},
   dateUpdated:{type:Date, default:Date.now}
 });
