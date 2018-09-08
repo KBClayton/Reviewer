@@ -12,30 +12,28 @@ import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 // import './main.css'
 import axios from 'axios'
 
-class ShowOneLocation extends Component {
+class ReplyPage extends Component {
 
   // State
   state = {
     title: "Reviewer",
-    subpage: 'Show All Products',
-    backBtn: '/allproducts',
-    locations: [],
-    comments: [],
-    newComment: '',
-    newReply: ''
+    subpage: 'Add Reply',
+    data: {},
+    replies: [],
+    text: ''
   }
 
   // Loads All Articles
   loadLocations = () => {
 
     const { match: { params } } = this.props;
-    axios.get( `/api/product/${params._id}`)
+    axios.get( `/api/review/${params._id}`)
       .then(res => {
-      console.log(res.data);
+      // console.log(res.data);
       // console.log('Something Hapened')
-        this.setState({locations: res.data})
-        this.setState({comments: res.data.reviews})
-        console.log(this.state.comments.length)
+        this.setState({data: res.data})
+        this.setState({replies: res.data.replies})
+        console.log(this.state.data.replies)
       })
   }
       // Run loadLocations after posting *****
@@ -45,11 +43,12 @@ class ShowOneLocation extends Component {
   }
 
   handleSubmit = (event) => {
-    const newComment = {
-      text: this.state.newComment,
-      parentProduct: this.state.locations._id
+    const newReply = {
+      text: this.state.text,
+      parentReview: this.state.data._id
     }
-    axios.post('/api/review', newComment)
+    console.log(newReply)
+    axios.post('/api/reply', newReply)
       .then(res=>{
         console.log(res);
         this.loadLocations();
@@ -59,7 +58,7 @@ class ShowOneLocation extends Component {
   }
 
   onChange = (event) => {
-    this.setState({ newComment: event.target.value})
+    this.setState({ text: event.target.value})
   }
 
   // Render to Screen
@@ -70,32 +69,25 @@ class ShowOneLocation extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
-          <LocationDisplay
-            key = { this.state.locations._id}
-            id = {this.state.locations._id}
-            link = {this.state.locations.link}
-            title = {this.state.locations.title}
-            description = {this.state.locations.description}
-            urlLink = {this.state.backBtn}
-            lengthNo = {this.state.comments.length}
-          />
-          <ProductComment
-            addComment = {this.handleSubmit}
-            textComment = {this.onChange}
+        <div className="card">
+          <p>Headline MOFO</p>
+          <p>Original:  <i> "{this.state.data.text}"</i></p>
+        </div>
 
-          />
-          {this.state.comments.map(review => (
+        <input className = 'border border-dark m-3' type="text" onChange={this.onChange} name = 'replyText'/>
+        <button className="btn btn-info" onClick={this.handleSubmit} type='submit'>Send your reply</button>
+
+          {this.state.replies.map(review => (
             <CommentDisplay
               key = {review._id}
               id = {review._id}
               textComment = {review.text}
               replies = {review.replies}
-              onChange={e => this.setState({ newReply: e.target.value})}
-              length = {review.replies.length + ' Replies'}
+              // onChange={e => this.setState({ newReply: e.target.value})}
             />
-          ))}          
-          {/* <AddCommentModal/> */}
-          <Footer /> 
+          ))}   
+
+        <Footer /> 
 
       </div>
       
@@ -103,4 +95,4 @@ class ShowOneLocation extends Component {
   }
 }
  
-export default ShowOneLocation;
+export default ReplyPage;
