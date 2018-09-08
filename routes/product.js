@@ -15,7 +15,7 @@ module.exports = function(app) {
   app.get("/api/product/:id", function(req, res){
    // console.log(req.body);
       Product.findOne({_id:req.params.id})
-      .populate({path:'reviews',
+      .populate({path:'reviews', options: { sort: { 'dateCreated': -1 } },
       populate: { path: 'replies' }
     })
       //.populate('replies')
@@ -29,14 +29,14 @@ module.exports = function(app) {
 
   app.post("/api/product",  function(req, res){
       //console.log(req.body);
-     // console.log(req.session.uid);
+      console.log(req.session.uid);
       newprod=req.body;
       newprod.user=req.session.uid;
       Product.create(newprod).then(dbModel => {
         //update user
         User.findByIdAndUpdate(req.session.uid, { "$push": { "products": dbModel._id } },
         { "new": true, "upsert": true }).then(dbreply=> {
-          console.log(dbreply);
+          //console.log(dbreply);
           res.json(dbModel);
         });
         //res.json(dbModel)
