@@ -50,4 +50,11 @@ module.exports = function(app) {
       res.json(JSON.stringify(users));
   });
   });
+
+  app.delete("/api/review/:id", function(req, res){
+    Review.deleteOne({id:req.params.id}).then(dbreply=>{
+      res.json(dbreply)
+    })
+  })
+
 }
