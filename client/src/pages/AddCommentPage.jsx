@@ -22,7 +22,8 @@ class ShowOneLocation extends Component {
     locations: [],
     comments: [],
     newComment: '',
-    newReply: ''
+    newReply: '',
+    rating: ''
   }
 
   // Loads All Articles
@@ -46,16 +47,31 @@ class ShowOneLocation extends Component {
 
   handleSubmit = (event) => {
     const newComment = {
-      text: this.state.newComment,
-      parentProduct: this.state.locations._id
+      text: this.state.newComment
+      // parentProduct: this.state.locations._id
     }
     axios.post('/api/review', newComment)
       .then(res=>{
         console.log(res);
         this.loadLocations();
     })
+  }
 
+  ratingSubmitHandler = () => {
+    const newRating = {
+      parentProduct: this.state.locations._id,
+      rating: this.state.rating
+    }
+    console.log(newRating);
+    axios.post('/', newRating)
+      .then(res=>{
+        console.log(res);
+    })
+  }
 
+  setRating = (event) => {
+    let bennuCoffee = parseInt(event.target.value);
+    this.setState({ rating: bennuCoffee})
   }
 
   onChange = (event) => {
@@ -78,6 +94,8 @@ class ShowOneLocation extends Component {
             description = {this.state.locations.description}
             urlLink = {this.state.backBtn}
             lengthNo = {this.state.comments.length}
+            SubmitHandler = {this.ratingSubmitHandler}
+            setRating = {this.setRating}
           />
           <ProductComment
             addComment = {this.handleSubmit}
