@@ -102,7 +102,8 @@ module.exports = function(app) {
   })
 
   app.get("/api/user/allstuff", (req, res) => {
-    User.findOne({_id:req.session.uid}).populate("products")
+    User.findOne({_id:req.session.uid})
+    .populate("products")
     .populate("reviews")
     .populate("replies")
     .populate("chats")
@@ -116,5 +117,15 @@ module.exports = function(app) {
     //   {
     //     res.json(dbreply)}
     // );
+  })
+
+  app.get("/api/user/averagereview", (req, res) => {
+    User.findOne({_id:req.session.uid})
+    .populate("productRatings")
+    .populate("reviewRatings")
+    .exec(function(err, dbreply) {
+      console.log(dbreply);
+      
+    })
   })
 }
