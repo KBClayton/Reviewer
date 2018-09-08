@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 const CommentDisplay = props => (
   <div>
     <div className = 'card p-3 m-3'>
-    <h4  key={props._id} id={props._id}>Comment</h4>
+    <h4  key={props._id} id={props._id}><small><u>Comment</u></small></h4>
       <p>{props.textComment}</p>
       <textarea
         name='reply'
