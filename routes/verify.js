@@ -12,6 +12,7 @@ module.exports =  {
         var finalReturn=false;
         //console.log(process.env.JWT_SECRET);
         //let whatthe = new Promise 
+        async function thinger(){
         jwt.verify(tokenVerify, process.env.JWT_SECRET, function(err, decoded) {
             if(err){
                 //console.log(err);
@@ -58,6 +59,13 @@ module.exports =  {
                     return false
                 }
             }
+        })
+
+    }
+    await thinger()
+        .then(()=>{
+            console.log("this is after the jwt verify executes")
+            console.log(finalReturn)
         });
             //let newresult= 
             console.log(`finalreturn: ${finalReturn}`)

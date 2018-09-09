@@ -124,8 +124,25 @@ module.exports = function(app) {
     .populate("productRatings")
     .populate("reviewRatings")
     .exec(function(err, dbreply) {
+      if(err){
+        res.json(err)
+      }
+      let prodAvg=0;
+      let revAvg=0
       console.log(dbreply);
-      
+      if(dbreply.productRatings){
+        for(let i=0; i<dbreply.productRatings.length; i++){
+          prodAvg+=dbreply.productRatings[i].rating;
+        }
+      }
+      if(dbreply.reviewRatings){
+        for(let i=0; i<dbreply.reviewRatings.length; i++){
+          revAvg+=dbreply.reviewRatings[i].rating;
+        }
+      }
+      prodAvg=prodAvg/dbreply.productRatings.length;
+      revAvg=revAvg/dbreply.reviewRatings.length;
+      res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, averageReviewRating: revAvg, numberReviewRatings:dbreply.reviewRatings.length})      
     })
   })
 }
