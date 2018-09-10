@@ -102,7 +102,8 @@ module.exports = function(app) {
   })
 
   app.get("/api/user/allstuff", (req, res) => {
-    User.findOne({_id:req.session.uid}).populate("products")
+    User.findOne({_id:req.session.uid})
+    .populate("products")
     .populate("reviews")
     .populate("replies")
     .populate("chats")
@@ -116,5 +117,32 @@ module.exports = function(app) {
     //   {
     //     res.json(dbreply)}
     // );
+  })
+
+  app.get("/api/user/averagereview", (req, res) => {
+    User.findOne({_id:req.session.uid})
+    .populate("productRatings")
+    .populate("reviewRatings")
+    .exec(function(err, dbreply) {
+      if(err){
+        res.json(err)
+      }
+      let prodAvg=0;
+      let revAvg=0
+      console.log(dbreply);
+      if(dbreply.productRatings){
+        for(let i=0; i<dbreply.productRatings.length; i++){
+          prodAvg+=dbreply.productRatings[i].rating;
+        }
+      }
+      if(dbreply.reviewRatings){
+        for(let i=0; i<dbreply.reviewRatings.length; i++){
+          revAvg+=dbreply.reviewRatings[i].rating;
+        }
+      }
+      prodAvg=prodAvg/dbreply.productRatings.length;
+      revAvg=revAvg/dbreply.reviewRatings.length;
+      res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, averageReviewRating: revAvg, numberReviewRatings:dbreply.reviewRatings.length})      
+    })
   })
 }
