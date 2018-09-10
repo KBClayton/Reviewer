@@ -12,6 +12,8 @@ const LocationDisplay = props => (
       <Link to={props.urlLink}><button className = "btn btn-info m-3" >Comments</button></Link>
       <p><small>{props.lengthNo} Comments</small></p>
 
+      <p className = 'mb-0'><b>{props.Rating}</b></p>
+      <p>{props.noOfRatings}</p>
       <select className = 'border border-dark' name="Rating" onChange = {props.setRating} id="r1">
         <option value="1">1 Star</option>
         <option value="2">2 Star</option>

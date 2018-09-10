@@ -76,14 +76,14 @@ class ReplyPage extends Component {
 
         <input className = 'border border-dark m-3' type="text" onChange={this.onChange} name = 'replyText'/>
         <button className="btn btn-info" onClick={this.handleSubmit} type='submit'>Send your reply</button>
-
           {this.state.replies.map(review => (
             <CommentDisplay
               key = {review._id}
               id = {review._id}
               textComment = {review.text}
               replies = {review.replies}
-              // onChange={e => this.setState({ newReply: e.target.value})}
+              onChange={e => this.setState({ newReply: e.target.value})}
+              CommentType = 'Reply'
             />
           ))}   
 
