@@ -11,6 +11,7 @@ import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 
 // import './main.css'
 import axios from 'axios'
+console.log(document.cookie.username)
 
 class ShowOneLocation extends Component {
 
@@ -25,7 +26,8 @@ class ShowOneLocation extends Component {
     newReply: '',
     rating: [],
     UserSetRating: 0,
-    averageRating: 0
+    averageRating: 0,
+    userRating: 0
   }
 
   // Loads All Articles
@@ -105,12 +107,14 @@ class ShowOneLocation extends Component {
   thumbsUp = (event) =>{
     let thumbs = parseInt(event.target.value);
     this.setState({ userRating: thumbs });
-    console.log(this.state.userRating)
-  }
-
-  thumbsDown = (event) => {
-    let thumbs = parseInt(event.target.value);this.setState({ userRating: thumbs });
-    console.log(this.state.userRating)
+    const ThumbsRating = {
+      parentReview: event.target.id,
+      rating: thumbs
+    }
+    axios.post('/api/reviewrate', ThumbsRating)
+      .then(res=>{
+        console.log(res)
+      })
   }
 
   // Render to Screen
@@ -150,7 +154,7 @@ class ShowOneLocation extends Component {
               ReplyTxt = 'Reply'
               CommentType = 'Comment'
               thumbsUp = {this.thumbsUp}
-              thumbsDown = {this.thumbsDown}
+              // thumbsDown = {this.thumbsDown}
             />
           ))}          
           {/* <AddCommentModal/> */}

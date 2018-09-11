@@ -15,10 +15,10 @@ const CommentDisplay = props => (
         onChange=''
       >
       </textarea> */}
-      <button onClick={props.thumbsUp} value="1">
+      <button onClick={props.thumbsUp} id={props.id} value="1">
         thumbs up 
       </button>
-      <button onClick={props.thumbsDown} value="-1">
+      <button onClick={props.thumbsUp} id={props.id} value="-1">
         thumbs down
       </button>
       <a href={'/reply/' + props.id}>{props.ReplyTxt}</a>

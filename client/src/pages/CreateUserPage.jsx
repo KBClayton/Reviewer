@@ -137,6 +137,7 @@ class CreateUserPage extends Component {
             value={this.state.password_v}
             onChange={e => this.setState({ password_v: e.target.value})}
           />
+          <input type="file"/>
           <br/>
           <button
             className='m-2 btn btn-info btn-small'
