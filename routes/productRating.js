@@ -21,7 +21,8 @@ module.exports = function(app) {
           newprodRating.user=req.session.uid;
           //newprodRating.username=req.session.username;
           Product.findOne({_id:newprodRating.parentProduct}).populate("ratings").then(dbmod=>{
-              console.log(`this is productfind userid=${req.session.uid}`)
+              //console.log(`this is productfind userid=${req.session.uid}`)
+              let avgCollector=0;
               let preidstuff;
               let idstuff;
               let preParentproduct;
@@ -37,11 +38,11 @@ module.exports = function(app) {
                      parentProductSuff=preParentproduct.slice(1,preParentproduct.length-1)
                   }
                   // && JSON.stringify(dbmod.ratings[i].user)===req.session.uid
-                  console.log(`${parentProductSuff} and ${idstuff}`)
+                  //console.log(`${parentProductSuff} and ${idstuff}`)
                   if(parentProductSuff!==undefined && idstuff!==undefined){
                     if(parentProductSuff===newprodRating.parentProduct && idstuff===req.session.uid){
                         twice=true
-                        res.json({sucess:false, error:"you can't rate things twice."})
+                        res.json({sucess:false, error:"You can't rate things twice."})
                         break;
                     }
                   }
@@ -52,10 +53,25 @@ module.exports = function(app) {
                     User.findByIdAndUpdate(req.session.uid, { "$push": { "productRatings": dbModel._id } },
                     { "new": true, "upsert": true }).then(dbreply=> {
                         //console.log(dbreply)
-                        Product.findByIdAndUpdate(newprodRating.parentProduct, { "$push": { "ratings": dbModel._id } },{ "new": true, "upsert": true }).then(dbreply2=>{
+                        Product.findById(newprodRating.parentProduct).populate("ratings").then(dbrepper=>{
+                            console.log("in first findprodut")
+                            console.log(dbrepper.ratings);
+                            //console.log(dbrepper.ratings.length)
+                            avgCollector=newprodRating.rating;
+                            if(dbrepper!==undefined){
+                                for(let i=0; i<dbrepper.ratings.length; i++){
+                                    avgCollector=avgCollector+dbrepper.ratings[i].rating;
+                                    console.log(avgCollector);
+                                }
+                                avgCollector=avgCollector/(dbrepper.ratings.length+1);
+                                avgCollector=avgCollector.toFixed(1)
+                                console.log(avgCollector);
+                            }
+                            Product.findByIdAndUpdate(newprodRating.parentProduct, { "$push": { "ratings": dbModel._id },  "$set": {"averageRating":avgCollector}  },{ "new": true, "upsert": true }).then(dbreply2=>{
 
-                            //console.log(dbreply2);
-                            res.json(dbModel);
+                                //console.log(dbreply2);
+                                res.json(dbModel);
+                            })
                         })
                     //console.log(dbreply);
                     //console.log(logger);
