@@ -9,7 +9,10 @@ const reviewSchema = new Schema({
   ratings:[{type:Schema.Types.ObjectId, ref:'ReviewRating'}],
   username:{type:String},
   dateCreated:{type:Date, default:Date.now},
-  dateUpdated:{type:Date, default:Date.now}
+  dateUpdated:{type:Date, default:Date.now},
+  thumbsUp:{type: Number, default:0},
+  thumbsDown:{type: Number, default:0}
+
 });
 
 const Review = mongoose.model("Review", reviewSchema);

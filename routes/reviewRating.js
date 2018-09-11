@@ -20,7 +20,34 @@ module.exports = function(app) {
           //console.log(req.session.uid);
           newrevRating=req.body;
           newrevRating.user=req.session.uid;
+          Review.findOne({_id:newrevRating.parentReview}).populate("ratings").then(dbmod=>{
+            let preidstuff
+            let idstuff
+            let preParentproduct
+            let parentProductSuff
+            let twice=false
+              //console.log(dbmod.ratings);
+              for(let i=0; i<dbmod.ratings.length; i++){
+                  //console.log(JSON.stringify(dbmod.ratings[i].user))
+                  if(dbmod.ratings[i].user!==undefined){
+                     preidstuff=JSON.stringify( dbmod.ratings[i].user);
+                     idstuff=preidstuff.slice(1,preidstuff.length-1)
+                     preParentproduct=JSON.stringify( dbmod.ratings[i].parentProduct)
+                     parentProductSuff=preParentproduct.slice(1,preParentproduct.length-1)
+                  }
+                  // && JSON.stringify(dbmod.ratings[i].user)===req.session.uid
+                  console.log(`${parentProductSuff} and ${idstuff}`)
+                  if(parentProductSuff!==undefined && idstuff!==undefined){
+                    if(parentProductSuff===newprodRating.parentProduct && idstuff===req.session.uid){
+                        twice=true
+                        res.json({sucess:false, error:"you can't rate things twice."})
+                        break;
+                    }
+                  }
+              }
+
           //.newrevRating.username=req.session.username;
+          if(!twice)
           ReviewRating.create(newrevRating).then(dbModel => {
             //update user
             User.findByIdAndUpdate(req.session.uid, { "$push": { "reviewRatings": dbModel._id } },
@@ -36,6 +63,7 @@ module.exports = function(app) {
             });
             //res.json(dbModel)
           });
+        });
       });
     
 }
