@@ -70,8 +70,8 @@ class ReplyPage extends Component {
           subpage = {this.state.subpage}
         />
         <div className="card">
-          <p>Headline MOFO</p>
-          <p>Original:  <i> "{this.state.data.text}"</i></p>
+          <p>Original Comment</p>
+          <p><i> "{this.state.data.text}"</i></p>
         </div>
 
         <input className = 'border border-dark m-3' type="text" onChange={this.onChange} name = 'replyText'/>

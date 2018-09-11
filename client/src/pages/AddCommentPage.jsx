@@ -24,6 +24,7 @@ class ShowOneLocation extends Component {
     newComment: '',
     newReply: '',
     rating: [],
+    UserSetRating: 0,
     averageRating: 0
   }
 
@@ -69,7 +70,7 @@ class ShowOneLocation extends Component {
     })
     let average = temp/arrayLength;
     console.log(average)
-    
+
     if (!average){
       this.setState({averageRating: 0})
     }
@@ -82,7 +83,7 @@ class ShowOneLocation extends Component {
   ratingSubmitHandler = () => {
     const newRating = {
       parentProduct: this.state.locations._id,
-      rating: this.state.rating
+      rating: this.state.UserSetRating
     }
     console.log(newRating);
     axios.post('/api/productrate', newRating)
@@ -94,7 +95,7 @@ class ShowOneLocation extends Component {
 
   setRating = (event) => {
     let bennuCoffee = parseInt(event.target.value);
-    this.setState({ rating: bennuCoffee})
+    this.setState({ UserSetRating: bennuCoffee})
   }
 
   onChange = (event) => {
