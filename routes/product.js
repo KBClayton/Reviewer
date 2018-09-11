@@ -38,9 +38,9 @@ module.exports = function(app) {
 
   app.post("/api/product",  async function(req, res){
 
-    let logger= await verify.loggedin(app, req)
-    console.log(logger);
-    console.log(req.body);
+   // await verify.loggedin(app, req)
+    //console.log(logger);
+    //console.log(req.body);
     // if(!verify.loggedin(app, req)){
     //   return res.status(401).send({success: false, message: "You are not logged in"});
     // }
