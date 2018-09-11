@@ -154,7 +154,6 @@ class ShowOneLocation extends Component {
               ReplyTxt = 'Reply'
               CommentType = 'Comment'
               thumbsUp = {this.thumbsUp}
-              // thumbsDown = {this.thumbsDown}
             />
           ))}          
           {/* <AddCommentModal/> */}
