@@ -21,11 +21,17 @@ module.exports = function(app) {
           newrevRating=req.body;
           newrevRating.user=req.session.uid;
           Review.findOne({_id:newrevRating.parentReview}).populate("ratings").then(dbmod=>{
+            let thumbs
             let preidstuff
             let idstuff
             let preParentproduct
             let parentProductSuff
             let twice=false
+            if(newrevRating.rating===-1){
+                thumbs={thumbsDown:1}
+            }else{
+                thumbs={thumbsUp:1}
+            }
               //console.log(dbmod.ratings);
               for(let i=0; i<dbmod.ratings.length; i++){
                   //console.log(JSON.stringify(dbmod.ratings[i].user))
@@ -36,7 +42,7 @@ module.exports = function(app) {
                      parentProductSuff=preParentproduct.slice(1,preParentproduct.length-1)
                   }
                   // && JSON.stringify(dbmod.ratings[i].user)===req.session.uid
-                  console.log(`${parentProductSuff} and ${idstuff}`)
+                  //console.log(`${parentProductSuff} and ${idstuff}`)
                   if(parentProductSuff!==undefined && idstuff!==undefined){
                     if(parentProductSuff===newrevRating.parentReview && idstuff===req.session.uid){
                         twice=true
@@ -53,7 +59,7 @@ module.exports = function(app) {
             User.findByIdAndUpdate(req.session.uid, { "$push": { "reviewRatings": dbModel._id } },
             { "new": true, "upsert": true }).then(dbreply=> {
                 console.log(dbreply)
-                Review.findByIdAndUpdate(newrevRating.parentReview, { "$push": { "ratings": dbModel._id } },{ "new": true, "upsert": true }).then(dbreply2=>{
+                Review.findByIdAndUpdate(newrevRating.parentReview, { "$push": { "ratings": dbModel._id }, $inc: thumbs },{ "new": true, "upsert": true }).then(dbreply2=>{
                     console.log(dbreply2);
                     res.json(dbModel);
                 })
