@@ -11,6 +11,7 @@ const productSchema = new Schema({
   //parentProduct: {type:Schema.Types.ObjectId, ref:'Product', required:true},
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
   ratings:[{type:Schema.Types.ObjectId, ref:'ProductRating'}],
+  averageRating:{type:Number, min:1, max:5},
   user: {type:Schema.Types.ObjectId, ref:'User'},
   username:{type:String},
   catagories:{type: Array},
