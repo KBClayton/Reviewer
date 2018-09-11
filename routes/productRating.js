@@ -8,15 +8,12 @@ const verify=require("./verify");
 
 module.exports = function(app) {
     app.post("/api/productrate",  async function(req, res){
+        if(!await verify.loggedin(req)){
+            console.log("failed validation")
+            res.status(401).send({success: false, message: "you are not logged in"});
+            return;
+          }
 
-        //let logger= await verify.loggedin(app, req)
-        //console.log(logger);
-        console.log(req.body);
-        // if(!verify.loggedin(app, req)){
-        //   return res.status(401).send({success: false, message: "You are not logged in"});
-        // }
-          //console.log(req.body);
-          //console.log(req.session.uid);
           newprodRating=req.body;
           newprodRating.user=req.session.uid;
           //newprodRating.username=req.session.username;
@@ -61,14 +58,12 @@ module.exports = function(app) {
                             if(dbrepper!==undefined){
                                 for(let i=0; i<dbrepper.ratings.length; i++){
                                     avgCollector=avgCollector+dbrepper.ratings[i].rating;
-                                    console.log(avgCollector);
                                 }
                                 avgCollector=avgCollector/(dbrepper.ratings.length+1);
                                 avgCollector=avgCollector.toFixed(1)
-                                console.log(avgCollector);
+                                //console.log(avgCollector);
                             }
                             Product.findByIdAndUpdate(newprodRating.parentProduct, { "$push": { "ratings": dbModel._id },  "$set": {"averageRating":avgCollector}  },{ "new": true, "upsert": true }).then(dbreply2=>{
-
                                 //console.log(dbreply2);
                                 res.json(dbModel);
                             })
