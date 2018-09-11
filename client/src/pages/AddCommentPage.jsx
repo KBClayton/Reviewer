@@ -102,6 +102,17 @@ class ShowOneLocation extends Component {
     this.setState({ newComment: event.target.value})
   }
 
+  thumbsUp = (event) =>{
+    let thumbs = parseInt(event.target.value);
+    this.setState({ userRating: thumbs });
+    console.log(this.state.userRating)
+  }
+
+  thumbsDown = (event) => {
+    let thumbs = parseInt(event.target.value);this.setState({ userRating: thumbs });
+    console.log(this.state.userRating)
+  }
+
   // Render to Screen
   render() { 
     return (
@@ -138,6 +149,8 @@ class ShowOneLocation extends Component {
               length = {review.replies.length + ' Replies'}
               ReplyTxt = 'Reply'
               CommentType = 'Comment'
+              thumbsUp = {this.thumbsUp}
+              thumbsDown = {this.thumbsDown}
             />
           ))}          
           {/* <AddCommentModal/> */}
