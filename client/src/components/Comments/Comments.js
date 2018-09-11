@@ -6,8 +6,8 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 const CommentDisplay = props => (
   <div>
     <div className = 'card p-3 m-3'>
-    <h4 key={props.id} id={props.id}><small><u>{props.CommentType}</u></small></h4>
-      <p>{props.textComment}</p>
+    <p key={props.id} id={props.id}><small><u>{props.CommentType}</u></small></p>
+      <p><i>"{props.textComment}"</i></p>
       {/* <textarea
         name='reply'
         className='border border-dark'
@@ -15,14 +15,24 @@ const CommentDisplay = props => (
         onChange=''
       >
       </textarea> */}
-      <button onClick={props.thumbsUp} value="1">
-        thumbs up 
-      </button>
-      <button onClick={props.thumbsDown} value="-1">
-        thumbs down
-      </button>
+      <h3>
+      <span 
+        onClick={props.thumbsUp} 
+        id={props.id} 
+        value="1"
+        className={props.thumbsUpIcon}
+      />
+      <span> </span>
+      <span
+        onClick={props.thumbsUp} 
+        id={props.id} 
+        value="-1"
+        className = {props.thumbsDownIcon}
+        />
+      </h3>
       <a href={'/reply/' + props.id}>{props.ReplyTxt}</a>
       <p><b>{props.length}</b></p>
+      <h4>{props.thumbsUpAmount}{props.thumbsDownAmount}</h4>
     </div>
     <br/>
     

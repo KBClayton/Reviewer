@@ -55,6 +55,7 @@ class ShowAllProducts extends Component {
             lengthNo = {location.reviews.length}
             // Rating ={ location.rating.average}
             noOfRatings = {location.ratings.length + ' Ratings'}
+            CommentButton = 'See Comments'
           />
         ))}
         <Footer /> 
