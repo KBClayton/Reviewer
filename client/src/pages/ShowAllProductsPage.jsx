@@ -16,7 +16,7 @@ class ShowAllProducts extends Component {
     title: "Reviewer",
     subpage: 'Show All Products',
     locations: []
-   }
+  }
 
   // Loads All Articles
   loadLocations = () => {
@@ -53,6 +53,8 @@ class ShowAllProducts extends Component {
             description = {location.description}
             urlLink = {'/location/' + location._id}
             lengthNo = {location.reviews.length}
+            // Rating ={ location.rating.average}
+            noOfRatings = {location.ratings.length + ' Ratings'}
           />
         ))}
         <Footer /> 

@@ -5,4 +5,6 @@ module.exports={
     Reply:require('./Reply'),
     Recommend:require('./Recommend'),
     Chat:require('./Chat'),
+    ReviewRating:require('./ReviewRating'),
+    ProductRating:require('./ProductRating')
 }

@@ -22,7 +22,10 @@ class ShowOneLocation extends Component {
     locations: [],
     comments: [],
     newComment: '',
-    newReply: ''
+    newReply: '',
+    rating: [],
+    averageRating: 0,
+    userRating: 0
   }
 
   // Loads All Articles
@@ -35,7 +38,9 @@ class ShowOneLocation extends Component {
       // console.log('Something Hapened')
         this.setState({locations: res.data})
         this.setState({comments: res.data.reviews})
-        console.log(this.state.comments.length)
+        this.setState({rating: res.data.ratings})
+        // console.log(this.state.comments.length)
+        this.calculateRating();
       })
   }
       // Run loadLocations after posting *****
@@ -53,11 +58,59 @@ class ShowOneLocation extends Component {
       .then(res=>{
         console.log(res);
         this.loadLocations();
-      })
+    })
+  }
+
+  calculateRating = () => {
+    let temp = 0;
+    let arrayLength = this.state.rating.length;
+    this.state.rating.forEach((rate, index )=>{
+     temp += rate.rating
+    //  console.log(temp);
+    })
+    let average = temp/arrayLength;
+    console.log(average)
+    
+    if (!average){
+      this.setState({averageRating: 0})
+    }
+
+    else{
+      this.setState({averageRating: average.toFixed(1)})
+    }
+  }
+
+  ratingSubmitHandler = () => {
+    const newRating = {
+      parentProduct: this.state.locations._id,
+      rating: this.state.rating
+    }
+    console.log(newRating);
+    axios.post('/api/productrate', newRating)
+      .then(res=>{
+        console.log(res);
+        this.loadLocations();
+    })
+  }
+
+  setRating = (event) => {
+    let bennuCoffee = parseInt(event.target.value);
+    this.setState({ rating: bennuCoffee})
   }
 
   onChange = (event) => {
     this.setState({ newComment: event.target.value})
+  }
+
+  thumbsUp = (event) =>{
+    let thumbs = parseInt(event.target.value);
+    this.setState({ userRating: thumbs });
+    console.log(this.state.userRating)
+  }
+
+  thumbsDown = (event) => {
+    let thumbs = parseInt(event.target.value);this.setState({ userRating: thumbs });
+    console.log(this.state.userRating)
   }
 
   // Render to Screen
@@ -76,6 +129,10 @@ class ShowOneLocation extends Component {
             description = {this.state.locations.description}
             urlLink = {this.state.backBtn}
             lengthNo = {this.state.comments.length}
+            SubmitHandler = {this.ratingSubmitHandler}
+            setRating = {this.setRating}
+            noOfRatings = {'Based on ' + this.state.rating.length + ' Ratings'}
+            Rating = {'Average Rating: ' + this.state.averageRating + ' Stars'}
           />
           <ProductComment
             addComment = {this.handleSubmit}
@@ -89,6 +146,11 @@ class ShowOneLocation extends Component {
               textComment = {review.text}
               replies = {review.replies}
               onChange={e => this.setState({ newReply: e.target.value})}
+              length = {review.replies.length + ' Replies'}
+              ReplyTxt = 'Reply'
+              CommentType = 'Comment'
+              thumbsUp = {this.thumbsUp}
+              thumbsDown = {this.thumbsDown}
             />
           ))}          
           {/* <AddCommentModal/> */}

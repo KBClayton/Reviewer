@@ -18,6 +18,12 @@ const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reviewdb");
 
 
+//Amazon stuff
+const fileupload = require("express-fileupload");
+const BUCKET_NAME = 'es-test-bucket-8156';
+const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
+const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
+
 //Security stuff
 //const cookieParser = require('cookie-parser');
 //const cookieEncrypter = require('cookie-encrypter');
@@ -65,7 +71,7 @@ if (app.get("env") === "production") {
 
 const passportOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET
+  secretOrKey: process.env.JWT_SECRET || "this should not be live"
 };
 
 passport.use(new JwtStrategy(passportOpts,
@@ -87,6 +93,7 @@ app.use(session(sess));
 app.use(helmet.permittedCrossDomainPolicies())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(fileupload());
 //app.use(cookieParser(secretKey));
 //app.use(cookieEncrypter(secretKey));
 
@@ -100,7 +107,29 @@ app.use(function(req, res, next) {
 });
 
 
-
+//Amazon more stuff
+function uploadToS3(file){
+  let s3bucket = new AWS.S3({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
+    Bucket: BUCKET_NAME
+  });
+  s3bucket.createBucket(function(){
+    var params = {
+      Bucket: BUCKET_NAME,
+      Key: file.name,
+      Body: file.data
+    };
+    s3bucket.upload(params, function(err, data){
+      if(err){
+        console.log('error in callback');
+        console.log(err);
+      }
+      console.log('success');
+      console.log(data);
+    })
+  })
+}
 
 //api routes
 //require("./routes/user")(app, vault, cookieParams);
@@ -110,9 +139,15 @@ require("./routes/review")(app);
 require("./routes/reply")(app);
 require("./routes/recommend")(app);
 require("./routes/chat")(app);
-app.get("/api/thing", (req, res) => {
-  res.json({success:true, message:"this is hitting the server"})
-})
+require("./routes/reviewRating")(app);
+require("./routes/productRating")(app);
+app.post("/upload", function(req, res){
+  uploadToS3(req.files.file);
+  res.send("!")
+});
+// app.get("/api/thing", (req, res) => {
+//   res.sendfile({success:true, message:"this is hitting the server"})
+// })
 //require("./routes/admin")(app);
 
 app.get("/api/test", passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -125,6 +160,10 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "client/build/index.html"));
   });
 }
+
+
+
+
 
 
 //start the party

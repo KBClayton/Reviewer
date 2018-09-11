@@ -28,9 +28,15 @@ module.exports = function(app) {
           _id: user._id,
           username: user.username
         }, process.env.JWT_SECRET, {expiresIn:"10h"});
-        req.session.token="JWT "+token;
+        req.session.token=token;
 
-        
+        // jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+        //   if(err){
+        //       console.log(err);
+        //   }else{
+        //   console.log(decoded); // bar
+        //   }
+        // });
 
         req.session.uid= user.id;
         req.session.username= user.username;
@@ -54,8 +60,8 @@ module.exports = function(app) {
               const token = jwt.sign({
                 _id: user._id,
                 username: user.username 
-              }, process.env.JWT_SECRET);
-              req.session.token="JWT "+token;
+              }, process.env.JWT_SECRET, {expiresIn:"10h"});
+              req.session.token=token;
               //res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
               //vault.write(req, JSON.stringify({token: "JWT " + token, username:isMatch.username}));
               res.json({success: true, token: "JWT " + token});
@@ -91,14 +97,18 @@ module.exports = function(app) {
     }
     req.session.token=null;
     req.session.uid= null;
+    req.session.username=null;
     res.status(200).send({success:true, message:"loggedout"});
   })
 
   app.get("/api/user/allstuff", (req, res) => {
-    User.findOne({_id:req.session.uid}).populate("products")
+    User.findOne({_id:req.session.uid})
+    .populate("products")
     .populate("reviews")
     .populate("replies")
     .populate("chats")
+    .populate("productRatings")
+    .populate("reviewRatings")
     .exec( function(err, dbreply) {
       if (err) {res.json(err)};
       res.json(dbreply);
@@ -107,5 +117,32 @@ module.exports = function(app) {
     //   {
     //     res.json(dbreply)}
     // );
+  })
+
+  app.get("/api/user/averagereview", (req, res) => {
+    User.findOne({_id:req.session.uid})
+    .populate("productRatings")
+    .populate("reviewRatings")
+    .exec(function(err, dbreply) {
+      if(err){
+        res.json(err)
+      }
+      let prodAvg=0;
+      let revAvg=0
+      console.log(dbreply);
+      if(dbreply.productRatings){
+        for(let i=0; i<dbreply.productRatings.length; i++){
+          prodAvg+=dbreply.productRatings[i].rating;
+        }
+      }
+      if(dbreply.reviewRatings){
+        for(let i=0; i<dbreply.reviewRatings.length; i++){
+          revAvg+=dbreply.reviewRatings[i].rating;
+        }
+      }
+      prodAvg=prodAvg/dbreply.productRatings.length;
+      revAvg=revAvg/dbreply.reviewRatings.length;
+      res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, averageReviewRating: revAvg, numberReviewRatings:dbreply.reviewRatings.length})      
+    })
   })
 }
