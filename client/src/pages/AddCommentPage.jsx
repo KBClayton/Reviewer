@@ -8,7 +8,6 @@ import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
 import Replies from '../components/Replies/Replies'
 import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
-
 // import './main.css'
 import axios from 'axios'
 console.log(document.cookie.username)
@@ -27,7 +26,8 @@ class ShowOneLocation extends Component {
     rating: [],
     UserSetRating: 0,
     averageRating: 0,
-    userRating: 0
+    userRating: 0,
+    UserSetRating: 0
   }
 
   // Loads All Articles
@@ -96,8 +96,9 @@ class ShowOneLocation extends Component {
   }
 
   setRating = (event) => {
-    let bennuCoffee = parseInt(event.target.value);
+    let bennuCoffee = parseInt(event.target.id);
     this.setState({ UserSetRating: bennuCoffee})
+    this.ratingSubmitHandler();
   }
 
   onChange = (event) => {
@@ -113,7 +114,7 @@ class ShowOneLocation extends Component {
     }
     axios.post('/api/reviewrate', ThumbsRating)
       .then(res=>{
-        console.log(res)
+        this.loadLocations();
       })
   }
 
@@ -137,11 +138,11 @@ class ShowOneLocation extends Component {
             setRating = {this.setRating}
             noOfRatings = {'Based on ' + this.state.rating.length + ' Ratings'}
             Rating = {'Average Rating: ' + this.state.averageRating + ' Stars'}
+            CommentButton = 'Back to All'
           />
           <ProductComment
             addComment = {this.handleSubmit}
             textComment = {this.onChange}
-
           />
           {this.state.comments.map(review => (
             <CommentDisplay
@@ -152,8 +153,12 @@ class ShowOneLocation extends Component {
               onChange={e => this.setState({ newReply: e.target.value})}
               length = {review.replies.length + ' Replies'}
               ReplyTxt = 'Reply'
-              CommentType = 'Comment'
+              CommentType = {review.username + " " + Date(review.dateCreated)}
               thumbsUp = {this.thumbsUp}
+              thumbsUpAmount = {review.thumbsUp + ' Positive Reviews, '}
+              thumbsDownAmount = {review.thumbsDown + ' Negative Reviews'}
+              thumbsUpIcon = 'fa fa-thumbs-up'
+              thumbsDownIcon = 'fa fa-thumbs-down'
             />
           ))}          
           {/* <AddCommentModal/> */}

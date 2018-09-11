@@ -83,7 +83,8 @@ class ReplyPage extends Component {
               textComment = {review.text}
               replies = {review.replies}
               onChange={e => this.setState({ newReply: e.target.value})}
-              CommentType = 'Reply'
+              CommentType = {'Reply - ' + review.username + ' ' + Date(review.dateCreated)}
+
             />
           ))}   
 

@@ -57,6 +57,10 @@ class CreateWierdLocation extends Component {
       })
   }
 
+  searchAPILocations = () => {
+    
+  }
+
   // Render to Screen
   render() { 
     return (
