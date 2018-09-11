@@ -12,7 +12,7 @@ const productSchema = new Schema({
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
   ratings:[{type:Schema.Types.ObjectId, ref:'ProductRating'}],
   averageRating:{type:Number, min:1, max:5},
-  user: {type:Schema.Types.ObjectId, ref:'User'},
+  user: {type:Schema.Types.ObjectId, ref:'User', required:true},
   username:{type:String},
   catagories:{type: Array},
   gpsdata:{type: Object, default:{lat:30.2672, long:97.7431}},

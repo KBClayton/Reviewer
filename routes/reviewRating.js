@@ -32,13 +32,13 @@ module.exports = function(app) {
                   if(dbmod.ratings[i].user!==undefined){
                      preidstuff=JSON.stringify( dbmod.ratings[i].user);
                      idstuff=preidstuff.slice(1,preidstuff.length-1)
-                     preParentproduct=JSON.stringify( dbmod.ratings[i].parentProduct)
+                     preParentproduct=JSON.stringify( dbmod.ratings[i].parentReview)
                      parentProductSuff=preParentproduct.slice(1,preParentproduct.length-1)
                   }
                   // && JSON.stringify(dbmod.ratings[i].user)===req.session.uid
                   console.log(`${parentProductSuff} and ${idstuff}`)
                   if(parentProductSuff!==undefined && idstuff!==undefined){
-                    if(parentProductSuff===newprodRating.parentProduct && idstuff===req.session.uid){
+                    if(parentProductSuff===newrevRating.parentReview && idstuff===req.session.uid){
                         twice=true
                         res.json({sucess:false, error:"you can't rate things twice."})
                         break;
@@ -47,7 +47,7 @@ module.exports = function(app) {
               }
 
           //.newrevRating.username=req.session.username;
-          if(!twice)
+          if(!twice){
           ReviewRating.create(newrevRating).then(dbModel => {
             //update user
             User.findByIdAndUpdate(req.session.uid, { "$push": { "reviewRatings": dbModel._id } },
@@ -63,6 +63,7 @@ module.exports = function(app) {
             });
             //res.json(dbModel)
           });
+        }
         });
       });
     
