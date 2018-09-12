@@ -11,10 +11,6 @@ const socket = require("socket.io");
 
 //db stuff
 const mongoose = require("mongoose");
-//const User = require("./models/User");
-//const Product = require("./models/Product");
-//const Review = require("./models/Review");
-//const Reply = require("./models/Reply");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reviewdb");
 
 
@@ -25,8 +21,6 @@ const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
 const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
 
 //Security stuff
-//const cookieParser = require('cookie-parser');
-//const cookieEncrypter = require('cookie-encrypter');
 const uuidv4 = require('uuid/v4');
 const helmet = require('helmet')
 const secretKey = process.env.secretKey || 'this should not be live';

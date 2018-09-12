@@ -37,7 +37,7 @@ module.exports = function(app) {
         //   console.log(decoded); // bar
         //   }
         // });
-
+        
         req.session.uid= user.id;
         req.session.username= user.username;
         res.cookie("username", user.username, {
@@ -45,7 +45,7 @@ module.exports = function(app) {
           expires:new Date(Date.now() + 36000000)})
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
-        return res.json({success: true, message: "Successfully created new user", token: "JWT " + token});
+        return res.json({success: true, message: "Successfully created new user", token: "JWT " + token, hash: process.env.googlelocation});
       })
   });
 
@@ -72,7 +72,7 @@ module.exports = function(app) {
               res.cookie("username", user.username, {
                 //signed:true, 
                 expires:new Date(Date.now() + 36000000)})
-              res.json({success: true, token: "JWT " + token});
+              res.json({success: true, token: "JWT " + token, hash: process.env.googlelocation});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
             }
