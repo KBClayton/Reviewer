@@ -32,7 +32,7 @@ class LoginPage extends Component {
     }
     console.log(data)
   
-    axios.post('http://localhost:3001/api/user/new', data)
+    axios.post('/api/user/login', data)
       .then(function(response){
       console.log(response)
       })
