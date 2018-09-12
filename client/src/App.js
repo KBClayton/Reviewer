@@ -17,8 +17,6 @@ import requireAuth from './components/Auth';
 
 
 
-<<<<<<< HEAD
-=======
 const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
@@ -58,29 +56,11 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
->>>>>>> merge
 
 class App extends Component {
   state = { 
     redirectToReferrer: false
    }
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   render() { 
     return ( 
       <BrowserRouter>
@@ -99,9 +79,7 @@ class App extends Component {
     
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />
-          <Route path="/test/" component={App} onEnter={requireAuth}>
-            <Route path="allproducts" component={ShowAllProducts}/>
-          </Route> {/*  end I want this to be protected */}
+           {/*  end I want this to be protected */}
           {/* <Route component = {Homepage}/> */}
           <Route path='/reply/:_id' component= {ReplyPage}/>
           <Route path='/chat' component = {Chat} exact/>
