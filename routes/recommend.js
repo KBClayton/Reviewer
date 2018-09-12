@@ -10,6 +10,7 @@ const customHeaderRequest = request.defaults({
 const Nightmare = require('nightmare');
 const nightmare = Nightmare();
 const jquery = require("jquery");
+const cron = require('node-cron');
 let linkHelperFood = [];
 let imgHelperFood = [];
 let locHelperFood = [];
@@ -65,7 +66,7 @@ module.exports = function(app) {
               };
               return imgHelperFood;
           }).then(function(response) {
-              let foodArray = [];
+              //let foodArray = [];
               axios.get("http://www.austinchronicle.com/food/reviews/").then(function(response){
               const $ = cheerio.load(response.data);
               // Now, we grab every h2 within an article tag, and do the following:
@@ -80,7 +81,6 @@ module.exports = function(app) {
                 result.title = $(this)
                 .children("a")
                 .text()
-                //.replace("\'", "")
                 .replace("Restaurant Review: ", "")
                 .replace("Far Flung Correspondence: ", "")
                 .replace("Review: ", "");
@@ -95,16 +95,27 @@ module.exports = function(app) {
                 result.link = linkHelperFood[i];
                 result.image = imgHelperFood[i];
                 result.food = true;
-                foodArray.push(result);
-                Recommend.create(result).then(dbModel => {
-                  console.log(dbModel);
-                }).catch(function(err) {
-                  // If an error occurred, log it
-                  console.log(err);
-                    });
-                    });
-                    res.json(foodArray);
-                console.log("if " + linkHelperFood.length + " != " + imgHelperFood.length + " != " + locHelperFood.length + ", -> there was a problem.");
+                Recommend.findOne({ title:result.title }).then(function(response) {
+                  if(!response || response===null){
+                    Recommend.create(result).then(result => {
+                      //foodArray.push(result);
+                      console.log(result.title + " was added to the database");
+                    }).catch(function(err) {
+                      // If an error occurred, log it
+                      console.log(err);
+                        })
+                  }
+                  else {
+                    console.log(result.title + " was already in the database");
+                  };
+                    }).catch(function(err) {
+                      // If an error occurred, log it
+                      console.log(err);
+                        });
+                      });
+                    res.json("the database was successfully updated");
+                    //console.log(foodArray);
+                    //console.log("if " + linkHelperFood.length + " != " + imgHelperFood.length + " != " + locHelperFood.length + ", -> there was a problem.");
                     }).catch(function(err) {
                       // If an error occurred, log it
                       console.log(err);
@@ -130,7 +141,7 @@ module.exports = function(app) {
           }).then(async function(response) {
               imgHelperMusic = [];
               descHelperMusic = [];
-              console.log(linkHelperMusic);
+              //console.log(linkHelperMusic);
               for (let i = 0; i<linkHelperMusic.length ; i++){
                 await axios.get(linkHelperMusic[i]).then(function(response){
                   const $ = cheerio.load(response.data);
@@ -150,7 +161,6 @@ module.exports = function(app) {
                 };
                 return imgHelperMusic;
           }).then(function(response) {
-              let musicArray = [];
               axios.get("http://www.austinchronicle.com/music/reviews/").then(function(response) {
               const $ = cheerio.load(response.data);
               // Now, we grab every h2 within an article tag, and do the following:
@@ -171,16 +181,26 @@ module.exports = function(app) {
                 result.lat = "30.271";
                 result.long = "-97.754";
                 result.music = true;
-                musicArray.push(result);
-                Recommend.create(result).then(dbModel => {
-                  console.log(dbModel);
-                }).catch(function(err) {
-                  //if error, log error
-                  console.log(err);
-                  });
+                Recommend.findOne({ location:result.location }).then(function(response) {
+                  if(!response || response===null) {
+                    Recommend.create(result).then(function(result) {
+                      console.log(result.location + " was added to the database");
+                      }).catch(function(err) {
+                        // If an error occurred, log it
+                        console.log(err);
+                        })
+                  }
+                  else {
+                  console.log(result.location + " was already in the database");
+                  //console.log("musicArray Length = " + musicArray.length);
+                  return true;
+                  }
+                    }).catch(function(err) {
+                      // If an error occurred, log it
+                      console.log(err);
+                        });
                 });
-                  res.json(musicArray);
-                  console.log("if " + linkHelperMusic.length + " != " + imgHelperMusic.length + ", -> there was a problem.");
+                  res.json("the database was successfully updated");
                 }).catch(function(err) {
                   // If an error occurred, log it
                   console.log(err);
@@ -237,7 +257,7 @@ module.exports = function(app) {
             };
             return imgHelperBooks;
           }).then(function(response) {
-            let booksArray = [];
+            //let booksArray = [];
             axios.get("http://www.austinchronicle.com/books/reviews/").then(function(response){
               const $ = cheerio.load(response.data);
               $("section#CenterColumn").children("h2").each(function(i, element) {
@@ -276,16 +296,27 @@ module.exports = function(app) {
                 result.link = linkHelperBooks[i];
                 result.image = imgHelperBooks[i];
                 result.books = true;
-                booksArray.push(result);
-                Recommend.create(result).then(dbModel => {
-                  console.log(dbModel);
-                }).catch(function(err) {
-                  //if error, log error
-                console.log(err);
-              });
+                Recommend.findOne({ title:result.title }).then(function(response) {
+                  if(!response || response===null){
+                    Recommend.create(result).then(result => {
+                      //booksArray.push(result);
+                      console.log(result.title + " was added to the database");
+                    }).catch(function(err) {
+                      // If an error occurred, log it
+                      console.log(err);
+                        })
+                  }
+                  else {
+                    console.log(result.title + " was already in the database");
+                  };
+                    }).catch(function(err) {
+                      // If an error occurred, log it
+                      console.log(err);
+                        });
             });
-            res.json(booksArray);
-            console.log("if " + linkHelperBooks.length + " != " + imgHelperBooks.length + ", -> there was a problem.")
+            res.json("the database was successfully updated");
+            //console.log(booksArray);
+            //console.log("if " + linkHelperBooks.length + " != " + imgHelperBooks.length + ", -> there was a problem.")
           }).catch(function(err) {
             // if an error occured, log it
             console.log(err);
@@ -296,7 +327,6 @@ module.exports = function(app) {
   app.get("/recommend/daily", function(req, res) {
     // First, we grab the body of the html with request
     customHeaderRequest.get("http://do512.com/").then(function(response) {
-      console.log("HEYHEYHEYHEYHEYHEYHEYHEY");
       dailyArray = [];
       // Then, we load that into cheerio and save it to $ for a shorthand selector
       const $ = cheerio.load(response);
@@ -494,11 +524,6 @@ module.exports = function(app) {
               .children("div.content-card-text")
               .children("div.content-card-subtitle")
               .text();
-            result.image = $(this)
-              .children("a.content-card-place")
-              .children("figure.content-card-figure")
-              .children("img")
-              .attr("src");
             result.link = linkHelperObscura[i];
             result.lat = $(this)
               .children("a.content-card-place")
@@ -523,16 +548,26 @@ module.exports = function(app) {
                 .text().split(", ")[1]
                 .replace("\n", "") : "";
             result.obscura = true;
-            obscuraArray.push(result);
-            Recommend.create(result).then(dbModel => {
-              console.log(dbModel);
-            }).catch(function(err) {
-              //if error, log error
-              console.log(err);
-            });
+            Recommend.findOne({ title:result.title }).then(function(response) {
+              if(!response || response===null){
+                Recommend.create(result).then(res => {
+                  //obscuraArray.push(res);
+                  console.log(res.title + " was added to the database");
+                }).catch(function(err) {
+                  // If an error occurred, log it
+                  console.log(err);
+                    })
+              }
+              else {
+                console.log(result.title + " was already in the database");
+              };
+                }).catch(function(err) {
+                  // If an error occurred, log it
+                  console.log(err);
+                    });
         });
-        res.json(obscuraArray);
-        console.log("if " + linkHelperObscura.length + " != " + addressHelperObscura.length + ", -> there was a problem.")
+        res.json("the database was successfully updated");
+        //console.log("if " + linkHelperObscura.length + " != " + addressHelperObscura.length + ", -> there was a problem.")
       }).catch(function(err) {
         //if error, log error
         console.log(err);
@@ -612,11 +647,6 @@ module.exports = function(app) {
               .children("div.content-card-text")
               .children("div.content-card-subtitle")
               .text();
-            result.image = $(this)
-              .children("a.content-card-place")
-              .children("figure.content-card-figure")
-              .children("img")
-              .attr("src");
             result.link = linkHelperObscura[i];
             result.lat = $(this)
               .children("a.content-card-place")
@@ -641,15 +671,25 @@ module.exports = function(app) {
                 .text().split(", ")[1]
                 .replace("\n", "") : "";
             result.obscura = true;
-            obscuraArray.push(result);
-            Recommend.create(result).then(dbModel => {
-              console.log(dbModel);
-            }).catch(function(err) {
-              //if error, log error
-              console.log(err);
-            });
+            Recommend.findOne({ title:result.title }).then(function(response) {
+              if(!response || response===null){
+                Recommend.create(result).then(res => {
+                  //obscuraArray.push(result);
+                  console.log(res.title + " was added to the database");
+                }).catch(function(err) {
+                  // If an error occurred, log it
+                  console.log(err);
+                    })
+              }
+              else {
+                console.log(result.title + " was already in the database");
+              }
+                }).catch(function(err) {
+                  // If an error occurred, log it
+                  console.log(err);
+                    });
         });
-        res.json(obscuraArray);
+        res.json("the database was successfully updated");
         console.log("if " + linkHelperObscura.length + " != " + addressHelperObscura.length + ", -> there was a problem.")
       }).catch(function(err) {
         //if error, log error
@@ -657,18 +697,105 @@ module.exports = function(app) {
       });
     });
   });
+
+  app.get("/recommend/obscuraP1/images", function(req, res) {
+    nightmare
+      .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places")
+      .wait(10000)
+      .evaluate(() => {
+        let collection = []
+        $("div.index-card-wrap").each(function(i, element) {
+          let obscureObject = {};
+          obscureObject.title = $(this)
+            .children("a.content-card-place")
+            .children("div.content-card-text")
+            .children("h3.content-card-title")
+            .children("span")
+            .text();
+          obscureObject.image = $(this)
+            .children("a.content-card-place")
+            .children("figure.content-card-figure")
+            .children("img")
+            .attr("data-src");
+          collection.push(obscureObject);
+      });
+      return collection})
+      .end()
+      .then(async function(response) {
+        let obImageArray = [];
+        for (i=0; i<response.length; i++) {
+          await Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
+            obImageArray.push(response[i]);
+            //console.log(result)
+          }).catch(function(err) {
+            // If an error occurred, log it
+            console.log(err);
+              });
+        }
+        res.json(obImageArray);
+        console.log(obImageArray.length + " images added to db");
+        })
+        .catch(function(err) {
+          // If an error occurred, log it
+          console.log(err);
+        });
+      });
+  
+  
+  app.get("/recommend/obscuraP2/images", function(req, res) {
+    nightmare
+      .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places?page=2")
+      .wait(10000)
+      .evaluate(() => {
+        let collection = []
+        $("div.index-card-wrap").each(function(i, element) {
+          let obscureObject = {};
+          obscureObject.title = $(this)
+            .children("a.content-card-place")
+            .children("div.content-card-text")
+            .children("h3.content-card-title")
+            .children("span")
+            .text();
+          obscureObject.image = $(this)
+            .children("a.content-card-place")
+            .children("figure.content-card-figure")
+            .children("img")
+            .attr("data-src");
+          collection.push(obscureObject);
+      });
+      return collection})
+      .end()
+      .then(async function(response) {
+        let obImageArray = [];
+        for (i=0; i<response.length; i++) {
+          await Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
+            obImageArray.push(response[i]);
+            //console.log(result)
+          }).catch(function(err) {
+            // If an error occurred, log it
+            console.log(err);
+              });
+        }
+        res.json(obImageArray);
+        console.log(obImageArray.length + " images added to db");
+        })
+        .catch(function(err) {
+          // If an error occurred, log it
+          console.log(err);
+      });
+    });
         
   app.get("/recommend/trails", function(req, res) {
     // First, we grab the body of the html with request
     nightmare
     .goto("https://www.alltrails.com/us/texas/austin")
     .wait(2000)
-    .evaluate(function() {
-      let collection =[]
+    .evaluate(() => {
+      let collection =[];
       const objectA = $("section#nearby-trails").children("div").attr("data-react-props");
       const objectB = JSON.parse(objectA).results;
       $.each(objectB, function(i, element){
-        let trail = {}
+        let trail = {};
         console.log(i);
         trail.title = objectB[i].name;
         trail.location = objectB[i].area_name;
@@ -681,52 +808,190 @@ module.exports = function(app) {
     });
     return collection})
     .end()
-    .then(function(response) {
-      for (i=0; i<response.length ; i++) {
-        Recommend.create(response[i]).then(dbModel => {
-          console.log(dbModel);
-        }).catch(function(err) {
-          //if error, log error
-          console.log(err);
-        });
+    .then(async function(result) {
+      let trailArray = [];
+      for (i=0; i<result.length ; i++) {
+        await Recommend.findOne({ title:result[i].title }).then(function(response) {
+          if(!response || response===null){
+            Recommend.create(result[i]).then(res => {
+              trailArray.push(res);
+              console.log(res.title + " was added to the database");
+            }).catch(function(err) {
+              // If an error occurred, log it
+              console.log(err);
+                })
+          }
+          else {
+            console.log(response.title + " was already in the database");
+          };
+            }).catch(function(err) {
+              // If an error occurred, log it
+              console.log(err);
+                });
       } 
-      res.json(response);
-      console.log(response);
+      res.json(trailArray);
+      console.log(trailArray);
       })
       .catch(function(err) {
         // If an error occurred, log it
         console.log(err);
-    });
+      });
     });
 
-//route to get all restaurant recommendations
-app.get("/recommend/acFood/all", function(req, res){
-  // console.log(req.body);
-     Recommend.find({food:true}).then(dbModel => res.json(dbModel));
- });
- //route to get all album recommendations
-app.get("/recommend/acMusic/all", function(req, res){
-  // console.log(req.body);
-     Recommend.find({music:true}).then(dbModel => res.json(dbModel));
- });
- //route to get all book recommendations
-app.get("/recommend/acBooks/all", function(req, res){
-  // console.log(req.body);
-     Recommend.find({books:true}).then(dbModel => res.json(dbModel));
- });
- //route to get all do512 event recommendations
-app.get("/recommend/daily/all", function(req, res){
-  // console.log(req.body);
-     Recommend.find({do512:true}).then(dbModel => res.json(dbModel));
- });
- //route to get all atlas obscura recommendations
-app.get("/recommend/obscura/all", function(req, res){
-  // console.log(req.body);
-     Recommend.find({obscura:true}).then(dbModel => res.json(dbModel));
- });
-//route to get all alltrail recommendations
-app.get("/recommend/trails/all", function(req, res){
-  // console.log(req.body);
-     Recommend.find({outdoor:true}).then(dbModel => res.json(dbModel));
- });
+  //route to get all restaurant recommendations
+  app.get("/recommend/acFood/all", function(req, res){
+    // console.log(req.body);
+    Recommend.find({food:true}).then(dbModel => res.json(dbModel));
+  });
+  //route to get all album recommendations
+  app.get("/recommend/acMusic/all", function(req, res){
+    // console.log(req.body);
+    Recommend.find({music:true}).then(dbModel => res.json(dbModel));
+  });
+  //route to get all book recommendations
+  app.get("/recommend/acBooks/all", function(req, res){
+    // console.log(req.body);
+    Recommend.find({books:true}).then(dbModel => res.json(dbModel));
+  });
+  //route to get all do512 event recommendations
+  app.get("/recommend/daily/all", function(req, res){
+    // console.log(req.body);
+    Recommend.find({do512:true}).then(dbModel => res.json(dbModel));
+  });
+  //route to get all atlas obscura recommendations
+  app.get("/recommend/obscura/all", function(req, res){
+    // console.log(req.body);
+    Recommend.find({obscura:true}).then(dbModel => res.json(dbModel));
+  });
+  //route to get all alltrail recommendations
+  app.get("/recommend/trails/all", function(req, res){
+    // console.log(req.body);
+    Recommend.find({outdoor:true}).then(dbModel => res.json(dbModel));
+  });
+  //route to delete daily recommendations
+  app.delete("/recommend/daily/delete", function(req, res){
+    Recommend.deleteMany({do512:true}).then(dbModel=>{
+      res.json(dbModel)
+    })
+  })
 }
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!THIS VARIABLE NEEDS TO BE CHANGED IF DEPLOYED TO HEROKU!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+let urlHelper = "http://localhost:3000/"
+if (process.env.NODE_ENV === "production") {
+    urlHelper = "https://austin-reviews.herokuapp.com/"
+}
+console.log(`urlhelper is: ${urlHelper}`)
+
+//const urlHelper = "https://austin-reviews.herokuapp.com/"
+//automated scheduler for updating the restaurant recommendations
+const updateFood = cron.schedule('5 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/acFood").then(res => {
+    console.log(res);
+    console.log("RESTAURANT RECS UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+//automated scheduler for updating the album recommendations
+const updateMusic = cron.schedule('10 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/acMusic").then(res => {
+    console.log(res);
+    console.log("ALBUM RECS UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+//automated scheduler for updating the book recommendations
+const updateBooks = cron.schedule('15 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/acBooks").then(res => {
+    console.log(res);
+    console.log("BOOK RECS UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+//automated scheduler for updating the daily event recommendations
+const clearDo512 = cron.schedule('20 * * * *', function(error, response, body) {
+  axios.delete(urlHelper + "recommend/daily/delete").then(res => {
+    console.log(res);
+    console.log("YESTERDAY'S RECS DELETED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+//automated scheduler for updating the daily event recommendations
+const updateDo512 = cron.schedule('25 * * * *', function(error, response, body) {
+  axios.get(urlHelper + "recommend/daily").then(res => {
+    console.log(res);
+    console.log("DAILY RECS UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+//automated scheduler functions for updating the obscura recommendations
+const updateObscura1 = cron.schedule('30 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/obscuraP1").then(res => {
+    console.log(res);
+    console.log("OBSCURA P1 RECS UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+const updateObscura2 = cron.schedule('35 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/obscuraP1/images").then(res => {
+    console.log(res);
+    console.log("OBSCURA P1 IMAGES UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+const updateObscura3 = cron.schedule('40 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/obscuraP2").then(res => {
+    console.log(res);
+    console.log("OBSCURA P2 RECS UPDATAED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+const updateObscura4 = cron.schedule('45 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/obscuraP2/images").then(res => {
+    console.log(res);
+    console.log("OBSCURA P2 IMAGES UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+//automated scheduler for updating the trail recommendations
+const updateTrail = cron.schedule('0 * * * *', async function(error, response, body) {
+  await axios.get(urlHelper + "recommend/trails").then(res => {
+    console.log(res);
+    console.log("TRAIL RECS UPDATED");
+  }).catch(function(err) {
+    // If an error occurred, log it
+    console.log(err);
+    });
+  }, false);
+
+
+ 
+updateFood.start();
+updateMusic.start();
+updateBooks.start();
+clearDo512.start();
+updateDo512.start();
+updateObscura1.start();
+updateObscura2.start();
+updateObscura3.start();
+updateObscura4.start();
+updateTrail.start();

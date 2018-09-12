@@ -17,7 +17,12 @@ module.exports = function(app) {
     Reply.findOne({id:req.params.id}).then(dbModel => res.json(dbModel));
   });
   
-  app.post("/api/reply",  function(req, res){
+  app.post("/api/reply",  async function(req, res){
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
       //console.log(req.body);
       //console.log(req.session.uid);
       newreply=req.body;
@@ -47,7 +52,13 @@ module.exports = function(app) {
   });
   });
 
-  app.delete("/api/reply/:id", function(req, res){
+  app.delete("/api/reply/:id", async function(req, res){
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
+
     Reply.deleteOne({id:req.params.id}).then(dbreply=>{
       res.json(dbreply)
     })

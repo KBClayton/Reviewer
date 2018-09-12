@@ -14,7 +14,12 @@ module.exports = function(app) {
    // console.log(req.body);
     Review.find({}).sort({'dateCreated': -1}).populate('replies').populate('ratings').then(dbModel => res.json(dbModel));
   });
-  app.post("/api/review",  function(req, res){
+  app.post("/api/review",  async function(req, res){
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
      // console.log(req.body);
      // console.log(req.session.uid);
       //console.log(req.body.parentProduct);
@@ -55,7 +60,12 @@ module.exports = function(app) {
   });
   });
 
-  app.delete("/api/review/:id", function(req, res){
+  app.delete("/api/review/:id", async function(req, res){
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
     Review.deleteOne({id:req.params.id}).then(dbreply=>{
       res.json(dbreply)
     })

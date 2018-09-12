@@ -48,6 +48,8 @@ class ShowOneLocation extends Component {
       // Run loadLocations after posting *****
 
   componentDidMount(){
+    console.log("in the didmount, username:")
+    console.log(document.cookie);
     this.loadLocations();
   }
 

@@ -34,6 +34,7 @@ class SearchPage extends Component {
     axios.get("/recommend/acFood/all")
       .then(res => {
         //console.log(res.data);
+        const but = res.data
         this.setState({restaurants: res.data});
         this.setState({randomRestaurant: this.state.restaurants[Math.floor(Math.random()*this.state.restaurants.length)]})
         console.log(this.state.randomRestaurant);

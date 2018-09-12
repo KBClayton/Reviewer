@@ -36,16 +36,13 @@ module.exports = function(app) {
       //.then(dbModel => res.json(dbModel));
   });
 
-  app.post("/api/product",  async function(req, res){
+  app.post("/api/product", async function(req, res){
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
 
-   // await verify.loggedin(app, req)
-    //console.log(logger);
-    //console.log(req.body);
-    // if(!verify.loggedin(app, req)){
-    //   return res.status(401).send({success: false, message: "You are not logged in"});
-    // }
-      //console.log(req.body);
-      //console.log(req.session.uid);
       newprod=req.body;
       newprod.user=req.session.uid;
       newprod.username=req.session.username;
@@ -54,7 +51,7 @@ module.exports = function(app) {
         User.findByIdAndUpdate(req.session.uid, { "$push": { "products": dbModel._id } },
         { "new": true, "upsert": true }).then(dbreply=> {
           //console.log(dbreply);
-          console.log(logger);
+          //console.log(logger);
           res.json(dbModel);
         });
         //res.json(dbModel)
@@ -79,7 +76,12 @@ module.exports = function(app) {
     })
   });
 
-  app.delete("/api/product/:id", function(req, res){
+  app.delete("/api/product/:id", async function(req, res){
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
     Product.deleteOne({id:req.params.id}).then(dbreply=>{
       res.json(dbreply)
     })

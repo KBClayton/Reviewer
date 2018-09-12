@@ -10,14 +10,11 @@ const verify=require("./verify");
 module.exports = function(app) {
     app.post("/api/reviewrate",  async function(req, res){
 
-        //let logger= await verify.loggedin(app, req)
-        //console.log(logger);
-        console.log(req.body);
-        // if(!verify.loggedin(app, req)){
-        //   return res.status(401).send({success: false, message: "You are not logged in"});
-        // }
-          //console.log(req.body);
-          //console.log(req.session.uid);
+        if(!await verify.loggedin(req)){
+            console.log("failed validation")
+            res.status(401).send({success: false, message: "you are not logged in"});
+            return;
+          }
           newrevRating=req.body;
           newrevRating.user=req.session.uid;
           Review.findOne({_id:newrevRating.parentReview}).populate("ratings").then(dbmod=>{

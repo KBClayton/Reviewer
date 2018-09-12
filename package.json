@@ -42,6 +42,7 @@
     "mongoose-type-email": "^1.0.9",
     "nightmare": "^3.0.1",
     "nightmare-react-utils": "^1.0.4",
+    "node-cron": "^2.0.1",
     "nodemon": "^1.18.4",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
