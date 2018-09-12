@@ -11,8 +11,11 @@ const LocationDisplay = props => (
       {/* <a href='localhost:3001/api/articles'><button className = 'btn-danger'>Save</button></a> */}
       <Link to={props.urlLink}><button className = "btn btn-info m-3" >{props.CommentButton}</button></Link>
       <p><small>{props.lengthNo} Comments</small></p>
-
-      <p className = 'mb-0'><b>{props.Rating}</b></p>
+      <p className = 'mb-0'><b>{props.Rating}</b></p>  
+          
+      {props.noOfRatings === 0 &&
+        <p className = 'mb-0'><b>{props.Rating} Lemon</b></p>
+      }
       <p>{props.noOfRatings}</p>
       <h1>
         <span 
