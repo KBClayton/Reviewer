@@ -8,9 +8,9 @@ import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
 import Replies from '../components/Replies/Replies'
 import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
-
 // import './main.css'
 import axios from 'axios'
+console.log(document.cookie.username)
 
 class ShowOneLocation extends Component {
 
@@ -24,8 +24,10 @@ class ShowOneLocation extends Component {
     newComment: '',
     newReply: '',
     rating: [],
+    UserSetRating: 0,
     averageRating: 0,
-    userRating: 0
+    userRating: 0,
+    UserSetRating: 0
   }
 
   // Loads All Articles
@@ -46,6 +48,8 @@ class ShowOneLocation extends Component {
       // Run loadLocations after posting *****
 
   componentDidMount(){
+    console.log("in the didmount, username:")
+    console.log(document.cookie);
     this.loadLocations();
   }
 
@@ -70,7 +74,7 @@ class ShowOneLocation extends Component {
     })
     let average = temp/arrayLength;
     console.log(average)
-    
+
     if (!average){
       this.setState({averageRating: 0})
     }
@@ -83,7 +87,7 @@ class ShowOneLocation extends Component {
   ratingSubmitHandler = () => {
     const newRating = {
       parentProduct: this.state.locations._id,
-      rating: this.state.rating
+      rating: this.state.UserSetRating
     }
     console.log(newRating);
     axios.post('/api/productrate', newRating)
@@ -94,8 +98,9 @@ class ShowOneLocation extends Component {
   }
 
   setRating = (event) => {
-    let bennuCoffee = parseInt(event.target.value);
-    this.setState({ rating: bennuCoffee})
+    let bennuCoffee = parseInt(event.target.id);
+    this.setState({ UserSetRating: bennuCoffee})
+    this.ratingSubmitHandler();
   }
 
   onChange = (event) => {
@@ -105,12 +110,14 @@ class ShowOneLocation extends Component {
   thumbsUp = (event) =>{
     let thumbs = parseInt(event.target.value);
     this.setState({ userRating: thumbs });
-    console.log(this.state.userRating)
-  }
-
-  thumbsDown = (event) => {
-    let thumbs = parseInt(event.target.value);this.setState({ userRating: thumbs });
-    console.log(this.state.userRating)
+    const ThumbsRating = {
+      parentReview: event.target.id,
+      rating: thumbs
+    }
+    axios.post('/api/reviewrate', ThumbsRating)
+      .then(res=>{
+        this.loadLocations();
+      })
   }
 
   // Render to Screen
@@ -133,11 +140,11 @@ class ShowOneLocation extends Component {
             setRating = {this.setRating}
             noOfRatings = {'Based on ' + this.state.rating.length + ' Ratings'}
             Rating = {'Average Rating: ' + this.state.averageRating + ' Stars'}
+            CommentButton = 'Back to All'
           />
           <ProductComment
             addComment = {this.handleSubmit}
             textComment = {this.onChange}
-
           />
           {this.state.comments.map(review => (
             <CommentDisplay
@@ -148,9 +155,12 @@ class ShowOneLocation extends Component {
               onChange={e => this.setState({ newReply: e.target.value})}
               length = {review.replies.length + ' Replies'}
               ReplyTxt = 'Reply'
-              CommentType = 'Comment'
+              CommentType = {review.username + " " + Date(review.dateCreated)}
               thumbsUp = {this.thumbsUp}
-              thumbsDown = {this.thumbsDown}
+              thumbsUpAmount = {review.thumbsUp + ' Positive Reviews, '}
+              thumbsDownAmount = {review.thumbsDown + ' Negative Reviews'}
+              thumbsUpIcon = 'fa fa-thumbs-up'
+              thumbsDownIcon = 'fa fa-thumbs-down'
             />
           ))}          
           {/* <AddCommentModal/> */}

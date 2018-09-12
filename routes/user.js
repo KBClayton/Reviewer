@@ -40,6 +40,9 @@ module.exports = function(app) {
 
         req.session.uid= user.id;
         req.session.username= user.username;
+        res.cookie("username", user.username, {
+          //signed:true, 
+          expires:new Date(Date.now() + 36000000)})
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
         return res.json({success: true, message: "Successfully created new user", token: "JWT " + token});
@@ -62,8 +65,13 @@ module.exports = function(app) {
                 username: user.username 
               }, process.env.JWT_SECRET, {expiresIn:"10h"});
               req.session.token=token;
+              req.session.uid= user.id;
+              req.session.username= user.username;
               //res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
               //vault.write(req, JSON.stringify({token: "JWT " + token, username:isMatch.username}));
+              res.cookie("username", user.username, {
+                //signed:true, 
+                expires:new Date(Date.now() + 36000000)})
               res.json({success: true, token: "JWT " + token});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
@@ -95,6 +103,7 @@ module.exports = function(app) {
     if(!req.session.token){
       res.send({success:false, message:"You weren't logged in"})
     }
+    res.clearCookie("username");
     req.session.token=null;
     req.session.uid= null;
     req.session.username=null;
