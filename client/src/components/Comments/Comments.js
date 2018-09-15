@@ -8,13 +8,10 @@ const CommentDisplay = props => (
     <div className = 'card p-3 m-3'>
     <p key={props.id} id={props.id}><small><u>{props.CommentType}</u></small></p>
       <p><i>"{props.textComment}"</i></p>
-      {/* <textarea
-        name='reply'
-        className='border border-dark'
-        placeholder='Reply Here'
-        onChange=''
-      >
-      </textarea> */}
+        {/* {props.replies.map(reply=>( */}
+          {/* <p>Banna</p> */}
+        {/* ))} */}
+        
       <h3>
       <span 
         onClick={props.thumbsUp} 

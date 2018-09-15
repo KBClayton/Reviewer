@@ -9,6 +9,7 @@ import axios from 'axios'
 
 
 class CreateUserPage extends Component {
+  // super(props)
 
   // State
   state = {
@@ -69,6 +70,7 @@ class CreateUserPage extends Component {
     axios.post('/api/user/new', newUser)
       .then((response) => {
         console.log(response)
+        // this.setState()
         if (response.data.success === true){
           console.log(this)
           // this.setState({accountAccepted: true });

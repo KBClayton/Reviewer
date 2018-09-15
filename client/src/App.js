@@ -16,7 +16,6 @@ import ReplyPage from './pages/Reply';
 import requireAuth from './components/Auth';
 
 
-
 const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
@@ -71,6 +70,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     }
   />
 );
+
 
 
 class App extends Component {

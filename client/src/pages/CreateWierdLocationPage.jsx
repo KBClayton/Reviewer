@@ -4,6 +4,10 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
 
+let jsonpAdapter = require('axios-jsonp');
+ 
+
+
 class CreateWierdLocation extends Component {
 
   // State
@@ -57,8 +61,39 @@ class CreateWierdLocation extends Component {
       })
   }
 
-  searchAPILocations = () => {
-    
+  searchAPILocations = (event) => {
+    event.preventDefault();
+    console.log('You ran the function')
+    var queryURL = ("https://en.wikipedia.org/w/api.php?format=json&titles=" + this.state.locationName + "&action=query&prop=extracts&exintro=&explaintext=");
+    var queryURLBasic =   ("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + this.state.locationName +"&srwhat=text&srprop=timestamp&continue=&format=json");
+
+    axios({
+      url: queryURLBasic,
+      adapter: jsonpAdapter
+      // callbackParamName: 'c' // optional, 'callback' by default
+    }).then((res) => {
+      console.log(res)
+      const pageTitle = res.data.query.search[0].title
+      const pageID = res.data.query.search[0].pageid
+
+      axios({
+        url: "https://en.wikipedia.org/w/api.php?format=json&titles=" + res.data.query.search[0].title + "&action=query&prop=extracts&exsectionformat=plain&exintro=&explaintext=&",
+        adapter: jsonpAdapter
+      }).then((response)=> {
+        const annoyed =response.data.query.pages[pageID].extract
+        console.log(annoyed)
+        this.setState({description: annoyed})
+      })
+    });
+    let googleURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + this.state.locationName + "&apikey=AIzaSyDoQLe8s7JUbTZ_ubXhGY4cUmLiNqWvQxw"
+    axios.get(googleURL)
+      .then((googleresponse) => {
+        console.log(googleresponse)
+        if (googleresponse.data.results[0]){
+          this.setState({address: googleresponse.data.results[0].formatted_address})          
+        }
+
+      })
   }
 
   // Render to Screen
@@ -80,6 +115,9 @@ class CreateWierdLocation extends Component {
             value={this.state.locationName}
             onChange={e => this.setState({ locationName: e.target.value})}
           />
+          
+          <button onClick={this.searchAPILocations}>Search WIKI</button>
+          
           <input 
             className='m-2'
             name='link'

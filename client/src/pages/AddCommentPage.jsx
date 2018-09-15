@@ -12,6 +12,9 @@ import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 import axios from 'axios'
 console.log(document.cookie.username)
 
+var moment = require('moment');
+moment().format();
+
 class ShowOneLocation extends Component {
 
   // State
@@ -27,7 +30,7 @@ class ShowOneLocation extends Component {
     UserSetRating: 0,
     averageRating: 0,
     userRating: 0,
-    UserSetRating: 0
+    UserSetRating: false
   }
 
   // Loads All Articles
@@ -84,10 +87,10 @@ class ShowOneLocation extends Component {
     }
   }
 
-  ratingSubmitHandler = () => {
+  setRating = (event) => {
     const newRating = {
       parentProduct: this.state.locations._id,
-      rating: this.state.UserSetRating
+      rating: event.target.id
     }
     console.log(newRating);
     axios.post('/api/productrate', newRating)
@@ -95,12 +98,6 @@ class ShowOneLocation extends Component {
         console.log(res);
         this.loadLocations();
     })
-  }
-
-  setRating = (event) => {
-    let bennuCoffee = parseInt(event.target.id);
-    this.setState({ UserSetRating: bennuCoffee})
-    this.ratingSubmitHandler();
   }
 
   onChange = (event) => {
@@ -139,7 +136,7 @@ class ShowOneLocation extends Component {
             SubmitHandler = {this.ratingSubmitHandler}
             setRating = {this.setRating}
             noOfRatings = {'Based on ' + this.state.rating.length + ' Ratings'}
-            Rating = {'Average Rating: ' + this.state.averageRating + ' Stars'}
+            Rating = {'Average Rating: ' + this.state.locations.averageRating + ' Stars'}
             CommentButton = 'Back to All'
           />
           <ProductComment
@@ -155,12 +152,13 @@ class ShowOneLocation extends Component {
               onChange={e => this.setState({ newReply: e.target.value})}
               length = {review.replies.length + ' Replies'}
               ReplyTxt = 'Reply'
-              CommentType = {review.username + " " + Date(review.dateCreated)}
+              CommentType = {review.username + " " + moment(review.dateCreated).format("MMM Do YYYY")}
               thumbsUp = {this.thumbsUp}
               thumbsUpAmount = {review.thumbsUp + ' Positive Reviews, '}
               thumbsDownAmount = {review.thumbsDown + ' Negative Reviews'}
               thumbsUpIcon = 'fa fa-thumbs-up'
               thumbsDownIcon = 'fa fa-thumbs-down'
+              
             />
           ))}          
           {/* <AddCommentModal/> */}
