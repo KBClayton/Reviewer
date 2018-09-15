@@ -15,6 +15,7 @@ import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
 import requireAuth from './components/Auth';
 
+
 const Auth = {
   isAuthenticated: false,
   authenticate(cb) {

@@ -4,6 +4,10 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
 
+let jsonpAdapter = require('axios-jsonp');
+ 
+
+
 class CreateWierdLocation extends Component {
 
   // State
@@ -57,8 +61,57 @@ class CreateWierdLocation extends Component {
       })
   }
 
-  searchAPILocations = () => {
-    
+  searchAPILocations = (event) => {
+    event.preventDefault();
+    console.log('You ran the function')
+    var queryURL = ("https://en.wikipedia.org/w/api.php?format=json&titles=" + this.state.locationName + "&action=query&prop=extracts&exintro=&explaintext=");
+    var queryURLBasic =   ("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + this.state.locationName +"&srwhat=text&srprop=timestamp&continue=&format=json");
+
+    axios({
+      url: queryURLBasic,
+      adapter: jsonpAdapter
+      // callbackParamName: 'c' // optional, 'callback' by default
+    }).then((res) => {
+      console.log(res)
+      const pageTitle = res.data.query.search[0].title
+      const pageID = res.data.query.search[0].pageid
+
+      axios({
+        url: "https://en.wikipedia.org/w/api.php?format=json&titles=" + res.data.query.search[0].title + "&action=query&prop=extracts&exsectionformat=plain&exintro=&explaintext=&",
+        adapter: jsonpAdapter
+      }).then((response)=> {
+        const annoyed =response.data.query.pages[pageID].extract
+        console.log(annoyed)
+        this.setState({description: annoyed})
+      })
+
+
+
+
+    });
+    //Get Closest Title//
+  //   axios.get(queryURLBasic)
+  // //  axios.get({
+  // //       url:queryURLBasic,
+  // //       dataType: "JSONP",
+  // //   }).
+  //   .then(function(response){
+  //       console.log(response);
+  //       // get the page Title
+  //       // var pageTitle = response.query.search[0].title;
+  //       // var pageid=response.query.search[0].pageid;
+  //       // var queryURL = ("https://en.wikipedia.org/w/api.php?format=json&titles=" + pageTitle + "&action=query&prop=extracts&exsectionformat=plain&exintro=&explaintext=&");
+            
+  //       //Search by Title to Get more indepth Data
+  //       // $.ajax({
+  //       //     url:queryURL,
+  //       //     method:"GET",
+  //       //     dataType: "JSONP",
+  //       // }).
+  //       // then(function(response){
+  //       //     console.log(queryURL);
+  //       // })
+  //     })    
   }
 
   // Render to Screen
@@ -80,6 +133,9 @@ class CreateWierdLocation extends Component {
             value={this.state.locationName}
             onChange={e => this.setState({ locationName: e.target.value})}
           />
+          
+          <button onClick={this.searchAPILocations}>Search WIKI</button>
+          
           <input 
             className='m-2'
             name='link'

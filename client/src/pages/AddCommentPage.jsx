@@ -12,6 +12,9 @@ import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 import axios from 'axios'
 console.log(document.cookie.username)
 
+var moment = require('moment');
+moment().format();
+
 class ShowOneLocation extends Component {
 
   // State
@@ -149,7 +152,7 @@ class ShowOneLocation extends Component {
               onChange={e => this.setState({ newReply: e.target.value})}
               length = {review.replies.length + ' Replies'}
               ReplyTxt = 'Reply'
-              CommentType = {review.username + " " + Date(review.dateCreated)}
+              CommentType = {review.username + " " + moment(review.dateCreated).format("MMM Do YYYY")}
               thumbsUp = {this.thumbsUp}
               thumbsUpAmount = {review.thumbsUp + ' Positive Reviews, '}
               thumbsDownAmount = {review.thumbsDown + ' Negative Reviews'}
