@@ -148,7 +148,7 @@ module.exports = function(app) {
               res.cookie("hash", process.env.googlelocation, {
                     //signed:true, 
                 expires:new Date(Date.now() + 36000000)})
-              res.json({success: true, token: "JWT " + token, hash: process.env.googlelocation, port:PORT2});
+              res.json({success: true, token: token, hash: process.env.googlelocation, port:PORT2});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
             }

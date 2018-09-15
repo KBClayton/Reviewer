@@ -51,14 +51,13 @@ module.exports = function(app) {
                     { "new": true, "upsert": true }).then(dbreply=> {
                         //console.log(dbreply)
                         Product.findById(newprodRating.parentProduct).populate("ratings").then(dbrepper=>{
-                            console.log("in first findprodut")
-                            console.log(dbrepper.ratings);
-                            console.log(dbrepper.ratings.length)
-                            avgCollector=newprodRating.rating;
+                            //console.log("in first findprodut")
+                            //console.log(dbrepper.ratings);
+                            //console.log(dbrepper.ratings.length)
+                            avgCollector=parseInt(newprodRating.rating);
                             if(dbrepper!==undefined){
                                 for(let i=0; i<dbrepper.ratings.length; i++){
-                                    avgCollector=avgCollector+dbrepper.ratings[i].rating;
-                                    console.log(avgCollector + ' ' + dbrepper.ratings[i].rating)
+                                    avgCollector=avgCollector+parseInt(dbrepper.ratings[i].rating);
                                 }
                                 avgCollector=avgCollector/(dbrepper.ratings.length+1);
                                 avgCollector=avgCollector.toFixed(1)
