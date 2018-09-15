@@ -89,7 +89,10 @@ class CreateWierdLocation extends Component {
     axios.get(googleURL)
       .then((googleresponse) => {
         console.log(googleresponse)
-        this.setState({address: googleresponse.data.results[0].formatted_address})
+        if (googleresponse.data.results[0]){
+          this.setState({address: googleresponse.data.results[0].formatted_address})          
+        }
+
       })
   }
 
