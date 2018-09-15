@@ -84,34 +84,13 @@ class CreateWierdLocation extends Component {
         console.log(annoyed)
         this.setState({description: annoyed})
       })
-
-
-
-
     });
-    //Get Closest Title//
-  //   axios.get(queryURLBasic)
-  // //  axios.get({
-  // //       url:queryURLBasic,
-  // //       dataType: "JSONP",
-  // //   }).
-  //   .then(function(response){
-  //       console.log(response);
-  //       // get the page Title
-  //       // var pageTitle = response.query.search[0].title;
-  //       // var pageid=response.query.search[0].pageid;
-  //       // var queryURL = ("https://en.wikipedia.org/w/api.php?format=json&titles=" + pageTitle + "&action=query&prop=extracts&exsectionformat=plain&exintro=&explaintext=&");
-            
-  //       //Search by Title to Get more indepth Data
-  //       // $.ajax({
-  //       //     url:queryURL,
-  //       //     method:"GET",
-  //       //     dataType: "JSONP",
-  //       // }).
-  //       // then(function(response){
-  //       //     console.log(queryURL);
-  //       // })
-  //     })    
+    let googleURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + this.state.locationName + "&apikey=AIzaSyDoQLe8s7JUbTZ_ubXhGY4cUmLiNqWvQxw"
+    axios.get(googleURL)
+      .then((googleresponse) => {
+        console.log(googleresponse)
+        this.setState({address: googleresponse.data.results[0].formatted_address})
+      })
   }
 
   // Render to Screen

@@ -56,6 +56,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
 
+
 class App extends Component {
   state = { 
     redirectToReferrer: false
