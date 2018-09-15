@@ -53,15 +53,16 @@ module.exports = function(app) {
                         Product.findById(newprodRating.parentProduct).populate("ratings").then(dbrepper=>{
                             console.log("in first findprodut")
                             console.log(dbrepper.ratings);
-                            //console.log(dbrepper.ratings.length)
+                            console.log(dbrepper.ratings.length)
                             avgCollector=newprodRating.rating;
                             if(dbrepper!==undefined){
                                 for(let i=0; i<dbrepper.ratings.length; i++){
                                     avgCollector=avgCollector+dbrepper.ratings[i].rating;
+                                    console.log(avgCollector + ' ' + dbrepper.ratings[i].rating)
                                 }
                                 avgCollector=avgCollector/(dbrepper.ratings.length+1);
                                 avgCollector=avgCollector.toFixed(1)
-                                //console.log(avgCollector);
+                                console.log(avgCollector);
                             }
                             Product.findByIdAndUpdate(newprodRating.parentProduct, { "$push": { "ratings": dbModel._id },  "$set": {"averageRating":avgCollector}  },{ "new": true, "upsert": true }).then(dbreply2=>{
                                 //console.log(dbreply2);
