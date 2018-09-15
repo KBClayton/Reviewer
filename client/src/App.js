@@ -22,30 +22,30 @@ const Auth = {
   authenticate(cb) {
     let cookieVars=document.cookie;
     let cookieObj={};
-    console.log(cookieVars);
+    //console.log(cookieVars);
     if(cookieVars!==undefined){
-      console.log("in cookievars if")
+      //console.log("in cookievars if")
     cookieVars=cookieVars.replace(/=/g, " ")
     let cookieArray= cookieVars.split(" ")
-    console.log(cookieArray)
+    //console.log(cookieArray)
       if(cookieArray.length===6){
-        console.log("in cookiearray if")
+        //console.log("in cookiearray if")
         let username=cookieArray[1].substring(0, cookieArray[1].length-1)
         let port=parseInt(cookieArray[3])
         let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
         cookieObj.username=username;
         cookieObj.port=port;
         cookieObj.hash=hash;
-        console.log(cookieObj)
+        //console.log(cookieObj)
         if(cookieObj.username!==undefined && cookieObj.username.length>5)
         {
-          console.log(cookieObj.username)
+          //console.log(cookieObj.username)
         //this.setState({ redirectToReferrer: true });
         this.isAuthenticated = true;
         }
       }
     }else{
-      console.log("not logged in")
+      //console.log("not logged in")
     } 
   },
   signout(cb) {
