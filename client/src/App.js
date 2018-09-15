@@ -85,7 +85,7 @@ class App extends Component {
           <Route path ='/About' component = {AboutPage} exact/>
     
           <Route path='/createUser' component = {CreateUserPage}/>
-          <Route path='/createNewLocation' component = {CreateWierdLocation}/>
+          <PrivateRoute path='/createNewLocation' component = {CreateWierdLocation}/>
           <Route path="/login" component = {LoginPage} exact/>
           {/* <Route path="/login" component = {LoginPage} exact/>
           <Route path="/articles/:_id" component = {OneArticle} exact/> */}
