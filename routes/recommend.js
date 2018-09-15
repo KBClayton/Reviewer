@@ -878,6 +878,9 @@ module.exports = function(app) {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //!!!!!!!!!!!!!!!!!THIS VARIABLE NEEDS TO BE CHANGED IF DEPLOYED TO HEROKU!!!!!!!!!!!!!!!!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const dotenv = require("dotenv");
+dotenv.config();
+console.log(process.env.NODE_ENV);
 let urlHelper = "http://localhost:3000/"
 if (process.env.NODE_ENV === "production") {
     urlHelper = "https://austin-reviews.herokuapp.com/"
