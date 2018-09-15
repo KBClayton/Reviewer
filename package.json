@@ -22,6 +22,7 @@
     "concurrently": "^3.5.0"
   },
   "dependencies": {
+    "aws-sdk": "^2.315.0",
     "axios": "^0.18.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
@@ -31,6 +32,7 @@
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
     "electron": "^2.0.8",
+    "entropy-string": "^4.1.0",
     "express": "^4.16.3",
     "express-fileupload": "^0.4.0",
     "express-session": "^1.15.6",
@@ -43,6 +45,7 @@
     "nightmare": "^3.0.1",
     "nightmare-react-utils": "^1.0.4",
     "node-cron": "^2.0.1",
+    "nodemailer": "^4.6.8",
     "nodemon": "^1.18.4",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
@@ -50,7 +53,6 @@
     "request-promise": "^4.2.2",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
-    "socket.io-proxy": "^1.0.3",
     "uuid": "^3.3.2",
     "yarn": "^1.9.4"
   }

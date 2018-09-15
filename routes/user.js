@@ -4,20 +4,59 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const logger = require('heroku-logger');
 const verify=require("./verify")
+const nodemailer = require('nodemailer');
+const { Entropy } = require('entropy-string');
+const dotenv = require("dotenv");
+dotenv.config();
+
 
 module.exports = function(app) {
   app.post("/api/user/new", (req, res) => {
-      console.log(`The post has hit the server, here is new User`);
+      //console.log(`The post has hit the server, here is new User`);
       //console.log(req.body);
       //logger.info("The request has hit the server for new user");
       //logger.info(req.body);
+
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+            user: process.env.etherealUser,
+            pass: process.env.etherealPass
+        },
+        tls: {
+          rejectUnauthorized: false
+      }
+      });
+      console.log(`user is: ${process.env.etherealUser}`)
+
 
       var user = new User({
         username: req.body.username,
         email:req.body.email,
         password: req.body.password
       });
-      console.log(user);
+
+      const entropy = new Entropy({ total: 1e16, risk: 1e20 });
+      let string = entropy.string();
+      console.log(string)
+      user.emailVerifyKey=string;
+      let urlHelper = "http://localhost:3001/"
+      if (process.env.NODE_ENV === "production") {
+        urlHelper = "https://austin-reviews.herokuapp.com/"
+      }
+      console.log(`urlhelper is: ${urlHelper}`)
+
+
+      let mailOptions = {
+        from: '"Austin Reviews" <'+process.env.etherealUser+'>', // sender address
+        to: user.email, // list of receivers
+        subject: 'Verify Account', // Subject line
+        text: 'Click the link to verify your account', // plain text body
+        html: '<a href="http://'+urlHelper+'/user/verify/'+string+'" ><b>Verify me</b></a>' // html body
+      };
+
+      //console.log(user);
       user.save((err,dbreply) => {
         //console.log(dbreply);
         if(err){
@@ -30,6 +69,15 @@ module.exports = function(app) {
         }, process.env.JWT_SECRET, {expiresIn:"10h"});
         req.session.token=token;
 
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message sent: %s'+info.messageId);
+          // Preview only available when sending through an Ethereal account
+          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        });
         // jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
         //   if(err){
         //       console.log(err);
@@ -154,4 +202,34 @@ module.exports = function(app) {
       res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, averageReviewRating: revAvg, numberReviewRatings:dbreply.reviewRatings.length})      
     })
   })
+
+  app.get("/api/user/verify/:name/:id", (req, res) => {
+    User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.id}, {username:req.params.name}]}, {emailVerified:true},{upsert:true}).exec(function(err, dbreply) {
+      if(err){
+        res.json(err)
+      }
+      if(dbreply){
+        if(dbreply.emailVerified===true){
+          res.json({sucess:true, message:"Your email has been verified"})
+        }
+        
+      }
+    })
+  })
+
+  app.get("/api/user/reset/:name/:id", (req, res) => {
+    
+    User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.id}, {username:req.params.name}, {emailVerified:true}]}, {emailVerified:true, passwordReset:Date.now()},{upsert:true}).exec(function(err, dbreply) {
+      if(err){
+        res.json(err)
+      }
+      if(dbreply){
+        if(dbreply.emailVerified===true){
+          res.json({sucess:true, message:"Your password has been reset"})
+        }
+        
+      }
+    })
+  })
+
 }
