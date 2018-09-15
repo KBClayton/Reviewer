@@ -25,16 +25,12 @@ module.exports = function(app) {
   app.get("/api/productpop", function(req, res){
     //console.log(req.body);
    // console.log(vault.read(req));
-  
-
       Product.find({}).sort({'averageRating': -1}).populate('ratings').then((dbModel, err )=>{ 
         if(err){
           console.log(err);
           res.status(500).send({success:false, message:"something went wrong"})
         }
         res.json(dbModel)});
-
-
   });
 
   app.get("/api/product/:id", function(req, res){
