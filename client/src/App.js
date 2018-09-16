@@ -17,8 +17,6 @@ import requireAuth from './components/Auth';
 
 
 
-<<<<<<< HEAD
-=======
 const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
@@ -58,7 +56,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
->>>>>>> merge
 
 class App extends Component {
   state = { 
