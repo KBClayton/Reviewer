@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import RecommendationDisplay from '../components/RecommendationDisplay/recommendationDisplay'
+import DefaultRecDisplay from '../components/RecommendationDisplay/defaultRecDisplay'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 // import './main.css'
@@ -94,6 +95,7 @@ class SearchPage extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
+          {this.state.randomRestaurant ? 
           <RecommendationDisplay
             key = { this.state.randomRestaurant._id}
             id = {this.state.randomRestaurant._id}
@@ -102,8 +104,10 @@ class SearchPage extends Component {
             description = {this.state.randomRestaurant.description}
             urlLink = {this.state.randomRestaurant.link}
             imageLink = {this.state.randomRestaurant.image}
-            address = {this.state.randomRestaurant.address}
-          />
+            address = {this.state.randomRestaurant.address} 
+          /> : 
+          <DefaultRecDisplay/>}
+          {this.state.randomAlbum ? 
           <RecommendationDisplay
             key = { this.state.randomAlbum._id}
             id = {this.state.randomAlbum._id}
@@ -113,7 +117,9 @@ class SearchPage extends Component {
             urlLink = {this.state.randomAlbum.link}
             imageLink = {this.state.randomAlbum.image}
             address = {this.state.randomAlbum.address}
-          />
+          /> : 
+          <DefaultRecDisplay/>}
+          {this.state.randomBook ? 
           <RecommendationDisplay
             key = { this.state.randomBook._id}
             id = {this.state.randomBook._id}
@@ -123,7 +129,9 @@ class SearchPage extends Component {
             urlLink = {this.state.randomBook.link}
             imageLink = {this.state.randomBook.image}
             address = {this.state.randomBook.address}
-          />
+          /> : 
+          <DefaultRecDisplay/>}
+          {this.state.randomDo512events ?
           <RecommendationDisplay
             key = { this.state.randomDo512events._id}
             id = {this.state.randomDo512events._id}
@@ -133,7 +141,9 @@ class SearchPage extends Component {
             urlLink = {this.state.randomDo512events.link}
             imageLink = {this.state.randomDo512events.image}
             address = {this.state.randomDo512events.address}
-          />
+          /> : 
+          <DefaultRecDisplay/>}
+          {this.state.randomObscura ? 
           <RecommendationDisplay
             key = { this.state.randomObscura._id}
             id = {this.state.randomObscura._id}
@@ -143,7 +153,9 @@ class SearchPage extends Component {
             urlLink = {this.state.randomObscura.link}
             imageLink = {this.state.randomObscura.image}
             address = {this.state.randomObscura.address}
-          />
+          /> : 
+          <DefaultRecDisplay/>}
+          {this.state.randomObscura ?
           <RecommendationDisplay
             key = { this.state.randomTrail._id}
             id = {this.state.randomTrail._id}
@@ -153,7 +165,8 @@ class SearchPage extends Component {
             urlLink = {this.state.randomTrail.link}
             imageLink = {this.state.randomTrail.image}
             address = {this.state.randomTrail.address}
-          />
+          /> : 
+          <DefaultRecDisplay/>}
         <Footer /> 
       </div>
       

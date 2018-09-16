@@ -988,7 +988,7 @@ const updateTrail = cron.schedule('0 * * * *', async function(error, response, b
 
 
  
-updateFood.start();
+/*updateFood.start();
 updateMusic.start();
 updateBooks.start();
 clearDo512.start();
@@ -997,4 +997,4 @@ updateObscura1.start();
 updateObscura2.start();
 updateObscura3.start();
 updateObscura4.start();
-updateTrail.start();
+updateTrail.start();*/
