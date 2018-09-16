@@ -10,7 +10,7 @@ const RecommendationDisplay = props => (
       <p>{props.description}</p>
       <img src={props.imageLink} width='100px' />
       <p>{props.address}</p>
-      <button className=' mt-3 btn btn-outline-danger' onClick={props.submitMe}>Add {props.title} </button>
+      <button className=' mt-3 btn btn-outline-danger' onClick={props.submitMe}>Add this {props.type} </button>
     </div>
   </div>
 );

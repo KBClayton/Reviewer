@@ -222,7 +222,8 @@ class SearchPage extends Component {
             description = {this.state.randomRestaurant.description}
             urlLink = {this.state.randomRestaurant.link}
             imageLink = {this.state.randomRestaurant.image}
-            address = {this.state.randomRestaurant.address} 
+            address = {this.state.randomRestaurant.address}
+            type = "restaurant" 
             submitMe = {this.handleFoodSubmit}
           /> : 
           <DefaultRecDisplay
@@ -240,6 +241,7 @@ class SearchPage extends Component {
             urlLink = {this.state.randomAlbum.link}
             imageLink = {this.state.randomAlbum.image}
             address = {this.state.randomAlbum.address}
+            type = "album"
           /> : 
           <DefaultRecDisplay
             type = "albums"
@@ -256,6 +258,7 @@ class SearchPage extends Component {
             urlLink = {this.state.randomBook.link}
             imageLink = {this.state.randomBook.image}
             address = {this.state.randomBook.address}
+            type = "book"
           /> : 
           <DefaultRecDisplay
             type = "books"
@@ -272,6 +275,7 @@ class SearchPage extends Component {
             urlLink = {this.state.randomDo512events.link}
             imageLink = {this.state.randomDo512events.image}
             address = {this.state.randomDo512events.address}
+            type = "event"
           /> : 
           <DefaultRecDisplay
             type = "events"
@@ -288,6 +292,7 @@ class SearchPage extends Component {
             urlLink = {this.state.randomObscura.link}
             imageLink = {this.state.randomObscura.image}
             address = {this.state.randomObscura.address}
+            type = "weird place"
           /> : 
           <DefaultRecDisplay
             type = "weird places"
@@ -304,6 +309,7 @@ class SearchPage extends Component {
             urlLink = {this.state.randomTrail.link}
             imageLink = {this.state.randomTrail.image}
             address = {this.state.randomTrail.address}
+            type = "trail"
           /> : 
           <DefaultRecDisplay
             type = "trails"
