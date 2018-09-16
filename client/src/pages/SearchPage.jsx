@@ -82,10 +82,128 @@ class SearchPage extends Component {
         //console.log(this.state.trails)
       });
     }
-    
+  //scrape restaurant recs and add new recs to the database
+  foodScraper = async () => {
+    document.getElementById("findFood").style.display="none";
+    document.getElementById("defaultCardText").innerText="Currently searching for restaurant recommendations, the page will reload automatically when recommendations are found."
+    await axios.get("recommend/acFood").then(res => {
+      console.log(res);
+      console.log("RESTAURANT RECS UPDATED");
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
+      });
+    this.loadRecommendations();
+  } 
+  //scrape album recs and add new recs to the database
+  albumScraper = async () => {
+    document.getElementById("findAlbums").style.display="none";
+    document.getElementById("defaultCardText").innerText="Currently searching for album recommendations, the page will reload automatically when recommendations are found."
+    await axios.get("recommend/acMusic").then(res => {
+      console.log(res);
+      console.log("ALBUM RECS UPDATED");
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
+      });
+      this.loadRecommendations();
+  } 
+  //scrape book recs and add new recs to the database
+  bookScraper = async () => {
+    document.getElementById("findBooks").style.display="none";
+    document.getElementById("defaultCardText").innerText="Currently searching for book recommendations, the page will reload automatically when recommendations are found."
+    await axios.get("recommend/acBooks").then(res => {
+      console.log(res);
+      console.log("BOOK RECS UPDATED");
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
+      });
+      this.loadRecommendations();
+  } 
+  //scrape daily recs and add them to the database
+  dailyScraper = async () => {
+    await axios.get("recommend/daily").then(res => {
+      document.getElementById("findDaily").style.display="none";
+      document.getElementById("defaultCardText").innerText="Currently searching for event recommendations, the page will reload automatically when recommendations are found."
+      console.log(res);
+      console.log("DAILY RECS UPDATED");
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
+      });
+      this.loadRecommendations();
+  } 
+  //scrape obscura recs from both pages, add appropriate images and add new recs to the database
+  obscuraScraper = async () => {
+    document.getElementById("findObscura").style.display="none";
+    document.getElementById("defaultCardText").innerText="Currently searching for recommendations, the page will reload automatically when recommendations are found."
+    await axios.get("recommend/obscuraP1").then(async res1 => {
+      console.log(res1);
+      console.log("OBSCURA STEP 1 COMPLETE");
+      await axios.get("recommend/obscuraP2").then(async res2 => {
+        console.log(res2);
+        console.log("OBSCURA STEP 2 COMPLETE...OBSCURA RECS UPDATED");
+      }).catch(function(err) {
+        //if error, log error
+        console.log(err);
+      });
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
+      });
+      this.loadRecommendations();
+  }
+  //scrape trail recs and add new recs to the database
+  trailScraper = async () => {
+    document.getElementById("findTrails").style.display="none";
+    document.getElementById("defaultCardText").innerText="Currently searching for trail recommendations, the page will reload automatically when recommendations are found."
+    await axios.get("recommend/trails").then(res => {
+      console.log(res);
+      console.log("TRAIL RECS UPDATED");
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
+      });
+      this.loadRecommendations();
+  }  
     componentDidMount(){
       this.loadRecommendations()
     }
+  // Handle Form Submit
+  handleFoodSubmit = (event) => {
+    event.preventDefault();
+
+    // Create newUser Post
+    const newLocation = {
+      title: this.state.randomRestaurant.title,
+      description: this.state.randomRestaurant.description,
+      picture: this.state.picture,
+      link: this.state.randomRestaurant.image,
+      address: this.state.randomRestaurant.address,
+      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+    }
+
+    console.log(newLocation)
+    
+    axios.post('/api/product', newLocation)
+      .then((response) => {
+        console.log(response)
+        // If Successfully Posted
+        if (response.status === 200){
+          this.setState({productSuccess: 'true' });
+          // this.props.history.push('/home')
+        }
+        // If Unsuccessful
+        else{
+          alert(`Product Error`)
+        }
+
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+  }
 
   // Render to Screen
   render() { 
@@ -105,8 +223,13 @@ class SearchPage extends Component {
             urlLink = {this.state.randomRestaurant.link}
             imageLink = {this.state.randomRestaurant.image}
             address = {this.state.randomRestaurant.address} 
+            submitMe = {this.handleFoodSubmit}
           /> : 
-          <DefaultRecDisplay/>}
+          <DefaultRecDisplay
+            type = "restaurants"
+            buttonID = "findFood"
+            recScraper = {this.foodScraper}
+          />}
           {this.state.randomAlbum ? 
           <RecommendationDisplay
             key = { this.state.randomAlbum._id}
@@ -118,7 +241,11 @@ class SearchPage extends Component {
             imageLink = {this.state.randomAlbum.image}
             address = {this.state.randomAlbum.address}
           /> : 
-          <DefaultRecDisplay/>}
+          <DefaultRecDisplay
+            type = "albums"
+            buttonID = "findAlbums"
+            recScraper = {this.albumScraper}
+          />}
           {this.state.randomBook ? 
           <RecommendationDisplay
             key = { this.state.randomBook._id}
@@ -130,7 +257,11 @@ class SearchPage extends Component {
             imageLink = {this.state.randomBook.image}
             address = {this.state.randomBook.address}
           /> : 
-          <DefaultRecDisplay/>}
+          <DefaultRecDisplay
+            type = "books"
+            buttonID = "findBooks"
+            recScraper = {this.bookScraper}
+          />}
           {this.state.randomDo512events ?
           <RecommendationDisplay
             key = { this.state.randomDo512events._id}
@@ -142,7 +273,11 @@ class SearchPage extends Component {
             imageLink = {this.state.randomDo512events.image}
             address = {this.state.randomDo512events.address}
           /> : 
-          <DefaultRecDisplay/>}
+          <DefaultRecDisplay
+            type = "events"
+            buttonID = "findDaily"
+            recScraper = {this.dailyScraper}
+          />}
           {this.state.randomObscura ? 
           <RecommendationDisplay
             key = { this.state.randomObscura._id}
@@ -154,8 +289,12 @@ class SearchPage extends Component {
             imageLink = {this.state.randomObscura.image}
             address = {this.state.randomObscura.address}
           /> : 
-          <DefaultRecDisplay/>}
-          {this.state.randomObscura ?
+          <DefaultRecDisplay
+            type = "weird places"
+            buttonID = "findObscura"
+            recScraper = {this.obscuraScraper}
+          />}
+          {this.state.randomTrail ?
           <RecommendationDisplay
             key = { this.state.randomTrail._id}
             id = {this.state.randomTrail._id}
@@ -166,7 +305,11 @@ class SearchPage extends Component {
             imageLink = {this.state.randomTrail.image}
             address = {this.state.randomTrail.address}
           /> : 
-          <DefaultRecDisplay/>}
+          <DefaultRecDisplay
+            type = "trails"
+            buttonID = "findTrails"
+            recScraper = {this.trailScraper}
+          />}
         <Footer /> 
       </div>
       

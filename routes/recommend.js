@@ -701,7 +701,7 @@ module.exports = function(app) {
   app.get("/recommend/obscuraP1/images", function(req, res) {
     nightmare
       .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places")
-      .wait(10000)
+      .wait(15000)
       .evaluate(() => {
         let collection = []
         $("div.index-card-wrap").each(function(i, element) {
@@ -745,7 +745,7 @@ module.exports = function(app) {
   app.get("/recommend/obscuraP2/images", function(req, res) {
     nightmare
       .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places?page=2")
-      .wait(10000)
+      .wait(15000)
       .evaluate(() => {
         let collection = []
         $("div.index-card-wrap").each(function(i, element) {

@@ -6,8 +6,8 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 const DefaultRecDisplay = props => (
   <div>
     <div className = 'card p-3 m-3'>
-      <p>We're sorry, there are currently no recommendations of this type</p>
-      <button className=' mt-3 btn btn-outline-danger' onClick={props.foodScraper}>Check for New Recommendations</button> 
+      <p id='defaultCardText'>We're sorry, there are currently no {props.type} available to recommend.</p>
+      <button className=' mt-3 btn btn-outline-danger' id={props.buttonID} onClick={props.recScraper}>Check for New Recommendations</button> 
     </div>
   </div>
 );
