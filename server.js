@@ -1,9 +1,9 @@
 //basic server stuff
 const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-dotenv.config();
 const PORT = process.env.PORT || 3001;
 const app = express();
 const session = require("express-session");
@@ -11,18 +11,18 @@ const socket = require("socket.io");
 
 //db stuff
 const mongoose = require("mongoose");
-//const User = require("./models/User");
-//const Product = require("./models/Product");
-//const Review = require("./models/Review");
-//const Reply = require("./models/Reply");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reviewdb");
 
 
 //Amazon stuff
+const AWS=require("aws-sdk");
 const fileupload = require("express-fileupload");
-const BUCKET_NAME = 'es-test-bucket-8156';
+const BUCKET_NAME = 'atxreviewer';
 const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
 const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
+
+//email
+const nodemailer = require('nodemailer');
 
 //Security stuff
 //const cookieParser = require('cookie-parser');

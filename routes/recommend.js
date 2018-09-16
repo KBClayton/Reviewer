@@ -878,7 +878,15 @@ module.exports = function(app) {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //!!!!!!!!!!!!!!!!!THIS VARIABLE NEEDS TO BE CHANGED IF DEPLOYED TO HEROKU!!!!!!!!!!!!!!!!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const urlHelper = "http://localhost:3000/"
+const dotenv = require("dotenv");
+dotenv.config();
+console.log(process.env.NODE_ENV);
+let urlHelper = "http://localhost:3000/"
+if (process.env.NODE_ENV === "production") {
+    urlHelper = "https://austin-reviews.herokuapp.com/"
+}
+console.log(`urlhelper is: ${urlHelper}`)
+
 //const urlHelper = "https://austin-reviews.herokuapp.com/"
 //automated scheduler for updating the restaurant recommendations
 const updateFood = cron.schedule('5 * * * *', async function(error, response, body) {
