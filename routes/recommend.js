@@ -11,18 +11,33 @@ const Nightmare = require('nightmare');
 const nightmare = Nightmare();
 const jquery = require("jquery");
 const cron = require('node-cron');
+//Food Helper Arrays
 let linkHelperFood = [];
 let imgHelperFood = [];
 let locHelperFood = [];
+//Music Helper Arrays
 let linkHelperMusic = [];
 let imgHelperMusic = [];
 let descHelperMusic = [];
 let linkHelperBooks = [];
+let musicStoreNameArray = ["Waterloo Records", "End of an Ear", "Waterloo Records", "Antone's Record Store", "Waterloo Records", "Breakaway Records", "Waterloo Records", "Piranha Records", "Waterloo Records", "BLK Vinyl"];
+let musicAddressArray = ["600 N Lamar Blvd Austin TX 78703", "4304 Clawson Rd Austin TX 78704", "600 N Lamar Blvd Austin TX 78703", "2928 Guadalupe St Austin TX 78705", "600 N Lamar Blvd Austin TX 78703", "211 W N Loop Blvd Austin TX 78751", "600 N Lamar Blvd Austin TX 78703", "1208 N Interstate Hwy 35 E Round Rock TX 78681", "600 N Lamar Blvd Austin TX 78703", "2505 E 6th St Austin TX 78702"];
+let musicLatArray = [30.271, 30.229, 30.271, 30.296, 30.271, 30.318, 30.271, 30.519, 30.271, 30.258];
+let musicLongArray = [-97.754, -97.784, -97.754, -97.742, -97.754, -97.724, -97.754, -97.689, -97.754, -97.714];
+let musicTicketLinkArray = ["https://www.waterloorecords.com/Store","http://endofanear.com/","https://www.waterloorecords.com/Store","http://antonesrecordshop.com/content/","https://www.waterloorecords.com/Store","http://breakawayrecordshop.com/","https://www.waterloorecords.com/Store","http://www.piranharecords.net/home","https://www.waterloorecords.com/Store","https://www.blkvinylatx.com/"];
+//Book Helper Arrays
 let imgHelperBooks = [];
 let titleHelperBooks = [];
 let synHelperBooks = [];
 let authorHelperBooks = [];
+let bookStoreNameArray = ["BookPeople", "Malvern Books", "BookPeople", "South Congress Books", "BookPeople", "Resistencia", "BookPeople", "Recycled Reads", "BookPeople", "BookWoman", "BookPeople", "Austin Books & Comics"];
+let bookAddressArray = ["603 N Lamar Blvd Austin TX 78703", "613 W 29th St Austin TX 78705", "603 N Lamar Blvd Austin TX 78703", "1608 S Congress Ave Austin TX 78704", "603 N Lamar Blvd Austin TX 78703", "4926 E Cesar Chavez St Austin TX 78702", "603 N Lamar Blvd Austin TX 78703", "5335 Burnet Rd Austin TX 78756", "603 N Lamar Blvd Austin TX 78703", "5501 N Lamar Blvd Austin TX 78751", "603 N Lamar Blvd Austin TX 78703", "5002 N Lamar Blvd Austin TX 78751"];
+let bookLatArray = [30.272, 30.295, 30.272, 30.247, 30.272, 30.251, 30.272, 30.327, 30.272, 30.322, 30.272, 30.317];
+let bookLongArray = [-97.753, -97.743, -97.753, -97.750, -97.753, -97.700, -97.753, -97.739, -97.753, -97.728, -97.753, -97.732];
+let bookTicketLinkArray = ["https://www.bookpeople.com","http://malvernbooks.com/","https://www.bookpeople.com","https://southcongressbooks.com/","https://www.bookpeople.com","http://www.resistenciabooks.com/","https://www.bookpeople.com","http://library.austintexas.gov/recycled-reads","https://www.bookpeople.com","https://www.ebookwoman.com/","https://www.bookpeople.com","https://www.austinbooks.com/"];
+//Do512 Helper Array
 let dailyArray = [];
+//Obscura Helper Arrays
 let linkHelperObscura = [];
 let addressHelperObscura = [];
 
@@ -165,6 +180,7 @@ module.exports = function(app) {
               const $ = cheerio.load(response.data);
               // Now, we grab every h2 within an article tag, and do the following:
               $("section#CenterColumn").children("h2").each(function(i, element) {
+                let u = Math.floor(Math.random()*musicStoreNameArray.length);
                 // Save an empty result object
                 let result = {};
                 // Add the text and href of every link, and save them as properties of the result object
@@ -177,9 +193,11 @@ module.exports = function(app) {
                 result.link = linkHelperMusic[i];
                 result.image = imgHelperMusic[i];
                 result.description = descHelperMusic[i];
-                result.address = "600 N Lamar Blvd Austin TX 78703";
-                result.lat = "30.271";
-                result.long = "-97.754";
+                result.address = musicAddressArray[u];
+                result.lat = musicLatArray[u];
+                result.long = musicLongArray[u];
+                result.ticketLink = musicTicketLinkArray[u];
+                result.storeName = musicStoreNameArray[u];
                 result.music = true;
                 Recommend.findOne({ location:result.location }).then(function(response) {
                   if(!response || response===null) {
@@ -209,7 +227,7 @@ module.exports = function(app) {
             });  
 
   app.get("/recommend/acBooks", function(req, res) {
-    // First, we grab the body of the html with request
+    // First, we grab the body of the html with axios
     axios.get("http://www.austinchronicle.com/books/reviews/").then(function(response) {
       linkHelperBooks = [];
       const $ = cheerio.load(response.data);
@@ -261,6 +279,7 @@ module.exports = function(app) {
             axios.get("http://www.austinchronicle.com/books/reviews/").then(function(response){
               const $ = cheerio.load(response.data);
               $("section#CenterColumn").children("h2").each(function(i, element) {
+                let u = Math.floor(Math.random()*bookStoreNameArray.length);
                 let result = {};
                 result.title = titleHelperBooks[i] === "" 
                   ? $(this)
@@ -295,6 +314,18 @@ module.exports = function(app) {
                 };
                 result.link = linkHelperBooks[i];
                 result.image = imgHelperBooks[i];
+                result.address = bookAddressArray[u];
+                result.lat = bookLatArray[u];
+                result.long = bookLongArray[u];
+                result.ticketLink = bookStoreNameArray[u] === "BookPeople" ? bookTicketLinkArray[u] + "/search/site/" + result.title.replace(/\ /g, "%20")
+                  .replace(/\,/g, "%2C")
+                  .replace(/\:/g, "%3A")
+                  .replace(/\$/g, "%24")
+                  .replace(/\?/g, "%3F")
+                  .replace(/\"/g, "%22")
+                  .replace(/\'/g, "%27")
+                  .replace(/\&/g, "%26") : bookTicketLinkArray[u];
+                result.storeName = bookStoreNameArray[u];
                 result.books = true;
                 Recommend.findOne({ title:result.title }).then(function(response) {
                   if(!response || response===null){
@@ -701,7 +732,7 @@ module.exports = function(app) {
   app.get("/recommend/obscuraP1/images", function(req, res) {
     nightmare
       .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places")
-      .wait(15000)
+      .wait(5000)
       .evaluate(() => {
         let collection = []
         $("div.index-card-wrap").each(function(i, element) {
@@ -721,10 +752,10 @@ module.exports = function(app) {
       });
       return collection})
       .end()
-      .then(async function(response) {
+      .then(function(response) {
         let obImageArray = [];
         for (i=0; i<response.length; i++) {
-          await Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
+          Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
             obImageArray.push(response[i]);
             //console.log(result)
           }).catch(function(err) {
@@ -745,7 +776,7 @@ module.exports = function(app) {
   app.get("/recommend/obscuraP2/images", function(req, res) {
     nightmare
       .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places?page=2")
-      .wait(15000)
+      .wait(5000)
       .evaluate(() => {
         let collection = []
         $("div.index-card-wrap").each(function(i, element) {
@@ -765,10 +796,10 @@ module.exports = function(app) {
       });
       return collection})
       .end()
-      .then(async function(response) {
+      .then(function(response) {
         let obImageArray = [];
         for (i=0; i<response.length; i++) {
-          await Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
+          Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
             obImageArray.push(response[i]);
             //console.log(result)
           }).catch(function(err) {
@@ -790,15 +821,37 @@ module.exports = function(app) {
     nightmare
     .goto("https://www.alltrails.com/us/texas/austin")
     .wait(2000)
-    .evaluate(() => {
+    .evaluate(async() => {
       let collection =[];
       const objectA = $("section#nearby-trails").children("div").attr("data-react-props");
       const objectB = JSON.parse(objectA).results;
-      $.each(objectB, function(i, element){
+      await $.each(objectB, function(i, element){
         let trail = {};
-        console.log(i);
-        trail.title = objectB[i].name;
+        let difficultyArray = ["", "an easy", "a modertely easy", "a moderate", "a moderately difficult", "a challenging"]
+        let tLength = parseFloat(objectB[i].length) / 1609.34;
+        let trailLength = tLength.toFixed(1).toString();
+        let tEl = parseFloat(objectB[i].elevation_gain) * 3.38084;
+        let elGain = tEl.toFixed(1).toString();
+        objectB[i].activities[objectB[i].activities.length - 1] = "and " + objectB[i].activities[objectB[i].activities.length - 1];
+        let activityDescription = objectB[i].activities.join(", ");
+        let dogMessage = "";
+        for (j=0 ; j < objectB[i].features.length ; j++) {
+          if (objectB[i].features[j] == "dogs") {
+            dogMessage = " Dogs are welcome on this trail.";
+            break;
+          }
+          else if (objectB[i].features[j] == "dogs-leash"){
+            dogMessage = " Leashed dogs are welcome on this trail.";
+            break;
+          }
+          else {
+            dogMessage = " Unfortunately, dogs are not allowed on this trail.";
+          }
+        };
+        trail.ticketLink = objectB[i].features.join(", ");
+        trail.title = objectB[i].name.split(" in")[0];
         trail.location = objectB[i].area_name;
+        trail.description = "is " + difficultyArray[objectB[i].difficulty_rating] + " " + trailLength + " mile trail with an elevation gain of " + elGain + " feet. Available activities include " + activityDescription + "." + dogMessage; 
         trail.image = "https://alltrails.com/api/alltrails/trails/" + objectB[i].ID + "/profile_photo?show_placeholder=no&size=large&key=3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i";
         trail.link = "https://alltrails.com/trails/" + objectB[i].slug + "?ref=result-card";
         trail.lat = objectB[i]._geoloc.lat;

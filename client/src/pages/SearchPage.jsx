@@ -30,55 +30,79 @@ class SearchPage extends Component {
 
 
    }
+
+  //set new randomRestaurant
+  foodRandomizer = () => {
+    this.setState({randomRestaurant: this.state.restaurants[Math.floor(Math.random()*this.state.restaurants.length)]})
+    console.log(this.state.randomRestaurant);
+  }
+  //set new randomAlbum
+  albumRandomizer = () => {
+    this.setState({randomAlbum: this.state.albums[Math.floor(Math.random()*this.state.albums.length)]})
+    console.log(this.state.randomAlbum);
+  }
+  //set new randomBook
+  bookRandomizer = () => {
+    this.setState({randomBook: this.state.books[Math.floor(Math.random()*this.state.books.length)]})
+    console.log(this.state.randomBook);
+  }
+  //set new randomDo512events
+  do512Randomizer = () => {
+    this.setState({randomDo512events: this.state.do512events[Math.floor(Math.random()*this.state.do512events.length)]})
+    console.log(this.state.randomDo512events);
+  }
+  //set new randomRandomObscura
+  obscuraRandomizer = () => {
+    this.setState({randomObscura: this.state.obscura[Math.floor(Math.random()*this.state.obscura.length)]})
+    console.log(this.state.randomObscura);
+  }
+  //set new randomTrail
+  trailRandomizer = () => {
+    this.setState({randomTrail: this.state.trails[Math.floor(Math.random()*this.state.trails.length)]})
+    console.log(this.state.randomTrail);
+  }
   // Loads All Recommendations and sets the appropriate states
   loadRecommendations = () => {
     axios.get("/recommend/acFood/all")
       .then(res => {
         //console.log(res.data);
-        const but = res.data
         this.setState({restaurants: res.data});
-        this.setState({randomRestaurant: this.state.restaurants[Math.floor(Math.random()*this.state.restaurants.length)]})
-        console.log(this.state.randomRestaurant);
+        this.foodRandomizer();
         //console.log(this.state.restaurants)
       });
       axios.get("/recommend/acMusic/all")
       .then(res => {
         //console.log(res.data);
         this.setState({albums: res.data})
-        this.setState({randomAlbum: this.state.albums[Math.floor(Math.random()*this.state.albums.length)]})
-        console.log(this.state.randomAlbum);
+        this.albumRandomizer();
         //console.log(this.state.albums)
       });
       axios.get("/recommend/acBooks/all")
       .then(res => {
         //console.log(res.data);
         this.setState({books: res.data})
-        this.setState({randomBook: this.state.books[Math.floor(Math.random()*this.state.books.length)]})
-        console.log(this.state.randomBook);
+        this.bookRandomizer();
         //console.log(this.state.books)
       });
       axios.get("/recommend/daily/all")
       .then(res => {
         //console.log(res.data);
         this.setState({do512events: res.data})
-        this.setState({randomDo512events: this.state.do512events[Math.floor(Math.random()*this.state.do512events.length)]})
-        console.log(this.state.randomDo512events);
+        this.do512Randomizer();
         //console.log(this.state.do512events)
       });
       axios.get("/recommend/obscura/all")
       .then(res => {
         //console.log(res.data);
         this.setState({obscura: res.data})
-        this.setState({randomObscura: this.state.obscura[Math.floor(Math.random()*this.state.obscura.length)]})
-        console.log(this.state.randomObscura);
+        this.obscuraRandomizer();
         //console.log(this.state.obscura)
       });
       axios.get("/recommend/trails/all")
       .then(res => {
         //console.log(res.data);
         this.setState({trails: res.data})
-        this.setState({randomTrail: this.state.trails[Math.floor(Math.random()*this.state.trails.length)]})
-        console.log(this.state.randomTrail);
+        this.trailRandomizer();
         //console.log(this.state.trails)
       });
     }
@@ -171,9 +195,26 @@ class SearchPage extends Component {
       this.loadRecommendations()
     }
   //save a restaurant recommendation
-  handleSubmitFood = (event) => {
+  handleSubmitFood = async (event) => {
     event.preventDefault();
     //GEOCODING API CALL GOES HERE
+    let addressArray = this.state.randomRestaurant.address.split(",");
+    let addressHelper = addressArray.length == 1 ? this.state.randomRestaurant.address + " Austin TX" : this.state.randomRestaurant.address + " TX";
+    let formattedAddress = addressHelper.split(' ').length == 3 ? "Austin+TX" : addressHelper.replace(/\./g, "").split(' ').join('+');
+    let finalAddress = formattedAddress.split('+').join(' ')
+    console.log(formattedAddress);
+    let googleHelper = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + formattedAddress + "key=AIzaSyDoQLe8s7JUbTZ_ubXhGY4cUmLiNqWvQxw"
+    await axios.get(googleHelper)
+      .then((googleresponse) => {
+        console.log(googleresponse)
+        if (googleresponse.data.results[0]){
+          this.setState({gpsdata: {
+            lat: googleresponse.data.results[0].geometry.location.lat,
+            long: googleresponse.data.results[0].geometry.location.lng
+            }      
+          })
+        } 
+      });
 
     // Create newUser Post
     const newLocation = {
@@ -181,8 +222,8 @@ class SearchPage extends Component {
       description: this.state.randomRestaurant.description,
       picture: this.state.randomRestaurant.image,
       link: this.state.randomRestaurant.link,
-      address: this.state.randomRestaurant.address,
-      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+      address: addressHelper.split(' ').length == 3 ? this.state.randomRestaurant.address : finalAddress,
+      gpsdata: this.state.gpsdata
     }
 
     console.log(newLocation)
@@ -205,6 +246,7 @@ class SearchPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+    this.foodRandomizer();
   }
   //save an album recommendation
   handleSubmitMusic = (event) => {
@@ -212,11 +254,14 @@ class SearchPage extends Component {
     // Create newUser Post
     const newLocation = {
       title: this.state.randomAlbum.location + " by " + this.state.randomAlbum.title,
-      description: this.state.randomAlbum.description,
+      description: this.state.randomAlbum.description + "pick up a copy at " + this.state.randomAlbum.ticketlink + ".",
       picture: this.state.randomAlbum.image,
       link: this.state.randomAlbum.link,
       address: this.state.randomAlbum.address,
-      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+      gpsdata: {
+        lat: this.state.randomAlbum.lat,
+        long: this.state.randomAlbum.long
+        }
     }
 
     console.log(newLocation)
@@ -239,6 +284,7 @@ class SearchPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+    this.albumRandomizer();
   }
   //save a book recommendation
   handleSubmitBook = (event) => {
@@ -250,7 +296,10 @@ class SearchPage extends Component {
       picture: this.state.randomBook.image,
       link: this.state.randomBook.link,
       address: this.state.randomBook.address,
-      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+      gpsdata: {
+        lat: this.state.randomBook.lat,
+        long: this.state.randomBook.long
+        }
     }
 
     console.log(newLocation)
@@ -273,6 +322,7 @@ class SearchPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+    this.bookRandomizer();
   }
   //save a book recommendation
   handleSubmitDo512 = (event) => {
@@ -284,7 +334,10 @@ class SearchPage extends Component {
       picture: this.state.randomDo512events.image,
       link: this.state.randomDo512events.link,
       address: this.state.randomDo512events.address,
-      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+      gpsdata: {
+        lat: this.state.randomDo512events.lat,
+        long: this.state.randomDo512events.long
+        }
     }
 
     console.log(newLocation)
@@ -307,6 +360,7 @@ class SearchPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+    this.do512Randomizer();
   }
   //save an obscura recommendation
   handleSubmitObscura = (event) => {
@@ -317,8 +371,11 @@ class SearchPage extends Component {
       description: this.state.randomObscura.description,
       picture: this.state.randomObscura.image,
       link: this.state.randomObscura.link,
-      address: this.state.randomObscura.address,
-      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+      address: this.state.randomObscura.address.split(this.state.randomObscura.title)[1],
+      gpsdata: {
+        lat: this.state.randomObscura.lat,
+        long: this.state.randomObscura.long
+        }
     }
 
     console.log(newLocation)
@@ -341,18 +398,32 @@ class SearchPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+    this.obscuraRandomizer();
   }
-  //save an obscura recommendation
+  //save a trail recommendation
   handleSubmitTrail = (event) => {
     event.preventDefault();
+    //REVERSE GEOCODING GOES HERE
+    let addressHelper = this.state.randomTrail.lat + "," + this.state.randomTrail.long;
+    let googleHelper = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + addressHelper + "&key=AIzaSyDoQLe8s7JUbTZ_ubXhGY4cUmLiNqWvQxw";
+    axios.get(googleHelper)
+      .then((googleresponse) => {
+        console.log(googleresponse)
+        if (googleresponse.data.results[0]){
+          this.setState({address: googleresponse.data.results[0].formatted_address})          
+        }
+      })   
     // Create newUser Post
     const newLocation = {
       title: this.state.randomTrail.title,
       description: "Located at " + this.state.randomTrail.location + ", CUSTOM DESCRIPTION",
       picture: this.state.randomTrail.image,
       link: this.state.randomTrail.link,
-      //address: this.state.randomTrail.address,
-      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+      address: this.state.randomTrail.address,
+      gpsdata: {
+        lat: this.state.randomTrail.lat,
+        long: this.state.randomTrail.long
+        }      
     }
 
     console.log(newLocation)
@@ -375,6 +446,7 @@ class SearchPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+    this.trailRandomizer();
   }
 
   // Render to Screen
@@ -397,6 +469,7 @@ class SearchPage extends Component {
             address = {this.state.randomRestaurant.address}
             type = "restaurant" 
             submitMe = {this.handleSubmitFood}
+            refresh = {this.foodRandomizer}
           /> : 
           <DefaultRecDisplay
             type = "restaurants"
@@ -408,13 +481,14 @@ class SearchPage extends Component {
             key = { this.state.randomAlbum._id}
             id = {this.state.randomAlbum._id}
             link = {this.state.randomAlbum.link}
-            title = {this.state.randomAlbum.title}
-            description = {this.state.randomAlbum.description}
+            title = {this.state.randomAlbum.location}
+            description = {this.state.randomAlbum.description + "pick up a copy at " + this.state.randomAlbum.storeName + "."}
             urlLink = {this.state.randomAlbum.link}
             imageLink = {this.state.randomAlbum.image}
             address = {this.state.randomAlbum.address}
             type = "album"
             submitMe = {this.handleSubmitMusic}
+            refresh = {this.albumRandomizer}
           /> : 
           <DefaultRecDisplay
             type = "albums"
@@ -427,12 +501,13 @@ class SearchPage extends Component {
             id = {this.state.randomBook._id}
             link = {this.state.randomBook.link}
             title = {this.state.randomBook.title}
-            description = {this.state.randomBook.description}
+            description = {this.state.randomBook.description + "pick up a copy at " + this.state.randomBook.storeName + "."}
             urlLink = {this.state.randomBook.link}
             imageLink = {this.state.randomBook.image}
             address = {this.state.randomBook.address}
             type = "book"
             submitMe = {this.handleSubmitBook}
+            refresh = {this.bookRandomizer}
           /> : 
           <DefaultRecDisplay
             type = "books"
@@ -445,12 +520,13 @@ class SearchPage extends Component {
             id = {this.state.randomDo512events._id}
             link = {this.state.randomDo512events.link}
             title = {this.state.randomDo512events.title}
-            description = {this.state.randomDo512events.description}
+            description = {this.state.randomDo512events.location + " at " + this.state.randomDo512events.time}
             urlLink = {this.state.randomDo512events.link}
             imageLink = {this.state.randomDo512events.image}
             address = {this.state.randomDo512events.address}
             type = "event"
             submitMe = {this.handleSubmitDo512}
+            refresh = {this.do512Randomizer}
           /> : 
           <DefaultRecDisplay
             type = "events"
@@ -469,6 +545,7 @@ class SearchPage extends Component {
             address = {this.state.randomObscura.address}
             type = "weird place"
             submitMe = {this.handleSubmitObscura}
+            refresh = {this.obscuraRandomizer}
           /> : 
           <DefaultRecDisplay
             type = "weird places"
@@ -481,12 +558,13 @@ class SearchPage extends Component {
             id = {this.state.randomTrail._id}
             link = {this.state.randomTrail.link}
             title = {this.state.randomTrail.title}
-            description = {this.state.randomTrail.description}
+            description = {"Located at " + this.state.randomTrail.location + ", " + this.state.randomTrail.title + " " + this.state.randomTrail.description}
             urlLink = {this.state.randomTrail.link}
             imageLink = {this.state.randomTrail.image}
             address = {this.state.randomTrail.address}
             type = "trail"
             submitMe = {this.handleSubmitTrail}
+            refresh = {this.trailRandomizer}
           /> : 
           <DefaultRecDisplay
             type = "trails"
