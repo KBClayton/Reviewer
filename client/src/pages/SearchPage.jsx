@@ -170,16 +170,17 @@ class SearchPage extends Component {
     componentDidMount(){
       this.loadRecommendations()
     }
-  // Handle Form Submit
-  handleFoodSubmit = (event) => {
+  //save a restaurant recommendation
+  handleSubmitFood = (event) => {
     event.preventDefault();
+    //GEOCODING API CALL GOES HERE
 
     // Create newUser Post
     const newLocation = {
       title: this.state.randomRestaurant.title,
       description: this.state.randomRestaurant.description,
-      picture: this.state.picture,
-      link: this.state.randomRestaurant.image,
+      picture: this.state.randomRestaurant.image,
+      link: this.state.randomRestaurant.link,
       address: this.state.randomRestaurant.address,
       //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
     }
@@ -191,7 +192,178 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          this.setState({productSuccess: 'true' });
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
+        }
+        // If Unsuccessful
+        else{
+          alert(`Product Error`)
+        }
+
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+  }
+  //save an album recommendation
+  handleSubmitMusic = (event) => {
+    event.preventDefault();
+    // Create newUser Post
+    const newLocation = {
+      title: this.state.randomAlbum.location + " by " + this.state.randomAlbum.title,
+      description: this.state.randomAlbum.description,
+      picture: this.state.randomAlbum.image,
+      link: this.state.randomAlbum.link,
+      address: this.state.randomAlbum.address,
+      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+    }
+
+    console.log(newLocation)
+    
+    axios.post('/api/product', newLocation)
+      .then((response) => {
+        console.log(response)
+        // If Successfully Posted
+        if (response.status === 200){
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
+        }
+        // If Unsuccessful
+        else{
+          alert(`Product Error`)
+        }
+
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+  }
+  //save a book recommendation
+  handleSubmitBook = (event) => {
+    event.preventDefault();
+    // Create newUser Post
+    const newLocation = {
+      title: this.state.randomBook.title + " by " + this.state.randomBook.location,
+      description: this.state.randomBook.description,
+      picture: this.state.randomBook.image,
+      link: this.state.randomBook.link,
+      address: this.state.randomBook.address,
+      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+    }
+
+    console.log(newLocation)
+    
+    axios.post('/api/product', newLocation)
+      .then((response) => {
+        console.log(response)
+        // If Successfully Posted
+        if (response.status === 200){
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
+        }
+        // If Unsuccessful
+        else{
+          alert(`Product Error`)
+        }
+
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+  }
+  //save a book recommendation
+  handleSubmitDo512 = (event) => {
+    event.preventDefault();
+    // Create newUser Post
+    const newLocation = {
+      title: this.state.randomDo512events.title,
+      description: this.state.randomDo512events.location + " at " + this.state.randomDo512events.time,
+      picture: this.state.randomDo512events.image,
+      link: this.state.randomDo512events.link,
+      address: this.state.randomDo512events.address,
+      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+    }
+
+    console.log(newLocation)
+    
+    axios.post('/api/product', newLocation)
+      .then((response) => {
+        console.log(response)
+        // If Successfully Posted
+        if (response.status === 200){
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
+        }
+        // If Unsuccessful
+        else{
+          alert(`Product Error`)
+        }
+
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+  }
+  //save an obscura recommendation
+  handleSubmitObscura = (event) => {
+    event.preventDefault();
+    // Create newUser Post
+    const newLocation = {
+      title: this.state.randomObscura.title,
+      description: this.state.randomObscura.description,
+      picture: this.state.randomObscura.image,
+      link: this.state.randomObscura.link,
+      address: this.state.randomObscura.address,
+      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+    }
+
+    console.log(newLocation)
+    
+    axios.post('/api/product', newLocation)
+      .then((response) => {
+        console.log(response)
+        // If Successfully Posted
+        if (response.status === 200){
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
+        }
+        // If Unsuccessful
+        else{
+          alert(`Product Error`)
+        }
+
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+  }
+  //save an obscura recommendation
+  handleSubmitTrail = (event) => {
+    event.preventDefault();
+    // Create newUser Post
+    const newLocation = {
+      title: this.state.randomTrail.title,
+      description: "Located at " + this.state.randomTrail.location + ", CUSTOM DESCRIPTION",
+      picture: this.state.randomTrail.image,
+      link: this.state.randomTrail.link,
+      //address: this.state.randomTrail.address,
+      //GOOGLE GEOCODING!!!!gpsdata: this.state.gpsdata
+    }
+
+    console.log(newLocation)
+    
+    axios.post('/api/product', newLocation)
+      .then((response) => {
+        console.log(response)
+        // If Successfully Posted
+        if (response.status === 200){
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
           // this.props.history.push('/home')
         }
         // If Unsuccessful
@@ -224,7 +396,7 @@ class SearchPage extends Component {
             imageLink = {this.state.randomRestaurant.image}
             address = {this.state.randomRestaurant.address}
             type = "restaurant" 
-            submitMe = {this.handleFoodSubmit}
+            submitMe = {this.handleSubmitFood}
           /> : 
           <DefaultRecDisplay
             type = "restaurants"
@@ -242,6 +414,7 @@ class SearchPage extends Component {
             imageLink = {this.state.randomAlbum.image}
             address = {this.state.randomAlbum.address}
             type = "album"
+            submitMe = {this.handleSubmitMusic}
           /> : 
           <DefaultRecDisplay
             type = "albums"
@@ -259,6 +432,7 @@ class SearchPage extends Component {
             imageLink = {this.state.randomBook.image}
             address = {this.state.randomBook.address}
             type = "book"
+            submitMe = {this.handleSubmitBook}
           /> : 
           <DefaultRecDisplay
             type = "books"
@@ -276,6 +450,7 @@ class SearchPage extends Component {
             imageLink = {this.state.randomDo512events.image}
             address = {this.state.randomDo512events.address}
             type = "event"
+            submitMe = {this.handleSubmitDo512}
           /> : 
           <DefaultRecDisplay
             type = "events"
@@ -293,6 +468,7 @@ class SearchPage extends Component {
             imageLink = {this.state.randomObscura.image}
             address = {this.state.randomObscura.address}
             type = "weird place"
+            submitMe = {this.handleSubmitObscura}
           /> : 
           <DefaultRecDisplay
             type = "weird places"
@@ -310,6 +486,7 @@ class SearchPage extends Component {
             imageLink = {this.state.randomTrail.image}
             address = {this.state.randomTrail.address}
             type = "trail"
+            submitMe = {this.handleSubmitTrail}
           /> : 
           <DefaultRecDisplay
             type = "trails"
