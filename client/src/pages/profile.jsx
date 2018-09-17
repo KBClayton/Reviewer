@@ -8,13 +8,13 @@ import axios from 'axios'
 // import CreateUserForm from '../components/CreateUserForm/createuserform';
 
 
-class CreateUserPage extends Component {
+class UserProfilePage extends Component {
   // super(props)
 
   // State
   state = {
     title: 'Reviewer',
-    subpage: 'Signup',
+    subpage: 'Profile',
     name: '',
     email: '',
     password: '',

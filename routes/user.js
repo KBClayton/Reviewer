@@ -88,7 +88,7 @@ module.exports = function(app) {
         
         req.session.uid= user.id;
         req.session.username= user.username;
-        console.log(`The port should be ${PORT2}`)
+        //console.log(`The port should be ${PORT2}`)
         res.cookie("username", user.username, {
           //signed:true, 
           expires:new Date(Date.now() + 36000000)})
@@ -138,7 +138,7 @@ module.exports = function(app) {
               //   res.header("Set-Cookie", set_cookies);
               // } 
 
-              console.log(`The port should be ${PORT2}`)
+              //console.log(`The port should be ${PORT2}`)
               res.cookie("username", user.username, {
                 //signed:true, 
                 expires:new Date(Date.now() + 36000000)})
@@ -214,7 +214,7 @@ module.exports = function(app) {
       }
       let prodAvg=0;
       let revAvg=0
-      console.log(dbreply);
+      //console.log(dbreply);
       if(dbreply.productRatings){
         for(let i=0; i<dbreply.productRatings.length; i++){
           prodAvg+=dbreply.productRatings[i].rating;
@@ -245,6 +245,7 @@ module.exports = function(app) {
   })
 
  app.get("/api/user/reset/:email", (req, res) => {
+
   User.findOneAndUpdate( {$and:[{email:req.params.email}, {emailVerified:true}]}, { passwordReset:Date.now()},{upsert:true}).exec(function(err, dbreply) {
 
   })
