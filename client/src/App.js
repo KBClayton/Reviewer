@@ -113,7 +113,7 @@ class App extends Component {
       <BrowserRouter>
         
         <Switch>
-          <Route path='/' component = {()=><Homepage /> } exact/>
+          <Route path='/' component = {()=><ShowAllProducts /> } exact/>
           <Route path ='/About' component = {AboutPage} exact/>
     
           <Route path='/createUser' component = {CreateUserPage}/>
@@ -132,6 +132,8 @@ class App extends Component {
           {/* <Route component = {Homepage}/> */}
           <Route path='/reply/:_id' component= {ReplyPage}/>
           <PrivateRoute path='/chat' component = {Chat} exact/>
+          <Route path='*' component = {ShowAllProducts} name ='catchAll' />
+
         </Switch>
       </BrowserRouter>
      );
