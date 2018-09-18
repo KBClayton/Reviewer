@@ -4,6 +4,7 @@ import { Redirect, withRouter } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
+import ShowAllProducts from './ShowAllProductsPage';
 // import { BrowserRouter, Route, Link } from 'react-router-dom'
 // import CreateUserForm from '../components/CreateUserForm/createuserform';
 
@@ -13,6 +14,7 @@ class CreateUserPage extends Component {
 
   // State
   state = {
+    redirectToReferrer: false,
     title: 'Reviewer',
     subpage: 'Signup',
     name: '',
@@ -70,11 +72,14 @@ class CreateUserPage extends Component {
     axios.post('/api/user/new', newUser)
       .then((response) => {
         console.log(response)
+
+  
         // this.setState()
         if (response.data.success === true){
-          console.log(this)
+          //console.log(this)
           // this.setState({accountAccepted: true });
-          this.props.history.push('/login')
+          this.setState({ redirectToReferrer: true });
+          //this.props.history.push('/login')
         }
         else{
           alert(`This username or email is taken. Please try another.  May We Suggest BananaMan78!`)
@@ -94,6 +99,11 @@ class CreateUserPage extends Component {
 
   // Render to Screen
   render() { 
+    const { from } = { from: { pathname: "/allproducts" } };
+    const { redirectToReferrer } = this.state;
+    if (redirectToReferrer) {
+      return <Redirect to={from} />;
+    }
     return (
       <div className = 'bg-dark mb-5'>          
         <Header 

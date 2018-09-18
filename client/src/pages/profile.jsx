@@ -8,7 +8,7 @@ import axios from 'axios'
 // import CreateUserForm from '../components/CreateUserForm/createuserform';
 
 
-class UserProfilePage extends Component {
+class ProfilePage extends Component {
   // super(props)
 
   // State
@@ -156,4 +156,4 @@ class UserProfilePage extends Component {
   }
 }
  
-export default withRouter(CreateUserPage);
+export default withRouter(ProfilePage);
