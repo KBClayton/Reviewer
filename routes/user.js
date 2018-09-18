@@ -42,8 +42,10 @@ module.exports = function(app) {
       //console.log(string)
       user.emailVerifyKey=string;
       let urlHelper = "http://localhost:3001"
+      let url2="localhost"
       if (process.env.NODE_ENV === "production") {
-        urlHelper = "https://austin-reviews.herokuapp.com"
+        urlHelper = "https://austin-reviews.herokuapp.com";
+        url2="austin-reviews.herokuapp.com";
       }
       //console.log(`urlhelper is: ${urlHelper}`)
 
@@ -98,6 +100,9 @@ module.exports = function(app) {
         res.cookie("hash", process.env.googlelocation, {
               //signed:true, 
           expires:new Date(Date.now() + 36000000)})
+        res.cookie("url", url2, {
+            //signed:true, 
+        expires:new Date(Date.now() + 36000000)})
 
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
@@ -106,6 +111,12 @@ module.exports = function(app) {
   });
 
   app.post("/api/user/login", (req, res) => {
+    let urlHelper = "http://localhost:3001"
+    let url2="localhost";
+    if (process.env.NODE_ENV === "production") {
+      urlHelper = "https://austin-reviews.herokuapp.com"
+      url2="austin-reviews.herokuapp.com";
+    }
      // console.log(req.body)
       //console.log(vault.read(req))
     User.findOne({
@@ -123,6 +134,7 @@ module.exports = function(app) {
               req.session.token=token;
               req.session.uid= user.id;
               req.session.username= user.username;
+
 
               //res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
               //vault.write(req, JSON.stringify({token: "JWT " + token, username:isMatch.username}));
@@ -148,6 +160,10 @@ module.exports = function(app) {
               res.cookie("hash", process.env.googlelocation, {
                     //signed:true, 
                 expires:new Date(Date.now() + 36000000)})
+              res.cookie("url", url2, {
+                  //signed:true, 
+              expires:new Date(Date.now() + 36000000)})
+      
               res.json({success: true, token: token, hash: process.env.googlelocation, port:PORT2});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
@@ -186,7 +202,12 @@ module.exports = function(app) {
     res.status(200).send({success:true, message:"loggedout"});
   })
 
-  app.get("/api/user/allstuff", (req, res) => {
+  app.get("/api/user/allstuff", async (req, res) => {
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
     User.findOne({_id:req.session.uid})
     .populate("products")
     .populate("reviews")

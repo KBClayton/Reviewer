@@ -21,6 +21,9 @@
   "devDependencies": {
     "concurrently": "^3.5.0"
   },
+  "engines":{
+    "node": "10.3.0"
+  },
   "dependencies": {
     "aws-sdk": "^2.315.0",
     "axios": "^0.18.0",

@@ -235,7 +235,7 @@ module.exports = function(app) {
       $("section#CenterColumn").children("h2").each(function(i, element) {
         if ($(this)
           .children("a")
-          .text() == ""){
+          .text() == "") {
             return;
           }
       linkHelperBooks.push("https://www.austinchronicle.com" + $(this)
@@ -281,18 +281,6 @@ module.exports = function(app) {
               $("section#CenterColumn").children("h2").each(function(i, element) {
                 let u = Math.floor(Math.random()*bookStoreNameArray.length);
                 let result = {};
-                result.title = titleHelperBooks[i] === "" 
-                  ? $(this)
-                    .children("a")
-                    .text() 
-                      : titleHelperBooks[i];
-                result.description = synHelperBooks[i] === ""
-                  ? $(this)
-                    .next("div.description")
-                    .text()
-                      : titleHelperBooks[i].split(" ")[0] == $(this)
-                      .next("div.description")
-                      .text() ? synHelperBooks[i] : synHelperBooks[i];
                 if ($(this)
                   .children("a")
                   .text()
@@ -311,7 +299,21 @@ module.exports = function(app) {
                 }
                 else {
                   result.location = "";
+                  return;
                 };
+                result.title = titleHelperBooks[i] === "" 
+                  ? $(this)
+                    .children("a")
+                    .text()
+                    .split(' by ' + result.location)[0]
+                      : titleHelperBooks[i].split(' by ' + result.location)[0];
+                result.description = synHelperBooks[i] === ""
+                  ? $(this)
+                    .next("div.description")
+                    .text()
+                      : titleHelperBooks[i].split(" ")[0] == $(this)
+                      .next("div.description")
+                      .text() ? synHelperBooks[i] : synHelperBooks[i];
                 result.link = linkHelperBooks[i];
                 result.image = imgHelperBooks[i];
                 result.address = bookAddressArray[u];

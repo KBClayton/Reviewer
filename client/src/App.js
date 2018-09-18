@@ -16,35 +16,60 @@ import ReplyPage from './pages/Reply';
 import requireAuth from './components/Auth';
 import SearchResultsPage from './pages/SearchResultsPage';
 
+import ProfilePage from './pages/profile'
 
 const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
     let cookieVars=document.cookie;
     let cookieObj={};
-    //console.log(cookieVars);
+    console.log(cookieVars);
     if(cookieVars!==undefined){
       //console.log("in cookievars if")
     cookieVars=cookieVars.replace(/=/g, " ")
     let cookieArray= cookieVars.split(" ")
     //console.log(cookieArray)
-      if(cookieArray.length===6){
+    let bumper=0;
+    let url;
+    let hash;
+    let port;
+    let username;
+        if(cookieArray[0]==="heroku-session-affinity"){
+            bumper=2;
+        }
+      if(cookieArray.length>6){
+        for(let i=0; i<cookieArray.length; i++){
         //console.log("in cookiearray if")
-        let username=cookieArray[1].substring(0, cookieArray[1].length-1)
-        let port=parseInt(cookieArray[3])
-        let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
+          if(cookieArray[i]==="username"){
+            username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+          }
+          if(cookieArray[i]==="port"){
+            port=parseInt(cookieArray[i+1])
+          }
+          if(cookieArray[i]==="hash"){
+            hash=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+          }
+          if(cookieArray[i]==="url"){
+            url=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+          }
+        }
         cookieObj.username=username;
         cookieObj.port=port;
         cookieObj.hash=hash;
-        //console.log(cookieObj)
+        cookieObj.url=url;
+        console.log("this is cookie object")
+        console.log(cookieObj)
         if(cookieObj.username!==undefined && cookieObj.username.length>5)
         {
           //console.log(cookieObj.username)
         //this.setState({ redirectToReferrer: true });
         this.isAuthenticated = true;
+        return true;
         }
       }
     }else{
+      this.isAuthenticated = false;
+      return false
       //console.log("not logged in")
     } 
   },
@@ -57,9 +82,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   Auth.authenticate(),
   <Route
     {...rest}
-    render={props => 
-      Auth.isAuthenticated ? (
-        <Component {...props} />
+    render={(props) => 
+      Auth.isAuthenticated ===true 
+      ? ( <Component {...props} />
       ) : (
         <Redirect
           to={{
@@ -74,10 +99,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 
 class App extends Component {
+  
   state = { 
-    redirectToReferrer: false
+    redirectToReferrer: true
+    
    }
   render() { 
+    const { from } = { from: { pathname: "/allproducts" } };
+    const { redirectToReferrer } = this.state;
+
+
     return ( 
       <BrowserRouter>
         
@@ -96,11 +127,11 @@ class App extends Component {
           <Route path ='/searchResults/:query' component = {SearchResultsPage} name='searchResultsPage' exact/>
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />
-          <PrivateRoute path="/try2" component={SearchPage} />
+          <PrivateRoute path="/profile" component={ProfilePage} />
            {/*  end I want this to be protected */}
           {/* <Route component = {Homepage}/> */}
           <Route path='/reply/:_id' component= {ReplyPage}/>
-          <Route path='/chat' component = {Chat} exact/>
+          <PrivateRoute path='/chat' component = {Chat} exact/>
         </Switch>
       </BrowserRouter>
      );
