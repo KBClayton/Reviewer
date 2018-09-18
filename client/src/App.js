@@ -62,9 +62,12 @@ const Auth = {
           //console.log(cookieObj.username)
         //this.setState({ redirectToReferrer: true });
         this.isAuthenticated = true;
+        return true;
         }
       }
     }else{
+      this.isAuthenticated = false;
+      return false
       //console.log("not logged in")
     } 
   },
@@ -77,10 +80,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   Auth.authenticate(),
   <Route
     {...rest}
-    render={props => 
-      Auth.isAuthenticated ? (
-        <Component {...props} />
-        
+    render={(props) => 
+      Auth.isAuthenticated ===true 
+      ? ( <Component {...props} />
       ) : (
         <Redirect
           to={{
@@ -95,10 +97,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 
 class App extends Component {
+  
   state = { 
     redirectToReferrer: true
+    
    }
   render() { 
+    const { from } = { from: { pathname: "/allproducts" } };
+    const { redirectToReferrer } = this.state;
+
+
     return ( 
       <BrowserRouter>
         <Switch>

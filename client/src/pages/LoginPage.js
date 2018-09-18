@@ -2,11 +2,20 @@ import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  withRouter
+} from "react-router-dom";
+
 
 class LoginPage extends Component {
 
   // State
   state = {
+    redirectToReferrer: false,
     title: 'Reviewer',
     subpage: 'Login Page',
     username: '',
@@ -33,8 +42,9 @@ class LoginPage extends Component {
     console.log(data)
   
     axios.post('/api/user/login', data)
-      .then(function(response){
+      .then((response)=>{
       console.log(response)
+      this.setState({ redirectToReferrer: true });
       })
       .catch(function(error){
       console.log(error);
@@ -43,6 +53,11 @@ class LoginPage extends Component {
 
   // Render to Screen
   render() { 
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const { redirectToReferrer } = this.state;
+    if (redirectToReferrer) {
+      return <Redirect to={from} />;
+    }
     return (
       <div className = 'card mb-5'>          
         <Header 
