@@ -133,7 +133,8 @@ class SearchPage extends Component {
       this.loadRecommendations();
   } 
   //scrape book recs and add new recs to the database
-  bookScraper = async () => {
+  bookScraper = async (event) => {
+    event.preventDefault();
     document.getElementById("findBooks").style.display="none";
     document.getElementById("defaultCardText").innerText="Currently searching for book recommendations, the page will reload automatically when recommendations are found."
     await axios.get("recommend/acBooks").then(res => {
