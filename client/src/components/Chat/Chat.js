@@ -29,14 +29,16 @@ class Chat extends React.Component{
         cookieVars=cookieVars.replace(/=/g, " ")
         let cookieArray= cookieVars.split(" ")
         //console.log(cookieArray)
-          if(cookieArray.length===6){
+          if(cookieArray.length===8){
             //console.log("in cookiearray if")
             let username=cookieArray[1].substring(0, cookieArray[1].length-1)
             let port=parseInt(cookieArray[3])
             let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
+            let url=cookieArray[5].substring(0, cookieArray[8].length-1)
             cookieObj.username=username;
             cookieObj.port=port;
             cookieObj.hash=hash;
+            cookieObj.url=url;
             //console.log(cookieObj)
             if(cookieObj.username!==undefined && cookieObj.username.length>5)
             {
@@ -53,8 +55,8 @@ class Chat extends React.Component{
             id:[]
         };
         
-        console.log(cookieObj.port)
-        this.socket = io("localhost:"+cookieObj.port);
+        console.log(url+cookieObj.port)
+        this.socket = io(url+cookieObj.port);
         //this.socket = io('localhost:3001');
         this.socket.on('RECEIVE_MESSAGE', function(data){
             addMessage(data);
