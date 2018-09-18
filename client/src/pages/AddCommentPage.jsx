@@ -145,6 +145,7 @@ class ShowOneLocation extends Component {
           />
           <RateProductStars 
             setRating = {this.setRating}
+            fun = {<h1 className='text-warning'>This worked</h1>}
           />
           <ProductComment
             addComment = {this.handleSubmit}

@@ -14,6 +14,7 @@ import SearchPage from './pages/SearchPage';
 import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
 import requireAuth from './components/Auth';
+import SearchResultsPage from './pages/SearchResultsPage';
 
 
 const Auth = {
@@ -79,6 +80,7 @@ class App extends Component {
   render() { 
     return ( 
       <BrowserRouter>
+        
         <Switch>
           <Route path='/' component = {()=><Homepage /> } exact/>
           <Route path ='/About' component = {AboutPage} exact/>
@@ -91,7 +93,7 @@ class App extends Component {
           <Route path='/allproducts' component = {ShowAllProducts} name="allproducts" exact/>
           <Route path='/location/:_id' component = {ShowOneLocation} name="location" exact/>
           <PrivateRoute path='/search' component = {SearchPage} name="search" exact/>
-    
+          <Route path ='/searchResults/:query' component = {SearchResultsPage} name='searchResultsPage' exact/>
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />
           <PrivateRoute path="/try2" component={SearchPage} />

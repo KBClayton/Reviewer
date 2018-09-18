@@ -41,6 +41,7 @@ const RateProductStars = props => (
       />
       </b>
     </h1>
+    {props.fun}
   </div>
 );
 
