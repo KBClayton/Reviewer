@@ -14,7 +14,7 @@ import SearchPage from './pages/SearchPage';
 import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
 import requireAuth from './components/Auth';
-
+import ProfilePage from './pages/profile'
 
 const Auth = {
   isAuthenticated: false,
@@ -80,6 +80,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     render={props => 
       Auth.isAuthenticated ? (
         <Component {...props} />
+        
       ) : (
         <Redirect
           to={{
@@ -95,7 +96,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 class App extends Component {
   state = { 
-    redirectToReferrer: false
+    redirectToReferrer: true
    }
   render() { 
     return ( 
@@ -115,11 +116,11 @@ class App extends Component {
     
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />
-          <PrivateRoute path="/try2" component={SearchPage} />
+          <PrivateRoute path="/profile" component={ProfilePage} />
            {/*  end I want this to be protected */}
           {/* <Route component = {Homepage}/> */}
           <Route path='/reply/:_id' component= {ReplyPage}/>
-          <Route path='/chat' component = {Chat} exact/>
+          <PrivateRoute path='/chat' component = {Chat} exact/>
         </Switch>
       </BrowserRouter>
      );

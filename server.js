@@ -88,9 +88,10 @@ passport.use(new JwtStrategy(passportOpts,
 
 
 //app.use statements
-//app.use(helmet());
+app.use(helmet());
 app.use(session(sess));
-app.use(helmet.permittedCrossDomainPolicies())
+app.use(helmet.permittedCrossDomainPolicies({ permittedPolicies: 'all' }))
+app.use(helmet.frameguard({action: 'allow-from', domain: 'https://maps.googleapis.com'  }))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(fileupload());
