@@ -63,6 +63,7 @@ class CreateWierdLocation extends Component {
 
   searchAPILocations = (event) => {
     event.preventDefault();
+    if (this.state.location !== ''){
     console.log('You ran the function')
     var queryURL = ("https://en.wikipedia.org/w/api.php?format=json&titles=" + this.state.locationName + "&action=query&prop=extracts&exintro=&explaintext=");
     var queryURLBasic =   ("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + this.state.locationName +"&srwhat=text&srprop=timestamp&continue=&format=json");
@@ -81,19 +82,22 @@ class CreateWierdLocation extends Component {
         adapter: jsonpAdapter
       }).then((response)=> {
         const annoyed =response.data.query.pages[pageID].extract
-        console.log(annoyed)
+        // console.log(response.data.query.pages[pageID])
         this.setState({description: annoyed})
       })
     });
-    let googleURL = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + this.state.locationName + "&apikey=AIzaSyDoQLe8s7JUbTZ_ubXhGY4cUmLiNqWvQxw"
-    axios.get(googleURL)
+    let googleURL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" + this.state.locationName +"&inputtype=textquery&fieldsplace_id&locationbias=circle:2000@47.6918452,-122.2226413&key=AIzaSyCta4EWC0H7ZXJUnr4h2Dq7zD-d6LCa10A"
+    axios({
+      url: googleURL,
+      adapter: jsonpAdapter
+    })
       .then((googleresponse) => {
         console.log(googleresponse)
         if (googleresponse.data.results[0]){
           this.setState({address: googleresponse.data.results[0].formatted_address})          
         }
-
       })
+    }
   }
 
   // Render to Screen
@@ -116,7 +120,12 @@ class CreateWierdLocation extends Component {
             onChange={e => this.setState({ locationName: e.target.value})}
           />
           
-          <button onClick={this.searchAPILocations}>Search WIKI</button>
+          <button
+            className=' m-2 btn btn-outline-info'
+            onClick={this.searchAPILocations}
+          >
+          Search WIKI
+          </button>
           
           <input 
             className='m-2'
@@ -141,6 +150,14 @@ class CreateWierdLocation extends Component {
             type='text' 
             value={this.state.address}
             onChange={e => this.setState({ address: e.target.value})}
+          />
+          <input
+            className='m-2'
+            name='picture'
+            type='text'
+            placeholder='Add picture here...'
+            value={this.state.picture}
+            onChange={e => this.setState({ picture: e.target.value})}
           />
           <br/>
           <button

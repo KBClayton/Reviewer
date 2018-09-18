@@ -15,14 +15,15 @@ const CommentDisplay = props => (
       <h3>
       <span 
         onClick={props.thumbsUp} 
-        id={props.id} 
+        id={props.id}
         value="1"
+        banana='2'
         className={props.thumbsUpIcon}
       />
       <span> </span>
       <span
         onClick={props.thumbsUp} 
-        id={props.id} 
+        id={props.id}
         value="-1"
         className = {props.thumbsDownIcon}
         />

@@ -44,7 +44,7 @@ class LoginPage extends Component {
   // Render to Screen
   render() { 
     return (
-      <div className = 'bg-dark mb-5'>          
+      <div className = 'card mb-5'>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
