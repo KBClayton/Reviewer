@@ -34,7 +34,16 @@ class Chat extends React.Component{
             let username=cookieArray[1].substring(0, cookieArray[1].length-1)
             let port=parseInt(cookieArray[3])
             let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
-            let url=cookieArray[5].substring(0, cookieArray[8].length-1)
+            let url=cookieArray[5].substring(0, cookieArray[7].length-1)
+            console.log(url)
+            url=url.substring(8, url.length-7)
+            console.log(url)
+            if(url=="http%3A%2F%2Flocalhost%3A3001"){
+                url="htpp://localhost:3001";
+            }else{
+                url="https://austin-reviews.herokuapp.com";
+            }
+            console.log(url)
             cookieObj.username=username;
             cookieObj.port=port;
             cookieObj.hash=hash;
@@ -55,8 +64,8 @@ class Chat extends React.Component{
             id:[]
         };
         
-        console.log(url+cookieObj.port)
-        this.socket = io(url+cookieObj.port);
+        console.log(cookieObj.url+toString( cookieObj.port))
+        this.socket = io(cookieObj.url+cookieObj.port);
         //this.socket = io('localhost:3001');
         this.socket.on('RECEIVE_MESSAGE', function(data){
             addMessage(data);
