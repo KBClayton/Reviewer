@@ -186,7 +186,12 @@ module.exports = function(app) {
     res.status(200).send({success:true, message:"loggedout"});
   })
 
-  app.get("/api/user/allstuff", (req, res) => {
+  app.get("/api/user/allstuff", async (req, res) => {
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
     User.findOne({_id:req.session.uid})
     .populate("products")
     .populate("reviews")

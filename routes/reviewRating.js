@@ -8,13 +8,15 @@ const Reply= require("../models/Reply");
 const verify=require("./verify");
 
 module.exports = function(app) {
-    app.post("/api/reviewrate",  async function(req, res){
+    app.post("/api/reviewrate",  async (req, res)=>{
 
         if(!await verify.loggedin(req)){
             console.log("failed validation")
             res.status(401).send({success: false, message: "you are not logged in"});
             return;
           }
+          console.log("in review rate")
+          console.log(req.body)
           newrevRating=req.body;
           newrevRating.user=req.session.uid;
           Review.findOne({_id:newrevRating.parentReview}).populate("ratings").then(dbmod=>{
@@ -26,9 +28,13 @@ module.exports = function(app) {
             let twice=false
             if(newrevRating.rating===-1){
                 thumbs={thumbsDown:1}
-            }else{
+            }else if(newrevRating.rating===1){
                 thumbs={thumbsUp:1}
+            }else if(newrevRating.rating===1 || newrevRating.rating===-1 ){
+                res.json({sucess:false, error:"you must have +1 or -1"});
+                return;
             }
+
               //console.log(dbmod.ratings);
               for(let i=0; i<dbmod.ratings.length; i++){
                   //console.log(JSON.stringify(dbmod.ratings[i].user))
