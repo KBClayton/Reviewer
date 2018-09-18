@@ -41,7 +41,7 @@ class Chat extends React.Component{
             if(url==="localhost"){
                 url="localhost:";
             }else{
-                url="http://austin-reviews.herokuapp.com:";
+                url="austin-reviews.herokuapp.com:";
             }
             console.log(url)
             cookieObj.username=username;
