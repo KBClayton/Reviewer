@@ -28,7 +28,7 @@ class Chat extends React.Component{
         let hash;
         let port;
         let username;
-        let what="austin-reviews.herokuapp.com:80";
+        let what="austin-reviews.herokuapp.com";
         if(cookieVars!==undefined){
              //console.log("in cookievars if")
             cookieVars=cookieVars.replace(/=/g, " ")
@@ -63,6 +63,7 @@ class Chat extends React.Component{
                 cookieObj.url=url;
                 console.log(cookieObj)
             }
+
         }
         console.log(what)
         this.socket = io(what);
@@ -97,7 +98,6 @@ class Chat extends React.Component{
         }
         this.idgen = ()=>{
             return Math.floor(Math.random()*1000000000000);
-            
         }
     }
     render(){

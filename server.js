@@ -156,8 +156,10 @@ app.post("/upload", function(req, res){
 app.get("/api/test", passport.authenticate('jwt', {session: false}), (req, res) => {
   res.json({accessible: true});
 });
+let urlHelper = "http://localhost:3001"
 
 if (process.env.NODE_ENV === "production") {
+  urlHelper = "https://austin-reviews.herokuapp.com"
   app.use(express.static("client/build"));
   app.use((req, res) => {
     res.sendFile(path.join(__dirname, "client/build/index.html"));
@@ -180,10 +182,11 @@ io = socket(server);
  
 io.on('connection', (socket) => { 
     console.log('Socket connected');
-    socket.on('SEND_MESSAGE', function (data) { 
+    socket.on('SEND_MESSAGE',  (data) => { 
         console.log('Received data');
         io.emit('RECEIVE_MESSAGE', data);
     })
+    socket.on('disconnect', () => console.log('Client disconnected'));
 });
 
 
