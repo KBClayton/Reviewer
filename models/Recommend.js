@@ -12,6 +12,7 @@ const recommendSchema = new Schema ({
   ticketLink: { type: String, default: "" },
   lat: { type: String, default: "" },
   long: { type: String, default: "" },
+  storeName: {type: String, default: ""},
   do512: { type: Boolean, required: true, default: false},
   food: { type: Boolean, required: true, default: false},
   music: { type: Boolean, required: true, default: false},

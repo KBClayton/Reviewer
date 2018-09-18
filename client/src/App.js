@@ -72,7 +72,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
 
-
 class App extends Component {
   state = { 
     redirectToReferrer: false
@@ -85,13 +84,13 @@ class App extends Component {
           <Route path ='/About' component = {AboutPage} exact/>
     
           <Route path='/createUser' component = {CreateUserPage}/>
-          <Route path='/createNewLocation' component = {CreateWierdLocation}/>
+          <PrivateRoute path='/createNewLocation' component = {CreateWierdLocation}/>
           <Route path="/login" component = {LoginPage} exact/>
           {/* <Route path="/login" component = {LoginPage} exact/>
           <Route path="/articles/:_id" component = {OneArticle} exact/> */}
           <Route path='/allproducts' component = {ShowAllProducts} name="allproducts" exact/>
           <Route path='/location/:_id' component = {ShowOneLocation} name="location" exact/>
-          <Route path='/search' component = {SearchPage} name="search" exact/>
+          <PrivateRoute path='/search' component = {SearchPage} name="search" exact/>
     
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />
