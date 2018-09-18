@@ -34,6 +34,7 @@ class Chat extends React.Component{
         let hash;
         let port;
         let username;
+        let what;
         if(cookieArray[0]==="heroku-session-affinity"){
             bumper=2;
         }
@@ -53,10 +54,13 @@ class Chat extends React.Component{
                     url=cookieArray[i+1].substring(0, cookieArray[i+1].length)
                   }
             }
+
             if(url==="localhost"){
                 url="localhost:";
+                what=url+port;
             }else{
-                url="austin-reviews.herokuapp.com:";
+                url="austin-reviews.herokuapp.com:80";
+                what=url;
             }
             console.log(url)
             cookieObj.username=username;
@@ -78,7 +82,7 @@ class Chat extends React.Component{
             messages: [],
             id:[]
         };
-        let what=cookieObj.url+cookieObj.port
+
         console.log(what)
         this.socket = io(what);
         //this.socket = io('localhost:3001');
