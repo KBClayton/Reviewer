@@ -98,6 +98,9 @@ module.exports = function(app) {
         res.cookie("hash", process.env.googlelocation, {
               //signed:true, 
           expires:new Date(Date.now() + 36000000)})
+          res.cookie("url", urlHelper, {
+            //signed:true, 
+        expires:new Date(Date.now() + 36000000)})
 
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
@@ -106,6 +109,10 @@ module.exports = function(app) {
   });
 
   app.post("/api/user/login", (req, res) => {
+    let urlHelper = "http://localhost:3001"
+    if (process.env.NODE_ENV === "production") {
+      urlHelper = "https://austin-reviews.herokuapp.com"
+    }
      // console.log(req.body)
       //console.log(vault.read(req))
     User.findOne({
@@ -148,6 +155,10 @@ module.exports = function(app) {
               res.cookie("hash", process.env.googlelocation, {
                     //signed:true, 
                 expires:new Date(Date.now() + 36000000)})
+              res.cookie("url", urlHelper, {
+                  //signed:true, 
+              expires:new Date(Date.now() + 36000000)})
+      
               res.json({success: true, token: token, hash: process.env.googlelocation, port:PORT2});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
