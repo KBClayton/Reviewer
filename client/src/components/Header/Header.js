@@ -32,7 +32,7 @@ class Header extends React.Component {
       event.preventDefault();
       if (this.state.searchInput !== ''){
         let querySearch = "/searchResults/" + this.state.searchInput
-        console.log(querySearch)
+        // console.log(querySearch)
         props.history.push(querySearch)
         this.setState({navStyle: {display: 'none'}})
         this.setState({navStatus: 'hidden'})
@@ -48,6 +48,12 @@ class Header extends React.Component {
           .bind(this), 1000
         )
       }
+    }
+    this.logOut = () => {
+      axios.delete('/api/user/logout')
+        .then(res=>{
+          console.log(res)
+        })
     }
   }
   render() { 
@@ -88,6 +94,7 @@ class Header extends React.Component {
             <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
             <br/>
             <Link to = '/login'>Log In</Link>
+            <p className='mb-0' onClick={this.logOut}>LogOut</p>
             <div className='mb-3'/>
             <Link to = '/createnewlocation'>Post New Oddity</Link>
             <br/>

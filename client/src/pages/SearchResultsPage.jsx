@@ -18,36 +18,43 @@ class SearchResultsPage extends Component {
     title: "Reviewer",
     subpage: 'Show All Products',
     locations: [],
-    temp: []
+    temp: ''
   }
 
   // Loads All Articles
   loadLocations = () => {
-    const descriptionSearch = {
-      description: this.props.match.params.query
-    }
-    axios.post( `/api/product/search/${this.props.match.params.query}`, descriptionSearch)
-    .then(res => {
-      if (res.data.length === 0){
-        this.setState({locations: [
-          {
-            _id: 'Not Available',
-            description: `${this.props.match.params.query} returned no results`,
-            reviews: [],
-            ratings: []
-          }
-        ]})
-        console.log(this.state.locations)
-      }
-      else{
-        this.setState({locations: res.data})
-        console.log(this.state.locations)
-      }
+    // this.setState({searchQuery: this.props.match.params.query})
 
-    })
+        const descriptionSearch = {
+          description: this.props.match.params.query
+        }
+        // console.log(descriptionSearch)
+
+        axios.post( `/api/product/search/${this.props.match.params.query}`, descriptionSearch)
+        .then(res => {
+          console.log(this.props.match.params.query)
+
+          if (res.data.length === 0){
+            // console.log('failed')
+            this.setState({locations: []})
+            this.setState({temp: this.props.match.params.query})
+          }
+          else{
+            // console.log(res.data)
+            this.setState({locations: res.data})
+            this.setState({temp: this.props.match.params.query})
+          }
+
+        })
+
   }
+  // checkLocationStatus =()=>{
+  //   if (this.state.searchQuery)
+  // }
 
   componentDidMount(){
+    this.setState({temp: this.props.match.params.query})
+    console.log(this.state.temp)
     this.loadLocations();
   }
 
@@ -57,12 +64,23 @@ class SearchResultsPage extends Component {
 
   // Render to Screen
   render() { 
+
+    if (this.props.match.params.query !== this.state.temp){
+      this.loadLocations();
+    }
+
     return (
       <div>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
+        {this.state.locations.length > 0 ? (
+          <h1>Banana Power</h1>
+        ):(
+          <p>Testing Failed</p>
+        )
+        }
         {this.state.locations.map(location => (
           <div key={location._id}>
             <Link to={'/location/' + location._id}>
@@ -79,7 +97,6 @@ class SearchResultsPage extends Component {
                 Rating = {'Average Rating: ' + location.averageRating + ' Stars'}
                 noOfRatings = {location.ratings.length + ' Ratings'}
               />
-              {/* <RateProductStars/> */}
             </Link>
           </div>
         ))}
