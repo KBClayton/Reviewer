@@ -10,7 +10,7 @@ const LocationDisplay = props => (
       <div className = 'card p-3 m-3 bg-light'>
       <div className="row">
         <div className="col-12">
-          <a href={`//${props.link}`} target='_blank' >
+          <a href={props.link} target='_blank' >
             <div className='p-2 bg-light border border-secondary text-dark mb-2'>
               <h3 className='mb-0 text-info'>
                 <b>
@@ -49,7 +49,7 @@ const LocationDisplay = props => (
             }
             <p>{props.noOfRatings}</p>
             {/* <button className=' mt-3 btn btn-outline-danger' onClick={props.SubmitHandler}>Submit Rating</button> */}
-
+            {props.submitButton}
           </div>
         </div>
       </div>

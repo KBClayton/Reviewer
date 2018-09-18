@@ -487,6 +487,7 @@ class SearchPage extends Component {
             urlLink = {this.state.randomAlbum.link}
             imageLink = {this.state.randomAlbum.image}
             address = {this.state.randomAlbum.address}
+          submitButton = {<button className=' mt-3 btn btn-outline-danger' onClick={this.submitMe}>Add this {this.type} </button>}
             type = "album"
             submitMe = {this.handleSubmitMusic}
             refresh = {this.albumRandomizer}
