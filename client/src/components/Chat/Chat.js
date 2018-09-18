@@ -53,7 +53,7 @@ class Chat extends React.Component{
                     url="localhost:";
                     what=url+port;
                 }else{
-                    url="austin-reviews.herokuapp.com:80";
+                    url="austin-reviews.herokuapp.com";
                     what=url;
                 }
                 console.log(url)
