@@ -106,15 +106,17 @@ class ShowOneLocation extends Component {
   }
 
   thumbsUp = (event) =>{
-    let thumbs = parseInt(event.target.value);
+    let thumbs = parseInt(event.target.getAttribute('value'));
     this.setState({ userRating: thumbs });
     const ThumbsRating = {
       parentReview: event.target.id,
       rating: thumbs
     }
+    console.log(ThumbsRating)
     axios.post('/api/reviewrate', ThumbsRating)
       .then(res=>{
-        this.loadLocations();
+        // this.loadLocations();
+        console.log(res)
       })
   }
 
