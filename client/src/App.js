@@ -14,7 +14,7 @@ import SearchPage from './pages/SearchPage';
 import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
 import requireAuth from './components/Auth';
-
+import ProfilePage from './pages/profile'
 
 const Auth = {
   isAuthenticated: false,
@@ -62,9 +62,12 @@ const Auth = {
           //console.log(cookieObj.username)
         //this.setState({ redirectToReferrer: true });
         this.isAuthenticated = true;
+        return true;
         }
       }
     }else{
+      this.isAuthenticated = false;
+      return false
       //console.log("not logged in")
     } 
   },
@@ -77,9 +80,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   Auth.authenticate(),
   <Route
     {...rest}
-    render={props => 
-      Auth.isAuthenticated ? (
-        <Component {...props} />
+    render={(props) => 
+      Auth.isAuthenticated ===true 
+      ? ( <Component {...props} />
       ) : (
         <Redirect
           to={{
@@ -94,10 +97,16 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 
 class App extends Component {
+  
   state = { 
-    redirectToReferrer: false
+    redirectToReferrer: true
+    
    }
   render() { 
+    const { from } = { from: { pathname: "/allproducts" } };
+    const { redirectToReferrer } = this.state;
+
+
     return ( 
       <BrowserRouter>
         <Switch>
@@ -115,11 +124,11 @@ class App extends Component {
     
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />
-          <PrivateRoute path="/try2" component={SearchPage} />
+          <PrivateRoute path="/profile" component={ProfilePage} />
            {/*  end I want this to be protected */}
           {/* <Route component = {Homepage}/> */}
           <Route path='/reply/:_id' component= {ReplyPage}/>
-          <Route path='/chat' component = {Chat} exact/>
+          <PrivateRoute path='/chat' component = {Chat} exact/>
         </Switch>
       </BrowserRouter>
      );

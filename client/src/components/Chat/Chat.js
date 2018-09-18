@@ -18,9 +18,6 @@ import io from "socket.io-client";
 class Chat extends React.Component{
     constructor(props){
         super(props);
-
-
-
         let cookieVars=document.cookie;
         let cookieObj={};
         console.log(cookieVars);
