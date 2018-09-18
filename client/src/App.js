@@ -21,7 +21,7 @@ const Auth = {
   authenticate(cb) {
     let cookieVars=document.cookie;
     let cookieObj={};
-    //console.log(cookieVars);
+    console.log(cookieVars);
     if(cookieVars!==undefined){
       //console.log("in cookievars if")
     cookieVars=cookieVars.replace(/=/g, " ")
