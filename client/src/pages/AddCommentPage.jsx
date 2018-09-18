@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
 import Replies from '../components/Replies/Replies'
+import RateProductStars from '../components/RatingStars/ratingstars'
 import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 // import './main.css'
 import axios from 'axios'
@@ -130,6 +131,7 @@ class ShowOneLocation extends Component {
             id = {this.state.locations._id}
             link = {this.state.locations.link}
             title = {this.state.locations.title}
+            imageUrl = {this.state.locations.picture}
             description = {this.state.locations.description}
             urlLink = {this.state.backBtn}
             lengthNo = {this.state.comments.length}
@@ -138,6 +140,9 @@ class ShowOneLocation extends Component {
             noOfRatings = {'Based on ' + this.state.rating.length + ' Ratings'}
             Rating = {'Average Rating: ' + this.state.locations.averageRating + ' Stars'}
             CommentButton = 'Back to All'
+          />
+          <RateProductStars 
+            setRating = {this.setRating}
           />
           <ProductComment
             addComment = {this.handleSubmit}
@@ -158,7 +163,6 @@ class ShowOneLocation extends Component {
               thumbsDownAmount = {review.thumbsDown + ' Negative Reviews'}
               thumbsUpIcon = 'fa fa-thumbs-up'
               thumbsDownIcon = 'fa fa-thumbs-down'
-              
             />
           ))}          
           {/* <AddCommentModal/> */}
