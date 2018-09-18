@@ -42,8 +42,10 @@ module.exports = function(app) {
       //console.log(string)
       user.emailVerifyKey=string;
       let urlHelper = "http://localhost:3001"
+      let url2="localhost"
       if (process.env.NODE_ENV === "production") {
-        urlHelper = "https://austin-reviews.herokuapp.com"
+        urlHelper = "https://austin-reviews.herokuapp.com";
+        url2="austin-reviews.herokuapp.com";
       }
       //console.log(`urlhelper is: ${urlHelper}`)
 
@@ -98,7 +100,7 @@ module.exports = function(app) {
         res.cookie("hash", process.env.googlelocation, {
               //signed:true, 
           expires:new Date(Date.now() + 36000000)})
-          res.cookie("url", urlHelper, {
+        res.cookie("url", url2, {
             //signed:true, 
         expires:new Date(Date.now() + 36000000)})
 
@@ -110,8 +112,10 @@ module.exports = function(app) {
 
   app.post("/api/user/login", (req, res) => {
     let urlHelper = "http://localhost:3001"
+    let url2="localhost";
     if (process.env.NODE_ENV === "production") {
       urlHelper = "https://austin-reviews.herokuapp.com"
+      url2="austin-reviews.herokuapp.com";
     }
      // console.log(req.body)
       //console.log(vault.read(req))
@@ -130,6 +134,7 @@ module.exports = function(app) {
               req.session.token=token;
               req.session.uid= user.id;
               req.session.username= user.username;
+
 
               //res.cookie('supercookie2', {token: "JWT " + token, username:isMatch.username}, cookieParams);
               //vault.write(req, JSON.stringify({token: "JWT " + token, username:isMatch.username}));
@@ -155,7 +160,7 @@ module.exports = function(app) {
               res.cookie("hash", process.env.googlelocation, {
                     //signed:true, 
                 expires:new Date(Date.now() + 36000000)})
-              res.cookie("url", urlHelper, {
+              res.cookie("url", url2, {
                   //signed:true, 
               expires:new Date(Date.now() + 36000000)})
       

@@ -28,18 +28,18 @@ class Chat extends React.Component{
           //console.log("in cookievars if")
         cookieVars=cookieVars.replace(/=/g, " ")
         let cookieArray= cookieVars.split(" ")
-        //console.log(cookieArray)
+        console.log(cookieArray[7])
           if(cookieArray.length===8){
             //console.log("in cookiearray if")
             let username=cookieArray[1].substring(0, cookieArray[1].length-1)
             let port=parseInt(cookieArray[3])
             let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
-            let url=cookieArray[5].substring(0, cookieArray[7].length-1)
+            let url=cookieArray[7].substring(0, cookieArray[7].length)
+            //console.log(url)
+            //url=url.substring(8, url.length-7)
             console.log(url)
-            url=url.substring(8, url.length-7)
-            console.log(url)
-            if(url=="http%3A%2F%2Flocalhost%3A3001"){
-                url="htpp://localhost:3001";
+            if(url==="localhost"){
+                url="localhost:";
             }else{
                 url="https://austin-reviews.herokuapp.com";
             }
@@ -63,9 +63,9 @@ class Chat extends React.Component{
             messages: [],
             id:[]
         };
-        
-        console.log(cookieObj.url+toString( cookieObj.port))
-        this.socket = io(cookieObj.url+cookieObj.port);
+        let what=cookieObj.url+cookieObj.port
+        console.log(what)
+        this.socket = io(what);
         //this.socket = io('localhost:3001');
         this.socket.on('RECEIVE_MESSAGE', function(data){
             addMessage(data);
