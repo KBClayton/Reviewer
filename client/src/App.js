@@ -27,17 +27,36 @@ const Auth = {
     cookieVars=cookieVars.replace(/=/g, " ")
     let cookieArray= cookieVars.split(" ")
     //console.log(cookieArray)
-      if(cookieArray.length===8){
+    let bumper=0;
+    let url;
+    let hash;
+    let port;
+    let username;
+        if(cookieArray[0]==="heroku-session-affinity"){
+            bumper=2;
+        }
+      if(cookieArray.length>6){
+        for(let i=0; i<cookieArray.length; i++){
         //console.log("in cookiearray if")
-        let username=cookieArray[1].substring(0, cookieArray[1].length-1)
-        let port=parseInt(cookieArray[3])
-        let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
-        let url=cookieArray[5].substring(0, cookieArray[7].length-1)
+          if(cookieArray[i]==="username"){
+            username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+          }
+          if(cookieArray[i]==="port"){
+            port=parseInt(cookieArray[i+1])
+          }
+          if(cookieArray[i]==="hash"){
+            hash=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+          }
+          if(cookieArray[i]==="url"){
+            url=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+          }
+        }
         cookieObj.username=username;
         cookieObj.port=port;
         cookieObj.hash=hash;
         cookieObj.url=url;
-        //console.log(cookieObj)
+        console.log("this is cookie object")
+        console.log(cookieObj)
         if(cookieObj.username!==undefined && cookieObj.username.length>5)
         {
           //console.log(cookieObj.username)
