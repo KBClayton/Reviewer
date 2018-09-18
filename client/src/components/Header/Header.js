@@ -13,7 +13,8 @@ class Header extends React.Component {
       navStyle: {display: 'none'},
       searchInputClass: '',
       searchInputBackgroundColor: 'form-control',
-      searchInput: ''
+      searchInput: '',
+      username: ''
 
     }
 
@@ -52,11 +53,49 @@ class Header extends React.Component {
     this.logOut = () => {
       axios.delete('/api/user/logout')
         .then(res=>{
-          console.log(res)
+          props.history.push('/login')
         })
     }
+    this.checkCookie =()=>{
+      let cookieVars=document.cookie;
+      let cookieObj={};
+      console.log(cookieVars);
+      if(cookieVars!==undefined){
+        //console.log("in cookievars if")
+      cookieVars=cookieVars.replace(/=/g, " ")
+      let cookieArray= cookieVars.split(" ")
+      let username;
+        if(cookieArray.length>0){
+          for(let i=0; i<cookieArray.length; i++){
+          //console.log("in cookiearray if")
+            if(cookieArray[i]==="username"){
+              username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+            }
+          }
+          cookieObj.username=username;
+          // console.log("this is cookie object")
+          // console.log(cookieObj)
+          if(cookieObj.username!==undefined && cookieObj.username.length>5)
+          {
+            //console.log(cookieObj.username)
+          this.setState({ username: cookieObj.username });
+          return true;
+          }
+        }
+      }else{
+        return false
+        //console.log("not logged in")
+      } 
+    }
+
+    this.componentDidMount =()=>{
+      this.checkCookie();
+    }
+
   }
   render() { 
+
+
     return (  
       <div>
         <div className="fixedWrapper bg-dark text-light border-bottom border-custom header opaque">
@@ -93,7 +132,11 @@ class Header extends React.Component {
             <br/>
             <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
             <br/>
-            <Link to = '/login'>Log In</Link>
+            {this.state.username.length > 0 ? (
+              <p className = 'mb-0'>Logged in as {this.state.username}</p>
+            ):(
+              <Link to = '/login'>Log In</Link>
+            )}
             <p className='mb-0' onClick={this.logOut}>LogOut</p>
             <div className='mb-3'/>
             <Link to = '/createnewlocation'>Post New Oddity</Link>

@@ -68,6 +68,7 @@ class SearchResultsPage extends Component {
     if (this.props.match.params.query !== this.state.temp){
       this.loadLocations();
     }
+    console.log(this)
 
     return (
       <div>          
@@ -76,30 +77,32 @@ class SearchResultsPage extends Component {
           subpage = {this.state.subpage}
         />
         {this.state.locations.length > 0 ? (
-          <h1>Banana Power</h1>
+          <div>
+          {this.state.locations.map(location => (
+            <div key={location._id}>
+              <Link to={'/location/' + location._id}>
+                <LocationDisplay
+                  key = { location._id}
+                  id = {location._id}
+                  imageUrl = {location.picture}
+                  address = {location.address}
+                  // link = {location.link}
+                  title = {location.title}
+                  description = {location.description}
+                  // urlLink = {'/location/' + location._id}
+                  lengthNo = {location.reviews.length}
+                  Rating = {'Average Rating: ' + location.averageRating + ' Stars'}
+                  noOfRatings = {location.ratings.length + ' Ratings'}
+                />
+              </Link>
+            </div>
+          ))}
+          </div>
         ):(
-          <p>Testing Failed</p>
+          <p className='text-center text-danger'>No results Found</p>
         )
         }
-        {this.state.locations.map(location => (
-          <div key={location._id}>
-            <Link to={'/location/' + location._id}>
-              <LocationDisplay
-                key = { location._id}
-                id = {location._id}
-                imageUrl = {location.picture}
-                address = {location.address}
-                // link = {location.link}
-                title = {location.title}
-                description = {location.description}
-                // urlLink = {'/location/' + location._id}
-                lengthNo = {location.reviews.length}
-                Rating = {'Average Rating: ' + location.averageRating + ' Stars'}
-                noOfRatings = {location.ratings.length + ' Ratings'}
-              />
-            </Link>
-          </div>
-        ))}
+        
         <Footer /> 
       </div>
       
