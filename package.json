@@ -1,7 +1,6 @@
 {
   "name": "review",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "proxy": "http://localhost:3000",
   "scripts": {
@@ -58,5 +57,14 @@
     "socket.io-client": "^2.1.1",
     "uuid": "^3.3.2",
     "yarn": "^1.9.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KBClayton/Reviewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KBClayton/Reviewer/issues"
+  },
+  "homepage": "https://github.com/KBClayton/Reviewer#readme",
+  "description": ""
 }
