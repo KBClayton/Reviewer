@@ -21,7 +21,7 @@
   "devDependencies": {
     "concurrently": "^3.5.0"
   },
-  "engines":{
+  "engines": {
     "node": "10.3.0"
   },
   "dependencies": {
