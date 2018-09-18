@@ -88,7 +88,7 @@ passport.use(new JwtStrategy(passportOpts,
 
 
 //app.use statements
-app.use(helmet());
+//app.use(helmet());
 app.use(session(sess));
 app.use(helmet.permittedCrossDomainPolicies())
 app.use(bodyParser.urlencoded({ extended: true }));
