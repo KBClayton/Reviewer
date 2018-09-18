@@ -45,6 +45,7 @@ class ShowOneLocation extends Component {
         this.setState({locations: res.data})
         this.setState({comments: res.data.reviews})
         this.setState({rating: res.data.ratings})
+        
         // console.log(this.state.comments.length)
         this.calculateRating();
       })
@@ -58,14 +59,17 @@ class ShowOneLocation extends Component {
   }
 
   handleSubmit = (event) => {
+    event.preventDefault();
     const newComment = {
       text: this.state.newComment,
       parentProduct: this.state.locations._id
     }
+      this.setState({newComment: ''})
     axios.post('/api/review', newComment)
       .then(res=>{
-        console.log(res);
+        console.log(this.state.newComment);
         this.loadLocations();
+        
     })
   }
 
@@ -113,10 +117,10 @@ class ShowOneLocation extends Component {
       rating: thumbs
     }
     console.log(ThumbsRating)
+
     axios.post('/api/reviewrate', ThumbsRating)
       .then(res=>{
-        // this.loadLocations();
-        console.log(res)
+        this.loadLocations();
       })
   }
 
@@ -145,11 +149,11 @@ class ShowOneLocation extends Component {
           />
           <RateProductStars 
             setRating = {this.setRating}
-            fun = {<h1 className='text-warning'>This worked</h1>}
           />
           <ProductComment
             addComment = {this.handleSubmit}
             textComment = {this.onChange}
+            CommentText = {this.state.newComment}
           />
           {this.state.comments.map(review => (
             <CommentDisplay

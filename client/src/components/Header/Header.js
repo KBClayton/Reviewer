@@ -130,15 +130,19 @@ class Header extends React.Component {
               </div>
             </div>
             <br/>
-            <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
+           
             <br/>
             {this.state.username.length > 0 ? (
               <div>
                 <p className = 'mb-0'>Logged in as {this.state.username}</p>
+                <br/>
                 <Link to = '/profile'>My Profile</Link>
               </div>
             ):(
-                <Link to = '/login'>Log In</Link>
+                <div> 
+                  <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
+                  <Link to = '/login'>Log In</Link>
+                </div>
             )}
             <p className='mb-0' onClick={this.logOut}>LogOut</p>
             <div className='mb-3'/>
