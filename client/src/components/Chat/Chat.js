@@ -29,12 +29,16 @@ class Chat extends React.Component{
         cookieVars=cookieVars.replace(/=/g, " ")
         let cookieArray= cookieVars.split(" ")
         console.log(cookieArray[7])
+        let bumper=0;
+        if(cookieArray[0]==="heroku-session-affinity"){
+            bumper=2;
+        }
           if(cookieArray.length>8){
             //console.log("in cookiearray if")
-            let username=cookieArray[1].substring(0, cookieArray[1].length-1)
+            let username=cookieArray[bumper+1].substring(0, cookieArray[bumper+1].length-1)
             let port=parseInt(cookieArray[3])
-            let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
-            let url=cookieArray[7].substring(0, cookieArray[7].length)
+            let hash=cookieArray[bumper+5].substring(0, cookieArray[bumper+5].length-1)
+            let url=cookieArray[bumper+7].substring(0, cookieArray[bumper+7].length)
             //console.log(url)
             //url=url.substring(8, url.length-7)
             console.log(url)

@@ -27,12 +27,16 @@ const Auth = {
     cookieVars=cookieVars.replace(/=/g, " ")
     let cookieArray= cookieVars.split(" ")
     //console.log(cookieArray)
+    let bumper=0;
+        if(cookieArray[0]==="heroku-session-affinity"){
+            bumper=2;
+        }
       if(cookieArray.length>8){
         //console.log("in cookiearray if")
-        let username=cookieArray[1].substring(0, cookieArray[1].length-1)
+        let username=cookieArray[bumper+1].substring(0, cookieArray[bumper+1].length-1)
         let port=parseInt(cookieArray[3])
-        let hash=cookieArray[5].substring(0, cookieArray[5].length-1)
-        let url=cookieArray[5].substring(0, cookieArray[7].length-1)
+        let hash=cookieArray[bumper+5].substring(0, cookieArray[bumper+5].length-1)
+        let url=cookieArray[bumper+5].substring(0, cookieArray[bumper+7].length-1)
         cookieObj.username=username;
         cookieObj.port=port;
         cookieObj.hash=hash;
