@@ -27,7 +27,7 @@ const Auth = {
     cookieVars=cookieVars.replace(/=/g, " ")
     let cookieArray= cookieVars.split(" ")
     //console.log(cookieArray)
-      if(cookieArray.length===8){
+      if(cookieArray.length>8){
         //console.log("in cookiearray if")
         let username=cookieArray[1].substring(0, cookieArray[1].length-1)
         let port=parseInt(cookieArray[3])
