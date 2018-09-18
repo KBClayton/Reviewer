@@ -50,7 +50,7 @@ class Chat extends React.Component{
                     hash=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
                   }
                   if(cookieArray[i]==="url"){
-                    url=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                    url=cookieArray[i+1].substring(0, cookieArray[i+1].length)
                   }
             }
             if(url==="localhost"){
