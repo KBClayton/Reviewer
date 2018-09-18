@@ -103,7 +103,9 @@ app.use(fileupload());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("AllowedOrigin", "*")
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Credentials", "true")
+  res.header("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Cache-Control, Pragma, Authorization, Accept-Encoding");
   next();
 });
 
@@ -154,8 +156,10 @@ app.post("/upload", function(req, res){
 app.get("/api/test", passport.authenticate('jwt', {session: false}), (req, res) => {
   res.json({accessible: true});
 });
+let urlHelper = "http://localhost:3001"
 
 if (process.env.NODE_ENV === "production") {
+  urlHelper = "https://austin-reviews.herokuapp.com"
   app.use(express.static("client/build"));
   app.use((req, res) => {
     res.sendFile(path.join(__dirname, "client/build/index.html"));
@@ -178,10 +182,11 @@ io = socket(server);
  
 io.on('connection', (socket) => { 
     console.log('Socket connected');
-    socket.on('SEND_MESSAGE', function (data) { 
+    socket.on('SEND_MESSAGE',  (data) => { 
         console.log('Received data');
         io.emit('RECEIVE_MESSAGE', data);
     })
+    socket.on('disconnect', () => console.log('Client disconnected'));
 });
 
 

@@ -24,61 +24,47 @@ class Chat extends React.Component{
         let cookieVars=document.cookie;
         let cookieObj={};
         console.log(cookieVars);
-        if(cookieVars!==undefined){
-          //console.log("in cookievars if")
-        cookieVars=cookieVars.replace(/=/g, " ")
-        let cookieArray= cookieVars.split(" ")
-        console.log(cookieArray[7])
-        let bumper=0;
         let url;
         let hash;
         let port;
         let username;
-        if(cookieArray[0]==="heroku-session-affinity"){
-            bumper=2;
+        let what="austin-reviews.herokuapp.com";
+        if(cookieVars!==undefined){
+             //console.log("in cookievars if")
+            cookieVars=cookieVars.replace(/=/g, " ")
+            let cookieArray= cookieVars.split(" ")
+            if(cookieArray.length>1){
+                for(let i=0; i<cookieArray.length; i++){
+                    //console.log("in cookiearray if")
+                    if(cookieArray[i]==="username"){
+                        username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                    }
+                    if(cookieArray[i]==="port"){
+                        port=parseInt(cookieArray[i+1])
+                    }
+                    if(cookieArray[i]==="hash"){
+                        hash=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                    }
+                    if(cookieArray[i]==="url"){
+                        url=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+                    }
+                }
+                if(url==="localhost"){
+                    url="localhost:";
+                    what=url+port;
+                }else{
+                    url="austin-reviews.herokuapp.com";
+                    what=url;
+                }
+                console.log(url)
+                cookieObj.username=username;
+                cookieObj.port=port;
+                cookieObj.hash=hash;
+                cookieObj.url=url;
+                console.log(cookieObj)
+            }
+
         }
-          if(cookieArray.length>6){
-            for(let i=0; i<cookieArray.length; i++){
-                //console.log("in cookiearray if")
-                  if(cookieArray[i]==="username"){
-                    username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
-                  }
-                  if(cookieArray[i]==="port"){
-                    port=parseInt(cookieArray[i+1])
-                  }
-                  if(cookieArray[i]==="hash"){
-                    hash=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
-                  }
-                  if(cookieArray[i]==="url"){
-                    url=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
-                  }
-            }
-            if(url==="localhost"){
-                url="localhost:";
-            }else{
-                url="austin-reviews.herokuapp.com:";
-            }
-            console.log(url)
-            cookieObj.username=username;
-            cookieObj.port=port;
-            cookieObj.hash=hash;
-            cookieObj.url=url;
-            console.log(cookieObj)
-            if(cookieObj.username!==undefined && cookieObj.username.length>5)
-            {
-              //console.log(cookieObj.username)
-            //this.setState({ redirectToReferrer: true });
-            this.isAuthenticated = true;
-            }
-          }
-        }
-        this.state = {
-            username: cookieObj.username,
-            message: '',
-            messages: [],
-            id:[]
-        };
-        let what=cookieObj.url+cookieObj.port
         console.log(what)
         this.socket = io(what);
         //this.socket = io('localhost:3001');
@@ -86,6 +72,12 @@ class Chat extends React.Component{
             addMessage(data);
         });
 
+        this.state = {
+            username: cookieObj.username,
+            message: '',
+            messages: [],
+            id:[]
+        };
         const addMessage = data => {
             let id=this.idgen()
             console.log(id)
@@ -106,7 +98,6 @@ class Chat extends React.Component{
         }
         this.idgen = ()=>{
             return Math.floor(Math.random()*1000000000000);
-            
         }
     }
     render(){
