@@ -1,0 +1,6 @@
+.overflowTextDescription{
+  height: 200px;
+  overflow: scroll;
+  border: black 1px solid;
+  padding: 1rem;
+}

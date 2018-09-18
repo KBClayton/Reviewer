@@ -90,7 +90,7 @@ class App extends Component {
           <Route path="/articles/:_id" component = {OneArticle} exact/> */}
           <Route path='/allproducts' component = {ShowAllProducts} name="allproducts" exact/>
           <Route path='/location/:_id' component = {ShowOneLocation} name="location" exact/>
-          <Route path='/search' component = {SearchPage} name="search" exact/>
+          <PrivateRoute path='/search' component = {SearchPage} name="search" exact/>
     
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />

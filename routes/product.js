@@ -56,8 +56,28 @@ module.exports = function(app) {
       res.status(401).send({success: false, message: "you are not logged in"});
       return;
     }
+      //console.log("in new product")
+      //console.log(req.body)
+      let piclink
+      if(req.body.picture===''){
+        piclink=undefined;
+      }else{
+        piclink=req.body.picture;
+      }
+    
+      newprod={
+        title:req.body.title,
+        description:req.body.description,
+        picture:piclink,
+        link:req.body.link,
+        address:req.body.address,
+        averageRating:undefined,
+        gpsdata:req.body.gpsdata,
+        dateCreated:undefined,
+        dateUpdated:undefined,
+        averageRating:undefined
 
-      newprod=req.body;
+      };
       newprod.user=req.session.uid;
       newprod.username=req.session.username;
       Product.create(newprod).then(dbModel => {
