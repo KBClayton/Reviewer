@@ -184,7 +184,7 @@ io = socket(server);
 io.on('connection', (socket) => { 
     console.log('Socket connected');
     socket.on('SEND_MESSAGE',  (data) => { 
-        console.log('Received data');
+        console.log(`Received data from`);
         io.emit('RECEIVE_MESSAGE', data);
     })
     socket.on('disconnect', () => console.log('Client disconnected'));

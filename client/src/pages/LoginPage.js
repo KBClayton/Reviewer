@@ -23,6 +23,7 @@ class LoginPage extends Component {
   loadLocations = () => {
 
     const { match: { params } } = this.props;
+    console.log(params)
     if(params.name && params.emailver){
     axios.get( `/api/user/resetreq/${params.name}/${params.emailver}`)
       .then((res, err) => {
@@ -36,8 +37,8 @@ class LoginPage extends Component {
         // console.log(this.state.data.replies)
       })
     }else if(params.account && params.id){
-      axios.get( `/api/user/verify/${params.account}/${params.id}`)
-      .then((res,err) => {
+      axios.get( `/api/user/verify/${params.account}/${params.emailstring}`)
+      .then((res, err) => {
       // console.log(res.data);
       // console.log('Something Hapened')
       if(res){

@@ -275,8 +275,8 @@ module.exports = function(app) {
       if(err){
         res.json(err)
       }
-      console.log("in average reveiw exec")
-      console.log(dbreply);
+      // console.log("in average reveiw exec")
+      // console.log(dbreply);
       if(dbreply){
       if(dbreply.productRatings){
         for(let i=0; i<dbreply.productRatings.length; i++){
@@ -294,8 +294,8 @@ module.exports = function(app) {
       }
       prodAvg=prodAvg/dbreply.productRatings.length;
 
-      console.log(revDown)
-      console.log(revUp)
+      // console.log(revDown)
+      // console.log(revUp)
       }
       res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, revUp: revUp, revDown:revDown, numberReviewRatings:dbreply.reviewRatings.length})      
     })
@@ -366,7 +366,7 @@ module.exports = function(app) {
         to: dbreply.email, // list of receivers
         subject: 'requested password reset', // Subject line
         text: 'Click the link reset your password, this link is only good for 1 hour', // plain text body
-        html: '<p>Click the link reset your password, this link is only good for 1 hour</p><br><a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
+        html: '<p>Hello '+dbreply.username+',click the link reset your password, this link is only good for 1 hour</p><br><a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
       };
       // console.log(mailOptions)
       // console.log("past mailoptions, going inasdfsdfto transporter")
