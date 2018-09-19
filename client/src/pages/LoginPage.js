@@ -16,7 +16,23 @@ class LoginPage extends Component {
     subpage: 'Login Page',
     username: '',
     password: '',
-    errorMsg: ''
+    errorMsg: '',
+    resetemail:'',
+    resetmessage:''
+  }
+  reset = (event)=>{
+    event.preventDefault();
+    let resetthing={
+      email:this.state.resetemail
+    }
+    //console.log(resetthing)
+    axios.post('/api/user/reset', resetthing).then((response)=>{
+      console.log(response)
+      this.setState({resetmessage:response.data.message})
+    }).catch(function(error){
+      console.log(error);
+      })
+    
   }
 
   handleSubmit = (event) => {
@@ -85,6 +101,26 @@ class LoginPage extends Component {
             onClick={this.handleSubmit}
           >
             Sign In
+          </button>
+        </form>
+        <form className='container bg-info'>
+        <br/>
+        <br/>
+        <p className='m-0 p-0 text-danger'>{this.state.resetmessage}</p>
+        <input 
+            className='m-2'
+            name='resetemail'
+            placeholder='Reset my password'
+            type='text' 
+            value={this.state.resetemail}
+            onChange={e => this.setState({ resetemail: e.target.value})}
+          />
+          <br/>
+          <button
+            className='m-2 btn btn-info btn-small'
+            onClick={this.reset}
+          >
+            Reset my password
           </button>
         </form>
 

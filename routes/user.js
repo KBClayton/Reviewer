@@ -304,6 +304,7 @@ module.exports = function(app) {
   let urlHelper = "http://localhost:3001"
   if (process.env.NODE_ENV === "production") {
     urlHelper = "https://austin-reviews.herokuapp.com";
+    urlHelper=urlHelper+":"+toString(process.env.PORT)
   }
   // console.log("in reset route")
   // console.log(req.body)
