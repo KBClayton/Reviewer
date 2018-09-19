@@ -95,7 +95,7 @@ module.exports = function(app) {
   app.post("/api/product/search/:query", function(req, res){
     var re = new RegExp(req.params.query, 'i');
     Product.find().or([{ 'description': { $regex: re }}, { 'title': { $regex: re }}, { 'catagories': { $regex: re }}]).sort({'dateCreated': 1}).exec(function(err, users) {
-      res.json(JSON.stringify(users));
+      res.json(users);
   });
   });
 

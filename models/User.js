@@ -21,6 +21,7 @@ const UserSchema = new Schema({
   email:{type:mongoose.SchemaTypes.Email, required:true, unique:true},
   emailVerified:{type:Boolean, default:false},
   passwordReset:{type:Date, default:Date.now},
+  passwordResetRequest:{type:Date},
   averageRating:{type:Number},
   emailVerifyKey:{type:String},
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
