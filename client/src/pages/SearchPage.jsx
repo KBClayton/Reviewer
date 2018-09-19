@@ -150,6 +150,7 @@ class SearchPage extends Component {
   //set new randomDo512events
   do512Randomizer = async () => {
     await this.setState({randomDo512events: this.state.do512events[Math.floor(Math.random()*this.state.do512events.length)]})
+    this.state.randomDo512events ? this.state.randomDo512events.ticketLink ? this.setState({txAvailable: true}) : this.setState({txAvailable: false}) : console.log("efforting");
     for (let w=0 ; w<this.state.product.length ; w++){
       if (this.state.randomDo512events.title === this.state.product[w].title) {
         this.setState({dailyPrevent: {
