@@ -292,10 +292,12 @@ module.exports = function(app) {
       // }
       if(dbreply){
         if(dbreply.emailVerified===true){
-          res.set('Content-Type', 'text/html');
-          res.send(new Buffer(`<h2>Your email has been verified, <a href="${urlHelper}" target="_blank">go to main page.</a></h2>`));
-          //res.json({sucess:true, message:"Your email has been verified"})
+          // res.set('Content-Type', 'text/html');
+          // res.send(new Buffer(`<h2>Your email has been verified, <a href="${urlHelper}" target="_blank">go to main page.</a></h2>`));
+          res.json({sucess:true, message:"Your email has been verified"})
         }
+      }else if(err){
+        res.json(err)
       }
     })
   })
