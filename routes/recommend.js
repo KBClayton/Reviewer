@@ -8,7 +8,10 @@ const customHeaderRequest = request.defaults({
             'Connection': 'keep-alive'}
   });
 const Nightmare = require('nightmare');
-const nightmare = Nightmare();
+const nightmare = Nightmare({
+  loadTimeout: 30000,
+  executionTimeout: 12000
+});
 const jquery = require("jquery");
 const cron = require('node-cron');
 //Food Helper Arrays
@@ -581,6 +584,7 @@ module.exports = function(app) {
                 .text().split(", ")[1]
                 .replace("\n", "") : "";
             result.obscura = true;
+            result.obscuraP1 = true;
             Recommend.findOne({ title:result.title }).then(function(response) {
               if(!response || response===null){
                 Recommend.create(result).then(res => {
@@ -704,6 +708,7 @@ module.exports = function(app) {
                 .text().split(", ")[1]
                 .replace("\n", "") : "";
             result.obscura = true;
+            result.obscuraP2 = true;
             Recommend.findOne({ title:result.title }).then(function(response) {
               if(!response || response===null){
                 Recommend.create(result).then(res => {
@@ -734,7 +739,7 @@ module.exports = function(app) {
   app.get("/recommend/obscuraP1/images", function(req, res) {
     nightmare
       .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places")
-      .wait(5000)
+      .wait(4000)
       .evaluate(() => {
         let collection = []
         $("div.index-card-wrap").each(function(i, element) {
@@ -754,10 +759,11 @@ module.exports = function(app) {
       });
       return collection})
       .end()
-      .then(function(response) {
+      .then(async function(response) {
         let obImageArray = [];
+        console.log(response);
         for (i=0; i<response.length; i++) {
-          Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
+          await Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
             obImageArray.push(response[i]);
             //console.log(result)
           }).catch(function(err) {
@@ -769,54 +775,65 @@ module.exports = function(app) {
         console.log(obImageArray.length + " images added to db");
         })
         .catch(function(err) {
+          // If an error occurred, log it
+          console.log(err);
+        }).then(_ => {
+          // finally cleanup
+          nightmare.end();
+          // kill the Electron process explicitly to ensure no orphan child processes
+          nightmare.proc.disconnect();
+          nightmare.proc.kill();
+          nightmare.ended = true;
+          nightmare = null;
+        }).catch(function(err) {
           // If an error occurred, log it
           console.log(err);
         });
+        nightmare.halt();
       });
   
   
-  app.get("/recommend/obscuraP2/images", function(req, res) {
+  app.get("/recommend/obscuraP2/images", async function(req, res) {
+    console.log(req.query);
+    let titleHelper = req.query.title
+    let imageHelper = "";
     nightmare
-      .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places?page=2")
-      .wait(5000)
-      .evaluate(() => {
-        let collection = []
-        $("div.index-card-wrap").each(function(i, element) {
-          let obscureObject = {};
-          obscureObject.title = $(this)
-            .children("a.content-card-place")
-            .children("div.content-card-text")
-            .children("h3.content-card-title")
-            .children("span")
-            .text();
-          obscureObject.image = $(this)
-            .children("a.content-card-place")
-            .children("figure.content-card-figure")
-            .children("img")
-            .attr("data-src");
-          collection.push(obscureObject);
-      });
-      return collection})
-      .end()
-      .then(function(response) {
-        let obImageArray = [];
-        for (i=0; i<response.length; i++) {
-          Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
-            obImageArray.push(response[i]);
-            //console.log(result)
+      .goto(req.query.link)
+      .wait(4000);
+    await nightmare.evaluate(() =>{
+        let obscureObject = {};
+        obscureObject.image = $("figure.js-item-image.slick-slide.slick-current.slick-active")
+          .children("a.js-trigger-lightbox.gallery-image-container")
+          .children("img")
+          .attr("src");
+          console.log(obscureObject.image + "HELLO HELLO HELLO");
+        return obscureObject
+      }).then(async (response) => {
+        console.log(response.image);
+        await Recommend.findOneAndUpdate({title: titleHelper}, {image: response.image}).then((result) => {
+            console.log(result);
+            res.json(result);
+            console.log("image added")
           }).catch(function(err) {
             // If an error occurred, log it
             console.log(err);
-              });
-        }
-        res.json(obImageArray);
-        console.log(obImageArray.length + " images added to db");
-        })
-        .catch(function(err) {
-          // If an error occurred, log it
-          console.log(err);
-      });
+              })
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
+    }).then(() => {
+      // finally cleanup
+      nightmare.end();
+      // kill the Electron process explicitly to ensure no orphan child processes
+      nightmare.proc.disconnect();
+      nightmare.proc.kill();
+      nightmare.ended = true;
+    }).catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
     });
+    nightmare.halt();
+});
         
   app.get("/recommend/trails", function(req, res) {
     // First, we grab the body of the html with request
@@ -888,6 +905,17 @@ module.exports = function(app) {
       console.log(trailArray);
       })
       .catch(function(err) {
+        // If an error occurred, log it
+        console.log(err);
+      }).then(_ => {
+        // finally cleanup
+        nightmare.end();
+        // kill the Electron process explicitly to ensure no orphan child processes
+        nightmare.proc.disconnect();
+        nightmare.proc.kill();
+        nightmare.ended = true;
+        nightmare = null;
+      }).catch(function(err) {
         // If an error occurred, log it
         console.log(err);
       });
