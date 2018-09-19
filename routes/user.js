@@ -77,7 +77,8 @@ module.exports = function(app) {
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-              return console.log(error);
+              console.log(error);
+
           }
           console.log('Message sent: %s'+info.messageId);
           // Preview only available when sending through an Ethereal account
@@ -124,7 +125,7 @@ module.exports = function(app) {
       //console.log(vault.read(req))
     User.findOne({
       username: req.body.username
-    }, (err, user) => {
+    },  (err, user) => {
       if(!user){
         res.status(401).send({success: false, message: "wrong username"});
       } else {
@@ -233,7 +234,7 @@ module.exports = function(app) {
       res.status(401).send({success: false, message: "you are not logged in"});
       return;
     }
-    User.findOne({_id:req.session.uid})
+    User.findOne({_id:req.session.uid}, 'username roles picture email emailVerified averageRating products reviews chats replies productRatings reviewRatings')
     .populate("products")
     .populate("reviews")
     .populate("replies")
@@ -256,7 +257,7 @@ module.exports = function(app) {
       res.status(401).send({success: false, message: "you are not logged in"});
       return;
     }
-    User.find({})
+    User.find({}, 'username roles picture email emailVerified averageRating products reviews chats replies productRatings reviewRatings')
     .exec( function(err, dbreply) {
       if (err) {res.json(err)};
       res.json(dbreply);
@@ -264,16 +265,19 @@ module.exports = function(app) {
   })
 
   app.get("/api/user/averagereview", (req, res) => {
-    User.findOne({_id:req.session.uid})
+    let prodAvg=0;
+    let revUp=0;
+    let revDown=0;
+    User.findOne({_id:req.session.uid}, 'averageRating  productRatings reviewRatings')
     .populate("productRatings")
     .populate("reviewRatings")
-    .exec(function(err, dbreply) {
+    .then((dbreply, err)=> {
       if(err){
         res.json(err)
       }
-      let prodAvg=0;
-      let revAvg=0
-      //console.log(dbreply);
+      console.log("in average reveiw exec")
+      console.log(dbreply);
+      if(dbreply){
       if(dbreply.productRatings){
         for(let i=0; i<dbreply.productRatings.length; i++){
           prodAvg+=dbreply.productRatings[i].rating;
@@ -281,12 +285,19 @@ module.exports = function(app) {
       }
       if(dbreply.reviewRatings){
         for(let i=0; i<dbreply.reviewRatings.length; i++){
-          revAvg+=dbreply.reviewRatings[i].rating;
+          if(dbreply.reviewRatings[i].rating===-1){
+            revDown++
+          }else if (dbreply.reviewRatings[i].rating===1){
+            revUp++
+          }
         }
       }
       prodAvg=prodAvg/dbreply.productRatings.length;
-      revAvg=revAvg/dbreply.reviewRatings.length;
-      res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, averageReviewRating: revAvg, numberReviewRatings:dbreply.reviewRatings.length})      
+
+      console.log(revDown)
+      console.log(revUp)
+      }
+      res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, revUp: revUp, revDown:revDown, numberReviewRatings:dbreply.reviewRatings.length})      
     })
   })
 
