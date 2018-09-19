@@ -58,7 +58,7 @@ module.exports = function(app) {
         to: user.email, // list of receivers
         subject: 'Verify Account', // Subject line
         text: 'Click the link to verify your account', // plain text body
-        html: '<a href="http://'+urlHelper+'/api/user/verify/'+user.username+`/`+string+'" target="_blank"><b>Verify me</b></a>' // html body
+        html: '<a href="'+urlHelper+'/api/user/verify/'+user.username+`/`+string+'" target="_blank"><b>Verify me</b></a>' // html body
       };
 
       //console.log(user);
@@ -81,7 +81,7 @@ module.exports = function(app) {
           }
           console.log('Message sent: %s'+info.messageId);
           // Preview only available when sending through an Ethereal account
-          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+          //console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
         });
         // jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
         //   if(err){
@@ -176,19 +176,41 @@ module.exports = function(app) {
     });
   })
 
-  app.put("/api/user/", (req, res) => {
+  app.put("/api/user/", async (req, res) => {
     //console.log(req.body);
-    var user = new User({
-      username: req.body.username,
-      email:req.body.email,
-      password: req.body.password
-    });
-    user.save(err => {
-      if(err){
-        return res.json({success: false, message: "Username taken"});
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
+
+    User.findOne({
+      username: req.session.username
+    }, (err, user) => {
+      if(!user){
+        res.status(401).send({success: false, message: "critial error"});
+      } else {
+        user.comparePassword(req.body.password, (err, isMatch) => {
+            if(!err && isMatch){
+              user.password=req.body.newPasssword
+              // user.findOneAndUpdate({
+              //   username: req.session.username
+              // },{password:req.body.newPasssword}).then((err, dbreply)=>{
+                user.save((err,dbreply) => {
+                if(err){
+                  res.status(401).send({success: false, message: "critial error"});
+                }else{
+                  //console.log(dbreply)
+                  res.json({success: true, message: "password updated"})
+                }
+              })
+            }else{
+              res.status(401).send({success: false, message: "critial error"});
+            }
+        })
       }
-      return res.json({success: true, message: "Successfully created new user"});
     })
+    
   });
 
   app.delete("/api/user/logout", (req, res) => {
@@ -260,14 +282,14 @@ module.exports = function(app) {
     if (process.env.NODE_ENV === "production") {
       urlHelper = "https://austin-reviews.herokuapp.com";
     }
-    console.log("in verify route")
-    console.log(req.params)
+    //console.log("in verify route")
+    //console.log(req.params)
     User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.id}, {username:req.params.name}]}, {emailVerified:true, emailVerifyKey:null},{upsert:true}).then((err, dbreply) =>{
-      if(err){
-        console.log(err)
-        res.set('Content-Type', 'text/html');
-        res.send(new Buffer(`<h2>Sorry, there was an error.</h2>`));
-      }
+      // if(err){
+      //   console.log(err)
+      //   res.set('Content-Type', 'text/html');
+      //   res.send(new Buffer(`<h2>Sorry, there was an error.</h2>`));
+      // }
       if(dbreply){
         if(dbreply.emailVerified===true){
           res.set('Content-Type', 'text/html');
@@ -278,12 +300,14 @@ module.exports = function(app) {
     })
   })
 
- app.get("/api/user/reset/:email", (req, res) => {
+ app.post("/api/user/reset/", (req, res) => {
   let urlHelper = "http://localhost:3001"
   if (process.env.NODE_ENV === "production") {
     urlHelper = "https://austin-reviews.herokuapp.com";
   }
-  console.log("in reset route")
+  // console.log("in reset route")
+  // console.log(req.body)
+  let email=req.body.email;
   const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
@@ -295,30 +319,38 @@ module.exports = function(app) {
       rejectUnauthorized: false
   }
   });
+  const entropy = new Entropy({ total: 1e16, risk: 1e20 });
+  let string = entropy.string();
 
-  User.findOneAndUpdate( {$and:[{email:req.params.email}, {emailVerified:true}]}, { passwordResetRequest:Date.now()},{upsert:true}).then((err, dbreply) =>{
-    if(err){
-      console.log(err)
-      res.set('Content-Type', 'text/html');
-      res.send(new Buffer(`<h2>Sorry, there was an error.</h2>`));
-      return;
+  User.findOneAndUpdate( {$and:[{email:email}, {emailVerified:true}]}, {emailVerifyKey:string, passwordResetRequest:Date.now()},{upsert:true}).exec((err, dbreply) =>{
+    // if(err){
+    //   console.log(err)
+    //   res.set('Content-Type', 'text/html');
+    //   res.send(new Buffer(`<h2>Sorry, there was an error.</h2>`));
+    //   return;
+    // }
+    // console.log("past reset first findone and update")
+    // console.log(dbreply)
+    if(dbreply){
+      let mailOptions = {
+        from: '"Austin Reviews" <'+process.env.etherealUser+'>', // sender address
+        to: dbreply.email, // list of receivers
+        subject: 'requested password reset', // Subject line
+        text: 'Click the link reset your password, this link is only good for 1 hour', // plain text body
+        html: '<a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
+      };
+      // console.log(mailOptions)
+      // console.log("past mailoptions, going inasdfsdfto transporter")
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s'+info.messageId);
+        // Preview only available when sending through an Ethereal account
+       // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      });
+      res.json({sucess:true, message:"An email has been sent to your account"})
     }
-    let mailOptions = {
-      from: '"Austin Reviews" <'+process.env.etherealUser+'>', // sender address
-      to: dbreply.email, // list of receivers
-      subject: 'requested password reset', // Subject line
-      text: 'Click the link reset your password, this link is only good for 1 hour', // plain text body
-      html: '<a href="http://'+urlHelper+'/api/user/resetreq/'+dbreply.email+`/`+string+'" target="_blank"><b>Verify me</b></a>' // html body
-    };
-    
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          return console.log(error);
-      }
-      console.log('Message sent: %s'+info.messageId);
-      // Preview only available when sending through an Ethereal account
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    });
 
   })
  })
@@ -329,7 +361,8 @@ module.exports = function(app) {
     if (process.env.NODE_ENV === "production") {
       urlHelper = "https://austin-reviews.herokuapp.com";
     }
-    console.log("in reset route")
+    // console.log("in password reset route")
+    // console.log(req.params)
     const transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
@@ -343,43 +376,51 @@ module.exports = function(app) {
     });
     const entropy = new Entropy({ total: 1e16, risk: 1e20 });
     let string = entropy.string();
-    User.findOne( {$and:[{emailVerifyKey:req.params.name}, {username:req.params.name}, {emailVerified:true}]}).then((err, dbreply) =>{
-      if(err){
-        res.json(err)
-      }
-      console.log(dbreply.passwordResetRequest.getTime()-Date.now().getTime());
-      if((dbreply.passwordResetRequest.getTime()-Date.now().getTime())<3600000){
-        let mailOptions = {
-          from: '"Austin Reviews" <'+process.env.etherealUser+'>', // sender address
-          to: dbreply.email, // list of receivers
-          subject: 'requested password reset', // Subject line
-          text: 'Your password has been reset, it is'+string, // plain text body
-          html: '<a href="http://'+urlHelper+'/api/user/resetreq/'+dbreply.email+`/`+string+'" target="_blank"><b>Go to home page </b></a>' // html body
-        };
-
-        User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.name}, {username:req.params.name}, {emailVerified:true}]}, {passwordReset:Date.now()},{upsert:true}).then((err, dbreply) =>{
-          if(err){
-            res.json(err)
-          }
-          if(dbreply){
-            if(dbreply.emailVerified===true){
+    User.findOne( {$and:[{emailVerifyKey:req.params.email}, {username:req.params.name}, {emailVerified:true}]}).exec((err, user) =>{
+      // console.log("in first findone")
+      // console.log(user)
+      if(user){
+        let dbdate=new Date(user.passwordResetRequest)
+        let currentdate= new Date()
+        // console.log(dbdate.getTime())
+        // console.log(currentdate.getTime()-dbdate.getTime());
+        if((currentdate.getTime()-dbdate.getTime())<3600000){
+          let mailOptions = {
+            from: '"Austin Reviews" <'+process.env.etherealUser+'>', // sender address
+            to: user.email, // list of receivers
+            subject: 'Your password reset', // Subject line
+            text: 'Your password has been reset, it is: '+string, // plain text body
+            html: '<p>Your password has been reset, it is: '+string+' </p> <a href="'+urlHelper+'" target="_blank"><b>Go to home page </b></a>' // html body
+          };
+          user.password=string;
+          user.passwordReset=Date.now();
+          user.emailVerifyKey=null;
+          user.save((err,dbreply) => {
+            if(dbreply){
+              //console.log(dbreply)
               transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    return console.log(error);
+                    //return console.log(error);
+                    res.set('Content-Type', 'text/html');
+                    res.send(new Buffer(`<h2>Sorry, there was an error expired.</h2>`));
                 }
                 console.log('Message sent: %s'+info.messageId);
                 // Preview only available when sending through an Ethereal account
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                //console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
               });
               res.json({sucess:true, message:"Your password has been reset, check your email"})
+            }else{
+              res.status(401).send({success: false, message: "critial error"});
             }
-            
-          }
-        })
-      }else{
-        res.set('Content-Type', 'text/html');
-        res.send(new Buffer(`<h2>Sorry, the link expired.</h2>`));
-      }
+          })
+        }else{
+          res.set('Content-Type', 'text/html');
+          res.send(new Buffer(`<h2>Sorry, the link expired.</h2>`));
+        }
+    }
+    if(err){
+      res.json(err)
+    }
     })
     
     
