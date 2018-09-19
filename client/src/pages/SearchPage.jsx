@@ -823,7 +823,7 @@ class SearchPage extends Component {
             title = {this.state.randomObscura.title}
             description = {this.state.randomObscura.description}
             imageURL = {this.state.randomObscura.image}
-            imageAvailable = {this.state.obscuraImageAvailable == true ? "none" : "inherit"}
+            imageAvailable = {this.state.obscuraImageAvailable === true ? "none" : "inherit"}
             address = {this.state.randomObscura.address}
             areYou512 = "none"
             type = "weird place"

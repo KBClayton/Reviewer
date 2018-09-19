@@ -1,6 +1,15 @@
 .overflowTextDescription{
   height: 200px;
-  overflow: scroll;
+  overflow-x: scroll;
   border: black 1px solid;
   padding: 1rem;
+}
+
+.img-max60 {
+  height: 70px;
+  max-width: 100px;
+}
+
+.card:hover ~ h4 { 
+  text-decoration: none;
 }

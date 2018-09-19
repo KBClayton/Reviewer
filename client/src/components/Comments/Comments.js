@@ -5,32 +5,43 @@ import React from "react";
 
 const CommentDisplay = props => (
   <div>
-    <div className = 'card p-3 m-3'>
-    <p key={props.id} id={props.id}><small><u>{props.CommentType}</u></small></p>
-      <p><i>"{props.textComment}"</i></p>
-        {/* {props.replies.map(reply=>( */}
-          {/* <p>Banna</p> */}
-        {/* ))} */}
+    <div className = 'card p-2'>
+      <div className='d-flex justify-content-end'>
+        <p className=''>
+          {props.thumbsUpAmount}  
+          <span 
+            onClick={props.thumbsUp} 
+            id={props.id}
+            value="1"
+            banana='2'
+            className={props.thumbsUpIcon}
+          />
+          {props.thumbsDownAmount}
+          <span
+            onClick={props.thumbsUp} 
+            id={props.id}
+            value="-1"
+            className = {props.thumbsDownIcon}
+          />
+        </p>
+      </div>
+      <div className='p-3 bg-light'>
+        <p><i>"{props.textComment}"</i></p>
+        <p className='mb-0 text-right'>-<b>{props.CommentUser}</b></p>
+        <p className='mb-0 text-right font-weight-bold'><small><u>{props.CommentDate}</u></small></p>
+      </div>
+      <p className='text-center'><small>{props.length}</small></p>
+      {props.ReplyTxt ? (
+        <a className='text-center' href={'/reply/' + props.id}>
+        <button className='btn btn-outline-info'>Reply <i className ='fas fa-comment'/>
+        </button>
         
-      <h3>
-      <span 
-        onClick={props.thumbsUp} 
-        id={props.id}
-        value="1"
-        banana='2'
-        className={props.thumbsUpIcon}
-      />
-      <span> </span>
-      <span
-        onClick={props.thumbsUp} 
-        id={props.id}
-        value="-1"
-        className = {props.thumbsDownIcon}
-        />
-      </h3>
-      <a href={'/reply/' + props.id}>{props.ReplyTxt}</a>
-      <p><b>{props.length}</b></p>
-      <h4>{props.thumbsUpAmount}{props.thumbsDownAmount}</h4>
+        </a>
+      ):(
+        <div/>
+      )
+      }
+      
     </div>
     <br/>
     

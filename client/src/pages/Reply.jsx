@@ -4,7 +4,7 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 // import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
 // import { BrowserRouter, Route, Link } from 'react-router-dom'
-// import ProductComment from '../components/ProductComment/productComment'
+import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
 // import Replies from '../components/Replies/Replies'
 // import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
@@ -23,7 +23,9 @@ class ReplyPage extends Component {
     subpage: 'Add Reply',
     data: {},
     replies: [],
-    text: ''
+    text: '',
+    modalTrigger: false,
+    modalClass: 'd-none'
   }
 
   // Loads All Articles
@@ -46,6 +48,7 @@ class ReplyPage extends Component {
   }
 
   handleSubmit = (event) => {
+    event.preventDefault();
     const newReply = {
       text: this.state.text,
       parentReview: this.state.data._id
@@ -54,6 +57,8 @@ class ReplyPage extends Component {
     axios.post('/api/reply', newReply)
       .then(res=>{
         console.log(res);
+        this.setState({text: ''})
+        this.modalTrigger();
         this.loadLocations();
     })
 
@@ -64,6 +69,21 @@ class ReplyPage extends Component {
     this.setState({ text: event.target.value})
   }
 
+  modalTrigger = ()=>{
+    if (this.state.modalTrigger === false){
+      this.setState({modalTrigger: true})
+      this.setState({modalClass: ''})
+      console.log('open modal')
+      return;
+    }
+    else {
+      this.setState({modalTrigger: false})
+      console.log('close modal')
+      this.setState({modalClass: 'd-none'})
+      return;
+    }
+  }
+
   // Render to Screen
   render() { 
     return (
@@ -72,25 +92,59 @@ class ReplyPage extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
-        <div className="card">
-          <p>Original Comment</p>
-          <p><i> "{this.state.data.text}"</i></p>
+        <div className="container">
+          {/* <div className="card">
+            <p>Original Comment</p>
+            <p><i> "{this.state.data.text}"</i></p>
+          </div> */}
+          <div className='card mb-2 p-1 bg-light border border-dark'>
+            <p className='m-1'>Original Review by <b>{this.state.data.username}</b></p>
+            <CommentDisplay 
+              key = { this.state.data._id}
+              id = {this.state.data._id}
+              textComment = {this.state.data.text}
+              // replies = {review.replies}
+              // onChange={e => this.setState({ newReply: e.target.value})}
+              length = {this.state.replies.length + ' Replies'}
+              // ReplyTxt = 'Reply to this Review'
+              CommentUser = {this.state.data.username}
+              CommentDate = {moment(this.state.data.dateCreated).format("MMM Do YYYY")}
+              // thumbsUp = {this.thumbsUp}
+              thumbsUpAmount = {this.state.data.thumbsUp}
+              thumbsDownAmount = {this.state.data.thumbsDown}
+              thumbsUpIcon = 'fa fa-thumbs-up ml-1 mr-1'
+              thumbsDownIcon = 'fa fa-thumbs-down ml-1'
+            />  
+            <div className='text-center'>
+              <h5 onClick={this.modalTrigger} className='btn btn-info text-center'>
+                <span>Reply </span><span className='fa fa-comment'/>
+              </h5>
+            </div>
+                      </div>
+            <div className={this.state.modalClass}>
+
+          <ProductComment
+            addComment = {this.handleSubmit}
+            textComment = {this.onChange}
+            CommentText = {this.state.text}
+            modalTrigger = {this.modalTrigger}
+          />
+          </div>
+          <div className="pl-3 pr-3">
+            {this.state.replies.map(review => (
+              <CommentDisplay
+                key = {review._id}
+                id = {review._id}
+                textComment = {review.text}
+                CommentUser = {review.username}
+                CommentDate = {moment(review.dateCreated).format("MMM Do YYYY")}
+                replies = {review.replies}
+                onChange={e => this.setState({ newReply: e.target.value})}
+                CommentType = {'Reply - ' + review.username + ' ' + moment(review.dateCreated).format("MMM Do YYYY")}
+              />
+            ))}
+          </div>   
         </div>
-
-        <input className = 'border border-dark m-3' type="text" onChange={this.onChange} name = 'replyText'/>
-        <button className="btn btn-info" onClick={this.handleSubmit} type='submit'>Send your reply</button>
-          {this.state.replies.map(review => (
-            <CommentDisplay
-              key = {review._id}
-              id = {review._id}
-              textComment = {review.text}
-              replies = {review.replies}
-              onChange={e => this.setState({ newReply: e.target.value})}
-              CommentType = {'Reply - ' + review.username + ' ' + moment(review.dateCreated).format("MMM Do YYYY")}
-
-            />
-          ))}   
-
         <Footer /> 
 
       </div>
