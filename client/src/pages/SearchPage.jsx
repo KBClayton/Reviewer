@@ -55,7 +55,7 @@ class SearchPage extends Component {
   //set new randomRandomObscura
   obscuraRandomizer = async () => {
     await this.setState({randomObscura: this.state.obscura[Math.floor(Math.random()*this.state.obscura.length)]})
-    this.state.randomObscura ? this.state.randomObscura.image  == "https://via.placeholder.com/300x300" ? this.setState({obscuraImageAvailable: false}) : this.setState({obscuraImageAvailable: true}) : console.log("efforting");
+    this.state.randomObscura ? this.state.randomObscura.image  === "https://via.placeholder.com/300x300" ? this.setState({obscuraImageAvailable: false}) : this.setState({obscuraImageAvailable: true}) : console.log("efforting");
     console.log(this.state.randomObscura);
   }
   //set new randomTrail
@@ -596,7 +596,7 @@ class SearchPage extends Component {
             title = {this.state.randomDo512events.title}
             author = {this.state.randomDo512events.location + " at " + this.state.randomDo512events.time}
             description = "Visit the link for event details"
-            storePrefix = {this.state.txAvailable == true ? " or get tickets " : "."}
+            storePrefix = {this.state.txAvailable === true ? " or get tickets " : "."}
             store = "here"
             storeLink = {this.state.randomDo512events.ticketLink}
             storeSuffix = "."
@@ -623,7 +623,7 @@ class SearchPage extends Component {
             title = {this.state.randomObscura.title}
             description = {this.state.randomObscura.description}
             imageURL = {this.state.randomObscura.image}
-            imageAvailable = {this.state.obscuraImageAvailable == true ? "none" : "inherit"}
+            imageAvailable = {this.state.obscuraImageAvailable === true ? "none" : "inherit"}
             address = {this.state.randomObscura.address}
             areYou512 = "none"
             type = "weird place"

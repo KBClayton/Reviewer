@@ -97,7 +97,7 @@ class Header extends React.Component {
 
     return (  
       <div>
-        <div className="fixedWrapper bg-dark text-light border-bottom border-custom header opaque">
+        <div className="fixedWrapper bg-dark text-light border-bottom border-custom header">
           <h1 className="mb-0 w-100 pl-3 pr-3 pt-3 text-center border-bottom border-light" >
             <div className='d-flex justify-content-between mb-1'>
               <div>
@@ -108,9 +108,9 @@ class Header extends React.Component {
             </div>  
           </h1>
           {/* <p className='tagLine pl-3'>Reviewing Austin's Oddities</p> */}
-          <div style={this.state.navStyle} className=''>
+          <div style={this.state.navStyle} className='poorStory'>
             <div className={this.state.searchInputClass}>
-              <div className='input-group'>
+              <div className='input-group mb-0'>
                 <input 
                   type="text" 
                   className={this.state.searchInputBackgroundColor}
@@ -129,33 +129,39 @@ class Header extends React.Component {
               </div>
             </div>
             <br/>
-           
-            <br/>
             {this.state.username.length > 0 ? (
               <div>
-                <p className = 'mb-0'>Logged in as {this.state.username}</p>
-                <Link to = '/profile'>My Profile</Link>
-                <p className='mb-0' onClick={this.logOut}>LogOut</p>
+                <p className = 'mb-3 text-secondary'>Logged in as: <b className='loggedInUN poorStory'>{this.state.username}</b> <i className='text-success fa fa-check-circle'/></p>
+                <Link to = '/profile' className='text-white'>My Profile</Link>
+                <br/>
+                <div className='mb-3'/>
+                <Link to = '/createnewlocation'>Post New Oddity</Link>
+                <br/>
+                <Link to = '/allproducts'>All Oddities</Link>
+                <br/>
+                <Link to = '/Search' className='text-success'>Local Suggestions</Link>
+                <div className='mb-3'/>
+                <Link to = '/chat'>Chat</Link>
+                <br/>
+                <p className='mb-0 btn pl-0 pr-0 text-danger' onClick={this.logOut}>LogOut</p>
               </div>
             ):(
-                <div> 
-                  <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
-                  <br/>
-                  <Link to = '/login'>Log In</Link>
-                </div>
+              <div> 
+                <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
+                <br/>
+                <Link to = '/login'>Log In</Link>
+                <div className='mb-3'/>
+                <Link to = '/createnewlocation'>Post New Oddity</Link>
+                <br/>
+                <Link to = '/allproducts'>All Oddities</Link>
+                <br/>
+                <Link to = '/Search' className='text-success'>Local Suggestions</Link>
+                <div className='mb-3'/>
+                <Link to = '/chat'>Chat <i className='fas fa-lock'/></Link>
+              </div>
             )}
-            
-            <div className='mb-3'/>
-            <Link to = '/createnewlocation'>Post New Oddity</Link>
-            <br/>
-            <Link to = '/allproducts'>All Oddities</Link>
-            <br/>
-            <Link to = '/Search' className='text-success'>Local Suggestions</Link>
-            <div className='mb-3'/>
-            <Link to = '/chat'>Chat</Link>
-
+            </div>
           </div>
-        </div>
         <div className='mt-30'></div>
       </div>
 

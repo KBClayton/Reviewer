@@ -1,8 +1,9 @@
+import './Main.css';
 import React, { Component } from 'react';
 
 
 import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
-import './Main.css';
+
 // import Homepage from './pages/Homepage';
 import AboutPage from './pages/About-Page';
 import CreateUserPage from './pages/CreateUserPage';
