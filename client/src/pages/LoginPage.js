@@ -31,6 +31,14 @@ class LoginPage extends Component {
         this.setState({resetmessage: res.data.message})
         // console.log(this.state.data.replies)
       })
+    }else if(params.account && params.id){
+      axios.get( `/api/user/verify/${params.account}/${params.id}`)
+      .then(res => {
+      // console.log(res.data);
+      // console.log('Something Hapened')
+        this.setState({resetmessage: res.data.message})
+        // console.log(this.state.data.replies)
+      })
     }
   }
       // Run loadLocations after posting *****
