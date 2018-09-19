@@ -13,23 +13,7 @@ let nightmare = Nightmare({
   loadTimeout: 15000,
   executionTimeout: 12000
 });
-//import initNightmare from 'nightmare';
-
-// Some options I set for all instances
-//const nightmareOptions = {
-//  gotoTimeout: 10000,
-//  loadTimeout: 15000
-//};
-
-//class Nightmare {
-//  static getNewNightmare() {
-//    return initNightmare(nightmareOptions);
-//  }
-//}
-
-//export default Nightmare;
-
-const jquery = require("jquery");
+//const jquery = require("jquery");
 const cron = require('node-cron');
 //Food Helper Arrays
 let linkHelperFood = [];
@@ -997,24 +981,6 @@ const updateObscura1 = cron.schedule('30 * * * *', async function(error, respons
   await axios.get(urlHelper + "recommend/obscuraP1").then(res => {
     console.log(res);
     console.log("OBSCURA P1 RECS UPDATED");
-  }).catch(function(err) {
-    // If an error occurred, log it
-    console.log(err);
-    });
-  }, false);
-const updateObscura2 = cron.schedule('35 * * * *', async function(error, response, body) {
-  await axios.get(urlHelper + "recommend/obscuraP1/images").then(res => {
-    console.log(res);
-    console.log("OBSCURA P1 IMAGES UPDATED");
-  }).catch(function(err) {
-    // If an error occurred, log it
-    console.log(err);
-    });
-  }, false);
-const updateObscura3 = cron.schedule('40 * * * *', async function(error, response, body) {
-  await axios.get(urlHelper + "recommend/obscuraP2").then(res => {
-    console.log(res);
-    console.log("OBSCURA P2 RECS UPDATAED");
   }).catch(function(err) {
     // If an error occurred, log it
     console.log(err);

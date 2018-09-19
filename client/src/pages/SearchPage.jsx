@@ -74,7 +74,7 @@ class SearchPage extends Component {
       productArray.push(productObject);
       }
       this.setState({product: productArray});
-      //console.log(this.state.product)
+      console.log(this.state.product)
     });
 
   }
@@ -82,13 +82,16 @@ class SearchPage extends Component {
   foodRandomizer = async () => {
     await this.setState({randomRestaurant: this.state.restaurants[Math.floor(Math.random()*this.state.restaurants.length)]})
     for (let w=0 ; w<this.state.product.length ; w++){
+      console.log(this.state.randomRestaurant.title + " =? " + this.state.product[w].title);
       if (this.state.randomRestaurant.title === this.state.product[w].title) {
         this.setState({foodPrevent: {
           saved: true,
           title: this.state.randomRestaurant.title,
           user: this.state.product[w].user  
         }
+        
       })
+      break;
     }
       else {
         this.setState({foodPrevent: {
@@ -99,7 +102,7 @@ class SearchPage extends Component {
       })
     }
   }
-    console.log(this.state.randomRestaurant);
+    console.log(this.state.foodPrevent);
   }
   //set new randomAlbum
   albumRandomizer = async () => {
@@ -112,6 +115,7 @@ class SearchPage extends Component {
           user: this.state.product[w].user  
         }
       })
+      break;
     }
       else {
         this.setState({albumPrevent: {
@@ -122,7 +126,7 @@ class SearchPage extends Component {
       })
     }
   }
-    console.log(this.state.randomAlbum);
+    console.log(this.state.albumPrevent);
   }
   //set new randomBook
   bookRandomizer = async () => {
@@ -135,6 +139,7 @@ class SearchPage extends Component {
           user: this.state.product[w].user  
         }
       })
+      break;
     }
       else {
         this.setState({bookPrevent: {
@@ -145,7 +150,7 @@ class SearchPage extends Component {
       })
     }
   }
-    console.log(this.state.randomAlbum);
+    console.log(this.state.bookPrevent);
   }
   //set new randomDo512events
   do512Randomizer = async () => {
@@ -159,6 +164,7 @@ class SearchPage extends Component {
           user: this.state.product[w].user  
         }
       })
+      break;
     }
       else {
         this.setState({dailyPrevent: {
@@ -169,7 +175,7 @@ class SearchPage extends Component {
       })
     }
   }
-    console.log(this.state.randomDo512events);
+    console.log(this.state.dailyPrevent);
   }
   //set new randomRandomObscura
   obscuraRandomizer = async () => {
@@ -183,6 +189,7 @@ class SearchPage extends Component {
           user: this.state.product[w].user  
         }
       })
+      break;
     }
       else {
         this.setState({obscuraPrevent: {
@@ -193,7 +200,7 @@ class SearchPage extends Component {
       })
     }
   }
-    console.log(this.state.randomObscura);
+    console.log(this.state.obscuraPrevent);
   }
   //set new randomTrail
   trailRandomizer = async () => {
@@ -206,6 +213,7 @@ class SearchPage extends Component {
           user: this.state.product[w].user  
         }
       })
+      break;
     }
       else {
         this.setState({trailPrevent: {
@@ -216,7 +224,7 @@ class SearchPage extends Component {
       })
     }
   }
-    console.log(this.state.randomTrail);
+    console.log(this.state.trailPrevent);
   }
   // Loads All Recommendations and sets the appropriate states
   loadRecommendations = async () => {
@@ -676,7 +684,12 @@ class SearchPage extends Component {
             imageAvailable = "none"
             address = {this.state.randomRestaurant && this.state.randomRestaurant.address ? this.state.randomRestaurant.address.split(",").length == 1 ? this.state.randomRestaurant.address + " Austin, TX" : this.state.randomRestaurant.address + ", TX" : ""}
             areYou512 = "none"
-            type = "restaurant" 
+            type = "restaurant"
+            addEnabled = {this.state.foodPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.foodPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.foodPrevent.user}
+            addedHelper = {this.state.foodPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.foodPrevent.title ? '"' + this.state.foodPrevent.title + '"' : this.state.foodPrevent.title}
             submitMe = {this.handleSubmitFood}
             refresh = {this.foodRandomizer}
           /> : 
@@ -703,6 +716,11 @@ class SearchPage extends Component {
             address = {this.state.randomAlbum.address ? this.state.randomAlbum.address.replace("Austin TX", "Austin, TX"): this.state.randomAlbum.address}
             areYou512 = "none"
             type = "album"
+            addEnabled = {this.state.albumPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.albumPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.albumPrevent.user}
+            addedHelper = {this.state.albumPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.albumPrevent.title ? '"' + this.state.albumPrevent.title + '"' : this.state.albumPrevent.title}
             submitMe = {this.handleSubmitMusic}
             refresh = {this.albumRandomizer}
           /> : 
@@ -729,6 +747,11 @@ class SearchPage extends Component {
             address = {this.state.randomBook.address ? this.state.randomBook.address.replace("Austin TX", "Austin, TX") : this.state.randomBook.address}
             areYou512 = "none"
             type = "book"
+            addEnabled = {this.state.bookPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.bookPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.bookPrevent.user}
+            addedHelper = {this.state.bookPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.bookPrevent.title ? '"' + this.state.bookPrevent.title + '"' : this.state.bookPrevent.title}
             submitMe = {this.handleSubmitBook}
             refresh = {this.bookRandomizer}
           /> : 
@@ -755,6 +778,11 @@ class SearchPage extends Component {
             address = {this.state.randomDo512events.address ? this.state.randomDo512events.address.replace("Austin TX", "Austin, TX") : this.state.randomDo512events.address}
             areYou512 = "inherit"
             type = "event"
+            addEnabled = {this.state.dailyPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.dailyPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.dailyPrevent.user}
+            addedHelper = {this.state.dailyPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.dailyPrevent.title ? '"' + this.state.dailyPrevent.title + '"' : this.state.dailyPrevent.title}
             submitMe = {this.handleSubmitDo512}
             refresh = {this.do512Randomizer}
             refreshEvents = {this.do512Refresh}
@@ -777,6 +805,11 @@ class SearchPage extends Component {
             address = {this.state.randomObscura.address}
             areYou512 = "none"
             type = "weird place"
+            addEnabled = {this.state.obscuraPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.obscuraPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.obscuraPrevent.user}
+            addedHelper = {this.state.obscuraPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.obscuraPrevent.title ? '"' + this.state.obscuraPrevent.title + '"' : this.state.obscuraPrevent.title}
             submitMe = {this.handleSubmitObscura}
             refresh = {this.obscuraRandomizer}
             retrieveImage = {this.obscuraImager}
@@ -800,6 +833,11 @@ class SearchPage extends Component {
             address = {this.state.randomTrail.address}
             areYou512 = "none"
             type = "trail"
+            addEnabled = {this.state.trailPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.trailPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.trailPrevent.user}
+            addedHelper = {this.state.trailPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.trailPrevent.title ? '"' + this.state.trailPrevent.title + '"' : this.state.trailPrevent.title}
             submitMe = {this.handleSubmitTrail}
             refresh = {this.trailRandomizer}
           /> : 
