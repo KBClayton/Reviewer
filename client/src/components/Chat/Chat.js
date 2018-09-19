@@ -34,7 +34,11 @@ class Chat extends React.Component{
                 for(let i=0; i<cookieArray.length; i++){
                     //console.log("in cookiearray if")
                     if(cookieArray[i]==="username"){
-                        username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                        if(cookieArray[i+1][cookieArray[i+1].length]===";"){
+                            username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                          }else{
+                            username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+                          }
                     }
                     if(cookieArray[i]==="port"){
                         port=parseInt(cookieArray[i+1])
