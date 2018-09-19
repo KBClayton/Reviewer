@@ -93,8 +93,8 @@ class SearchPage extends Component {
     await this.setProductState();
     await this.setState({randomRestaurant: this.state.restaurants[Math.floor(Math.random()*this.state.restaurants.length)]})
     for (let w=0 ; w<this.state.product.length ; w++){
-      console.log(this.state.randomRestaurant.title + " =? " + this.state.product[w].title);
-      if (this.state.randomRestaurant.title === this.state.product[w].title) {
+      //console.log(this.state.randomRestaurant.title + " =? " + this.state.product[w].title);
+      if (this.state.randomRestaurant ? this.state.randomRestaurant.title === this.state.product[w].title : 2 == 1) {
         this.setState({foodPrevent: {
           saved: true,
           title: this.state.randomRestaurant.title,
@@ -122,7 +122,7 @@ class SearchPage extends Component {
     await this.setProductState();
     await this.setState({randomAlbum: this.state.albums[Math.floor(Math.random()*this.state.albums.length)]})
     for (let w=0 ; w<this.state.product.length ; w++){
-      if (this.state.randomAlbum.title === this.state.product[w].title) {
+      if (this.state.randomAlbum ? this.state.randomAlbum.title === this.state.product[w].title : 2 == 1) {
         this.setState({albumPrevent: {
           saved: true,
           title: this.state.randomAlbum.title,
@@ -149,7 +149,7 @@ class SearchPage extends Component {
     await this.setProductState();
     await this.setState({randomBook: this.state.books[Math.floor(Math.random()*this.state.books.length)]})
     for (let w=0 ; w<this.state.product.length ; w++){
-      if (this.state.randomBook.title === this.state.product[w].title) {
+      if (this.state.randomBook ? this.state.randomBook.title === this.state.product[w].title : 2 == 1) {
         this.setState({bookPrevent: {
           saved: true,
           title: this.state.randomBook.title,
@@ -177,7 +177,7 @@ class SearchPage extends Component {
     await this.setState({randomDo512events: this.state.do512events[Math.floor(Math.random()*this.state.do512events.length)]})
     this.state.randomDo512events ? this.state.randomDo512events.ticketLink ? this.setState({txAvailable: true}) : this.setState({txAvailable: false}) : console.log("efforting");
     for (let w=0 ; w<this.state.product.length ; w++){
-      if (this.state.randomDo512events.title === this.state.product[w].title) {
+      if (this.state.randomDo512events ? this.state.randomDo512events.title === this.state.product[w].title : 2 == 1) {
         this.setState({dailyPrevent: {
           saved: true,
           title: this.state.randomDo512events.title,
@@ -205,7 +205,7 @@ class SearchPage extends Component {
     await this.setState({randomObscura: this.state.obscura[Math.floor(Math.random()*this.state.obscura.length)]})
     this.state.randomObscura ? this.state.randomObscura.image  == "https://via.placeholder.com/300x300" ? this.setState({obscuraImageAvailable: false}) : this.setState({obscuraImageAvailable: true}) : console.log("efforting");
     for (let w=0 ; w<this.state.product.length ; w++){
-      if (this.state.randomObscura.title === this.state.product[w].title) {
+      if (this.state.randomObscura ? this.state.randomObscura.title === this.state.product[w].title : 2 == 1) {
         this.setState({obscuraPrevent: {
           saved: true,
           title: this.state.randomObscura.title,
@@ -232,7 +232,7 @@ class SearchPage extends Component {
     await this.setProductState();
     await this.setState({randomTrail: this.state.trails[Math.floor(Math.random()*this.state.trails.length)]})
     for (let w=0 ; w<this.state.product.length ; w++){
-      if (this.state.randomTrail.title === this.state.product[w].title) {
+      if (this.state.randomTrail ? this.state.randomTrail.title === this.state.product[w].title : 2==1) {
         this.setState({trailPrevent: {
           saved: true,
           title: this.state.randomTrail.title,
