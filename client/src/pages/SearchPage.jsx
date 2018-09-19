@@ -9,6 +9,9 @@ import RecDisplay from '../components/RecommendationDisplay/recDisplay'
 // import './main.css'
 import axios from 'axios'
 
+var moment = require('moment');
+moment().format();
+
 class SearchPage extends Component {
 
   // State
@@ -28,79 +31,262 @@ class SearchPage extends Component {
     randomObscura: {},
     randomTrail: {},
     obscuraImageAvailable: true,
-    txAvailable: false
+    txAvailable: false,
+    product: [],
+    foodPrevent: {
+      saved: false,
+      title: "",
+      user: "",
+      date: ""
+    },
+    albumPrevent: {
+      saved: false,
+      title: "",
+      user: "",
+      date: ""
+    },
+    bookPrevent: {
+      saved: false,
+      title: "",
+      user: "",
+      date: ""
+    },
+    dailyPrevent: {
+      saved: false,
+      title: "",
+      user: "",
+      date: ""
+    },
+    obscuraPrevent: {
+      saved: false,
+      title: "",
+      user: "",
+      date: ""
+    },
+    trailPrevent: {
+      saved: false,
+      title: "",
+      user: "",
+      date: ""
+    }
    }
+  //function to set the "product" state
+  setProductState = async () => {
+    await axios.get("/api/product")
+  .then(res => {
+    let productArray = []
+    for (let z=0; z<res.data.length ; z++) {
+    let productObject = {
+        title: res.data[z].title,
+        user: res.data[z].username,
+        date: moment(res.data[z].dateCreated).format("MMM Do YYYY")
+        }
+      productArray.push(productObject);
+      }
+      this.setState({product: productArray});
+      console.log(this.state.product)
+    });
 
+  }
   //set new randomRestaurant
-  foodRandomizer = () => {
-    this.setState({randomRestaurant: this.state.restaurants[Math.floor(Math.random()*this.state.restaurants.length)]})
-    console.log(this.state.randomRestaurant);
+  foodRandomizer = async () => {
+    await this.setState({randomRestaurant: this.state.restaurants[Math.floor(Math.random()*this.state.restaurants.length)]})
+    for (let w=0 ; w<this.state.product.length ; w++){
+      console.log(this.state.randomRestaurant.title + " =? " + this.state.product[w].title);
+      if (this.state.randomRestaurant.title === this.state.product[w].title) {
+        this.setState({foodPrevent: {
+          saved: true,
+          title: this.state.randomRestaurant.title,
+          user: this.state.product[w].user,
+          date: this.state.product[w].date 
+        }
+        
+      })
+      break;
+    }
+      else {
+        this.setState({foodPrevent: {
+          saved: false,
+          title: "",
+          user: "",
+          date: "" 
+        }
+      })
+    }
+  }
+    console.log(this.state.foodPrevent);
   }
   //set new randomAlbum
-  albumRandomizer = () => {
-    this.setState({randomAlbum: this.state.albums[Math.floor(Math.random()*this.state.albums.length)]})
-    console.log(this.state.randomAlbum);
+  albumRandomizer = async () => {
+    await this.setState({randomAlbum: this.state.albums[Math.floor(Math.random()*this.state.albums.length)]})
+    for (let w=0 ; w<this.state.product.length ; w++){
+      if (this.state.randomAlbum.title === this.state.product[w].title) {
+        this.setState({albumPrevent: {
+          saved: true,
+          title: this.state.randomAlbum.title,
+          user: this.state.product[w].user,
+          date: this.state.product[w].date  
+        }
+      })
+      break;
+    }
+      else {
+        this.setState({albumPrevent: {
+          saved: false,
+          title: "",
+          user: "",
+          date: "" 
+        }
+      })
+    }
+  }
+    console.log(this.state.albumPrevent);
   }
   //set new randomBook
-  bookRandomizer = () => {
-    this.setState({randomBook: this.state.books[Math.floor(Math.random()*this.state.books.length)]})
-    console.log(this.state.randomBook);
+  bookRandomizer = async () => {
+    await this.setState({randomBook: this.state.books[Math.floor(Math.random()*this.state.books.length)]})
+    for (let w=0 ; w<this.state.product.length ; w++){
+      if (this.state.randomBook.title === this.state.product[w].title) {
+        this.setState({bookPrevent: {
+          saved: true,
+          title: this.state.randomBook.title,
+          user: this.state.product[w].user,
+          date: this.state.product[w].date   
+        }
+      })
+      break;
+    }
+      else {
+        this.setState({bookPrevent: {
+          saved: false,
+          title: "",
+          user: "",
+          date: "" 
+        }
+      })
+    }
+  }
+    console.log(this.state.bookPrevent);
   }
   //set new randomDo512events
   do512Randomizer = async () => {
     await this.setState({randomDo512events: this.state.do512events[Math.floor(Math.random()*this.state.do512events.length)]})
     this.state.randomDo512events ? this.state.randomDo512events.ticketLink ? this.setState({txAvailable: true}) : this.setState({txAvailable: false}) : console.log("efforting");
-    console.log(this.state.randomDo512events);
+    for (let w=0 ; w<this.state.product.length ; w++){
+      if (this.state.randomDo512events.title === this.state.product[w].title) {
+        this.setState({dailyPrevent: {
+          saved: true,
+          title: this.state.randomDo512events.title,
+          user: this.state.product[w].user,
+          date: this.state.product[w].date  
+        }
+      })
+      break;
+    }
+      else {
+        this.setState({dailyPrevent: {
+          saved: false,
+          title: "",
+          user: "",
+          date: "" 
+        }
+      })
+    }
+  }
+    console.log(this.state.dailyPrevent);
   }
   //set new randomRandomObscura
   obscuraRandomizer = async () => {
     await this.setState({randomObscura: this.state.obscura[Math.floor(Math.random()*this.state.obscura.length)]})
     this.state.randomObscura ? this.state.randomObscura.image  == "https://via.placeholder.com/300x300" ? this.setState({obscuraImageAvailable: false}) : this.setState({obscuraImageAvailable: true}) : console.log("efforting");
-    console.log(this.state.randomObscura);
+    for (let w=0 ; w<this.state.product.length ; w++){
+      if (this.state.randomObscura.title === this.state.product[w].title) {
+        this.setState({obscuraPrevent: {
+          saved: true,
+          title: this.state.randomObscura.title,
+          user: this.state.product[w].user,
+          date: this.state.product[w].date  
+        }
+      })
+      break;
+    }
+      else {
+        this.setState({obscuraPrevent: {
+          saved: false,
+          title: "",
+          user: "",
+          date: "" 
+        }
+      })
+    }
+  }
+    console.log(this.state.obscuraPrevent);
   }
   //set new randomTrail
-  trailRandomizer = () => {
-    this.setState({randomTrail: this.state.trails[Math.floor(Math.random()*this.state.trails.length)]})
-    console.log(this.state.randomTrail);
+  trailRandomizer = async () => {
+    await this.setState({randomTrail: this.state.trails[Math.floor(Math.random()*this.state.trails.length)]})
+    for (let w=0 ; w<this.state.product.length ; w++){
+      if (this.state.randomTrail.title === this.state.product[w].title) {
+        this.setState({trailPrevent: {
+          saved: true,
+          title: this.state.randomTrail.title,
+          user: this.state.product[w].user,
+          date: this.state.product[w].date 
+        }
+      })
+      break;
+    }
+      else {
+        this.setState({trailPrevent: {
+          saved: false,
+          title: "",
+          user: "",
+          date: "" 
+        }
+      })
+    }
+  }
+    console.log(this.state.trailPrevent);
   }
   // Loads All Recommendations and sets the appropriate states
-  loadRecommendations = () => {
-    axios.get("/recommend/acFood/all")
+  loadRecommendations = async () => {
+    this.setProductState();
+    await axios.get("/recommend/acFood/all")
       .then(res => {
         //console.log(res.data);
         this.setState({restaurants: res.data});
         this.foodRandomizer();
         //console.log(this.state.restaurants)
       });
-      axios.get("/recommend/acMusic/all")
+    await axios.get("/recommend/acMusic/all")
       .then(res => {
         //console.log(res.data);
         this.setState({albums: res.data})
         this.albumRandomizer();
         //console.log(this.state.albums)
       });
-      axios.get("/recommend/acBooks/all")
+    await axios.get("/recommend/acBooks/all")
       .then(res => {
         //console.log(res.data);
         this.setState({books: res.data})
         this.bookRandomizer();
         //console.log(this.state.books)
       });
-      axios.get("/recommend/daily/all")
+    await axios.get("/recommend/daily/all")
       .then(res => {
         //console.log(res.data);
         this.setState({do512events: res.data})
         this.do512Randomizer();
         //console.log(this.state.do512events)
       });
-      axios.get("/recommend/obscura/all")
+    await axios.get("/recommend/obscura/all")
       .then(res => {
         //console.log(res.data);
         this.setState({obscura: res.data})
         this.obscuraRandomizer();
         //console.log(this.state.obscura)
       });
-      axios.get("/recommend/trails/all")
+    await axios.get("/recommend/trails/all")
       .then(res => {
         //console.log(res.data);
         this.setState({trails: res.data})
@@ -119,7 +305,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-    this.loadRecommendations();
+    this.foodRandomizer();
   } 
   //scrape album recs and add new recs to the database
   albumScraper = async () => {
@@ -200,40 +386,33 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.loadRecommendations();
+      this.obscuraRandomizer();
   }
   //scrape obscura images for current recs based on the boolean values of obscuraP1 and obscuraP2
   obscuraImager = async () => {
-    console.log(this.state.randomObscura);
-    if (this.state.randomObscura.obscuraP1 === true) {
-      await axios.get("recommend/obscuraP1/images", {
+    console.log(this.state.randomObscura)
+      await axios.get("recommend/obscura/images", {
         params: {
           title: this.state.randomObscura.title,
           link: this.state.randomObscura.link
         }
-      }).then(res => {
-      console.log(res);
-      console.log("OBSCURA IMAGE UPDATED (1)");
-    }).catch(function(err) {
-      // If an error occurred, log it
-      console.log(err);
-      });
-    }
-    else {
-      await axios.get("recommend/obscuraP2/images", {
-        params: {
-          title: this.state.randomObscura.title,
-          link: this.state.randomObscura.link
-        }
-      }).then(res => {
+      }).then(async res => {
         console.log(res);
-        console.log("OBSCURA IMAGE UPDATED (2)");
-      }).catch(function(err) {
+        console.log("OBSCURA IMAGE UPDATED");
+        await axios.get("/recommend/obscura/all")
+        .then(res => {
+          //console.log(res.data);
+          this.setState({obscura: res.data})
+          console.log("db updated");
+        }).catch(function(err) {
+          // If an error occurred, log it
+          console.log(err);
+          });
+        }).catch(function(err) {
         // If an error occurred, log it
         console.log(err);
-        });
-      }
-    this.obscuraRandomizer();
+      });
+      this.obscuraRandomizer();
     }
   //scrape trail recs and add new recs to the database
   trailScraper = async () => {
@@ -520,13 +699,19 @@ class SearchPage extends Component {
             id = {this.state.randomRestaurant._id}
             link = {this.state.randomRestaurant.link}
             title = {this.state.randomRestaurant.title}
+            author = {this.state.randomRestaurant.location}
             description = {this.state.randomRestaurant.description}
             urlLink = {this.state.randomRestaurant.link}
             imageURL = {this.state.randomRestaurant.image}
             imageAvailable = "none"
-            address = {this.state.randomRestaurant.address}
+            address = {this.state.randomRestaurant && this.state.randomRestaurant.address ? this.state.randomRestaurant.address.split(",").length == 1 ? this.state.randomRestaurant.address + " Austin, TX" : this.state.randomRestaurant.address + ", TX" : ""}
             areYou512 = "none"
-            type = "restaurant" 
+            type = "restaurant"
+            addEnabled = {this.state.foodPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.foodPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.foodPrevent.user + " on " + this.state.foodPrevent.date + "."}
+            addedHelper = {this.state.foodPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.foodPrevent.title ? '"' + this.state.foodPrevent.title + '"' : this.state.foodPrevent.title}
             submitMe = {this.handleSubmitFood}
             refresh = {this.foodRandomizer}
           /> : 
@@ -550,9 +735,14 @@ class SearchPage extends Component {
             storeLink = {this.state.randomAlbum.ticketLink}
             imageURL = {this.state.randomAlbum.image}
             imageAvailable = "none"
-            address = {this.state.randomAlbum.address}
+            address = {this.state.randomAlbum.address ? this.state.randomAlbum.address.replace("Austin TX", "Austin, TX"): this.state.randomAlbum.address}
             areYou512 = "none"
             type = "album"
+            addEnabled = {this.state.albumPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.albumPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.albumPrevent.user + " on " + this.state.albumPrevent.date + "."}
+            addedHelper = {this.state.albumPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.albumPrevent.title ? '"' + this.state.albumPrevent.title + '"' : this.state.albumPrevent.title}
             submitMe = {this.handleSubmitMusic}
             refresh = {this.albumRandomizer}
           /> : 
@@ -576,9 +766,14 @@ class SearchPage extends Component {
             storeLink = {this.state.randomBook.ticketLink}
             imageURL = {this.state.randomBook.image}
             imageAvailable = "none"
-            address = {this.state.randomBook.address}
+            address = {this.state.randomBook.address ? this.state.randomBook.address.replace("Austin TX", "Austin, TX") : this.state.randomBook.address}
             areYou512 = "none"
             type = "book"
+            addEnabled = {this.state.bookPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.bookPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.bookPrevent.user + " on " + this.state.bookPrevent.date + "."}
+            addedHelper = {this.state.bookPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.bookPrevent.title ? '"' + this.state.bookPrevent.title + '"' : this.state.bookPrevent.title}
             submitMe = {this.handleSubmitBook}
             refresh = {this.bookRandomizer}
           /> : 
@@ -596,15 +791,20 @@ class SearchPage extends Component {
             title = {this.state.randomDo512events.title}
             author = {this.state.randomDo512events.location + " at " + this.state.randomDo512events.time}
             description = "Visit the link for event details"
-            storePrefix = {this.state.txAvailable == true ? " or get tickets " : "."}
-            store = "here"
+            storePrefix = {this.state.txAvailable === true ? " or get tickets " : "."}
+            store = {this.state.txAvailable === true ? "here" : ""}
             storeLink = {this.state.randomDo512events.ticketLink}
-            storeSuffix = "."
+            storeSuffix = {this.state.txAvailable === true ? "." : ""}
             imageURL = {this.state.randomDo512events.image}
             imageAvailable = "none"
-            address = {this.state.randomDo512events.address}
+            address = {this.state.randomDo512events.address ? this.state.randomDo512events.address.replace("Austin TX", "Austin, TX") : this.state.randomDo512events.address}
             areYou512 = "inherit"
             type = "event"
+            addEnabled = {this.state.dailyPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.dailyPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.dailyPrevent.user + " on " + this.state.dailyPrevent.date + "."}
+            addedHelper = {this.state.dailyPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.dailyPrevent.title ? '"' + this.state.dailyPrevent.title + '"' : this.state.dailyPrevent.title}
             submitMe = {this.handleSubmitDo512}
             refresh = {this.do512Randomizer}
             refreshEvents = {this.do512Refresh}
@@ -627,9 +827,14 @@ class SearchPage extends Component {
             address = {this.state.randomObscura.address}
             areYou512 = "none"
             type = "weird place"
+            addEnabled = {this.state.obscuraPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.obscuraPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.obscuraPrevent.user + " on " + this.state.obscuraPrevent.date + "."}
+            addedHelper = {this.state.obscuraPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.obscuraPrevent.title ? '"' + this.state.obscuraPrevent.title + '"' : this.state.obscuraPrevent.title}
             submitMe = {this.handleSubmitObscura}
             refresh = {this.obscuraRandomizer}
-            retrieveImage = ""
+            retrieveImage = {this.obscuraImager}
           /> : 
           <DefaultRecDisplay
             type = "weird places"
@@ -650,6 +855,11 @@ class SearchPage extends Component {
             address = {this.state.randomTrail.address}
             areYou512 = "none"
             type = "trail"
+            addEnabled = {this.state.trailPrevent.saved === false ? "inherit" : "none"}
+            addDisabled = {this.state.trailPrevent.saved === true ? "inherit" : "none"}
+            userAdded = {this.state.trailPrevent.user + " on " + this.state.trailPrevent.date + "."}
+            addedHelper = {this.state.trailPrevent.saved === true ? " was added by " : ""}
+            titleAdded = {this.state.trailPrevent.title ? '"' + this.state.trailPrevent.title + '"' : this.state.trailPrevent.title}
             submitMe = {this.handleSubmitTrail}
             refresh = {this.trailRandomizer}
           /> : 
