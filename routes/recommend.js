@@ -282,7 +282,7 @@ module.exports = function(app) {
               imgHelperBooks.push(chronImageBooks);
               let chronTitleBooks = $("div.copy").children("h3").children("i").text() ? $("div.copy").children("h3").children("i").text()  : "";
               titleHelperBooks.push(chronTitleBooks);
-              let chronSynBooks = $("div.copy").next("p").text() ? $("div.copy").next("p").text() + "..." :  "";
+              let chronSynBooks = $("div.copy").children("p").first().text() ? $("div.copy").children("p").first().text() + "..": $("div.copy").children("p").text().split(".")[0] ? $("div.copy").children("p").text().split(".")[0] : "";
               synHelperBooks.push(chronSynBooks);
               let chronAuthBooks = $("div.copy").children("h3").next("b").text().replace("by ", "") ? $("div.copy").children("h3").next("b").text().replace("by ", "") : "";
               authorHelperBooks.push(chronAuthBooks);
@@ -577,7 +577,9 @@ module.exports = function(app) {
             result.address = addressHelperObscura[i]
               .replace("Austin", " Austin")
               .replace("United", " United")
-              .replace(/,/g, "");
+              .replace(/,/g, "")
+              .split(' United States')[0]
+              .replace("Austin Texas", "Austin, TX");
             result.description = $(this)
               .children("a.content-card-place")
               .children("div.content-card-text")
