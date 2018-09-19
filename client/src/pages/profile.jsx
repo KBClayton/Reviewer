@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 
-import { Redirect, withRouter } from 'react-router-dom'
+import { Redirect, withRouter, Link } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
+import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
 import axios from 'axios'
 // import { BrowserRouter, Route, Link } from 'react-router-dom'
 // import CreateUserForm from '../components/CreateUserForm/createuserform';
@@ -10,64 +11,77 @@ import axios from 'axios'
 
 class ProfilePage extends Component {
   // super(props)
-
-  // State
-  state = {
-    title: 'Reviewer',
-    subpage: 'Profile',
-    name: '',
+// State
+state = {
+    big:{},
+    username: '',
+    password_o:'',
+    password_v:'',
+    password:'',
+    title:'',
     email: '',
-    password: '',
-    password_v: '',
-    errorMsg: {
-      emailError: '',
-      usernameError: '',
-      passwordTooShortError: '',
-      passwordDoesntMatchError: ''
-    },
-    accountAccepted: false
+    emailVerified: false,
+    locations:[],
+    comments:[],
+    replys:[],
+    reviews:[],
+    ratings:[],
    }
+
+ //get the user's data
+ loadProfile = () => {
+    axios.get( `/api/user/allstuff`)
+      .then(res => {
+      console.log("returned data from get")
+      console.log(res.data);
+      // console.log('Something Hapened')
+        this.setState({username:res.data.username})
+        this.setState({email:res.data.email})
+        this.setState({emailVerified:res.data.emailVerified})
+        this.setState({locations: res.data.products})
+        this.setState({reviews: res.data.reviews})
+        this.setState({comments: res.data.replies})
+        this.setState({productRating: res.data.productRatings})
+        this.setState({title:res.data.username+"'s Profile"})
+        this.setState({ratings:res.data.reviewRatings})
+        console.log(this.state);
+        // console.log(this.state.comments.length)
+        //this.calculateRating();
+    })
+  }
+
+  //start the stuff
+  componentDidMount(){
+    this.loadProfile();
+  }
+
+
+  
+
 
   // Handle Form Submit
   handleSubmit = (event) => {
     event.preventDefault();
-
-    // UserName length validation
-    if (this.state.name.trim().length < 5){
-      this.setState({errorMsg: {usernameError: 'Username must be 5 or more characters'}})
-      return false;
-    }
-
-    //Email Regex Validation
-    const regexEmail = /^([A-Za-z0-9_\-\.+])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,})$/;
-    if (!regexEmail.test(this.state.email)){
-      this.setState({errorMsg: {emailError: 'Email is not valid'}})
-      return false;
-    }
-
     // Password Complexity Verification
     var regexPassword = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/
     if (!regexPassword.test(this.state.password.trim())){
     	this.setState({errorMsg: {passwordTooShortError: 'Password needs to contain: 8+ characters, 1+ uppercase letter, 1+ numbers and at least one symbol'}})
     	return false;
     }
-
     //Password Matches Verification
     if (this.state.password !== this.state.password_v){
       this.setState({errorMsg: {passwordDoesntMatchError: 'Passwords Do Not Match'}})
       return false;
     }
 
-    // Create newUser Post
     const newUser = {
-      username: this.state.name.trim(),
-      email: this.state.email.trim(),
-      password: this.state.password.trim()
+      password: this.state.password_o.trim(),
+      newPasssword:this.state.password.trim()
     }
 
     console.log(newUser)
     
-    axios.post('/api/user/new', newUser)
+    axios.put('/api/user/', newUser)
       .then((response) => {
         console.log(response)
         // this.setState()
@@ -95,46 +109,42 @@ class ProfilePage extends Component {
   // Render to Screen
   render() { 
     return (
-      <div className = 'bg-dark mb-5'>          
+      <div className = 'bg-light mb-5'>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
+        
 
+        
         <form className='container'>
-
-          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.usernameError}</p>
-          <input 
-            className='m-2 animated bounce'
-            name='fullname'
-            placeholder='Full Name'
-            type='text' 
-            value={this.state.name}
-            onChange={e => this.setState({ name: e.target.value})}
-          />
-          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.emailError}</p>
+        
+        <h4>Username:  {this.state.username}</h4>
+        <h4>Email:  {this.state.email}</h4>
+        <h4>{this.state.emailVerified?(<p>Your email has been verified</p> ):(<p>Your email has not been verified</p>)}</h4>
+          <p className='m-0 p-0 text-danger'></p>
           <input
             className='m-2'
-            name='email'
-            placeholder='Email Address'
-            type="text"
-            value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value})}
+            name='Old passcode'
+            placeholder='Passcode'
+            type="password"
+            value={this.state.password_o}
+            onChange={e => this.setState({ password: e.target.value})}
           />
-          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordTooShortError}</p>
+          <br/>
           <input
             className='m-2'
-            name='password'
+            name='New password'
             placeholder='Passcode'
             type="password"
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value})}
           />
-          <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordDoesntMatchError}</p>
+          <p className='m-0 p-0 text-danger'></p>
           <input
             className='m-2'
             name='password_v'
-            placeholder='Retype Passcode'
+            placeholder='Retype new Passcode'
             type="password"
             value={this.state.password_v}
             onChange={e => this.setState({ password_v: e.target.value})}
@@ -147,7 +157,57 @@ class ProfilePage extends Component {
           >
             Submit
           </button>
+
         </form>
+
+        {this.state.locations.length > 0 ? (
+            <div>
+            <h4>You have posted {this.state.locations.length} wierd things</h4>
+            {this.state.locations.map(location => (
+            <div key={location._id}>
+                <Link to={'/location/' + location._id}>
+                <LocationDisplay
+                    key = { location._id}
+                    id = {location._id}
+                    imageUrl = {location.picture}
+                    address = {location.address}
+                    // link = {location.link}
+                    title = {location.title}
+                    description = {location.description}
+                    // urlLink = {'/location/' + location._id}
+                    lengthNo = {location.reviews.length}
+                    Rating = {'Average Rating: ' + location.averageRating + ' Stars'}
+                    noOfRatings = {location.ratings.length + ' Ratings'}
+                />
+                </Link>
+            </div>
+            ))}
+            </div>
+        ):(
+            <p className='text-center text-danger'>You have no products posted</p>
+        )
+        }
+        {this.state.reviews.length>0?(
+            <h4>You have reviewed {this.state.reviews.length} wierd things</h4>
+        ):(
+            <p className='text-center text-danger'>You have not reviewd anything</p>
+        )}
+        {this.state.comments.length>0?(
+            <h4>You have commented on {this.state.comments.length} reviews</h4>
+        ):(
+            <p className='text-center text-danger'>You have not commented on anything</p>
+        )}
+        {this.state.reviews.length>0?(
+            <h4>You have commented on {this.state.comments.length} reviews</h4>
+        ):(
+            <p className='text-center text-danger'>You have not commented on anything</p>
+        )}
+        {this.state.ratings.length>0?(
+            <h4>You have rated {this.state.ratings.length} wierd things</h4>
+        ):(
+            <p className='text-center text-danger'>You have not rated anything</p>
+        )}
+
 
         <Footer/>
       </div>

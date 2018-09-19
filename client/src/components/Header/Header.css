@@ -1,5 +1,38 @@
-/* .header {
+.fixedWrapper {
   position: fixed;
+  width: 100%;
+  z-index: 1111;
   top: 0;
-  z-index: 99;
-} */
+}
+.img-logo {
+  height: 40px;
+  position: relative;
+}
+.our-logo {
+  font-family: 'Poor Story', cursive;
+  letter-spacing: 5px;
+  font-size: 40px;
+  position: relative;
+  top: -0.5rem;
+  padding-left: 1rem;
+}
+.navStatusButton {
+  position: relative;
+  top: -0.5rem;
+}
+.tagLine {
+  font-size:16px;
+  /* font-family: 'Poor Story', cursive; */
+  color: lightgoldenrodyellow;
+  letter-spacing: 2px;
+}
+
+.border-custom {
+  border-color: lightgoldenrodyellow;
+}
+.opaque {
+  opacity: .95;
+}
+.mt-30 {
+  margin-top: 90px;
+}

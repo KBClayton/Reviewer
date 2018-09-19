@@ -26,9 +26,11 @@ module.exports = function(app) {
       //console.log(req.body);
       //console.log(req.session.uid);
       newreply=req.body;
+      //console.log(req.session.username)
       //newreply.user=req.session.uid;
       newreply.username=req.session.username;
-
+      newreply.user=req.session.uid;
+      console.log(newreply);
       Reply.create(newreply).then(dbModel => {
        // //update user
         User.findByIdAndUpdate(req.session.uid, { "$push": { "replies": dbModel._id } },

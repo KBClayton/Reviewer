@@ -59,13 +59,13 @@ class LoginPage extends Component {
       return <Redirect to={from} />;
     }
     return (
-      <div className = 'card mb-5'>          
+      <div>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
 
-        <form className='container'>
+        <form className='container bg-info'>
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg}</p>
           <input 
             className='m-2'

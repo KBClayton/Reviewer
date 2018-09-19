@@ -10,7 +10,9 @@ const ProductComment = props => (
       onChange={props.textComment} 
       name="productComment" id={props._id} 
       cols="30" rows="10" 
-      placeholder='Add your review here'>
+      placeholder='Add your review here'
+      value = {props.CommentText}  
+    >
     </textarea>
     <button 
       className = 'btn btn-secondary btn-sm' 

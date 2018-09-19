@@ -14,6 +14,8 @@ import SearchPage from './pages/SearchPage';
 import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
 import requireAuth from './components/Auth';
+import SearchResultsPage from './pages/SearchResultsPage';
+
 import ProfilePage from './pages/profile'
 
 const Auth = {
@@ -109,8 +111,9 @@ class App extends Component {
 
     return ( 
       <BrowserRouter>
+        
         <Switch>
-          <Route path='/' component = {()=><Homepage /> } exact/>
+          <Route path='/' component = {()=><ShowAllProducts /> } exact/>
           <Route path ='/About' component = {AboutPage} exact/>
     
           <Route path='/createUser' component = {CreateUserPage}/>
@@ -121,7 +124,7 @@ class App extends Component {
           <Route path='/allproducts' component = {ShowAllProducts} name="allproducts" exact/>
           <Route path='/location/:_id' component = {ShowOneLocation} name="location" exact/>
           <PrivateRoute path='/search' component = {SearchPage} name="search" exact/>
-    
+          <Route path ='/searchResults/:query' component = {SearchResultsPage} name='searchResultsPage' exact/>
           {/* beginI want this to be protected */}
           <PrivateRoute path="/protected" component={ShowAllProducts} />
           <PrivateRoute path="/profile" component={ProfilePage} />
@@ -129,6 +132,8 @@ class App extends Component {
           {/* <Route component = {Homepage}/> */}
           <Route path='/reply/:_id' component= {ReplyPage}/>
           <PrivateRoute path='/chat' component = {Chat} exact/>
+          <Route path='*' component = {ShowAllProducts} name ='catchAll' />
+
         </Switch>
       </BrowserRouter>
      );
