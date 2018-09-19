@@ -10,13 +10,9 @@ const LocationDisplay = props => (
       <div className = 'card p-3 m-3 bg-light'>
       <div className="row">
         <div className="col-12">
-<<<<<<< HEAD
           
 
           
-=======
-          <a href={props.link} target='_blank' >
->>>>>>> e5decb5356d61307aa3fc8871d18b669d5142c0b
             <div className='p-2 bg-light border border-secondary text-dark mb-2'>
               <h3 className='mb-0 text-info'>
                 <b>
