@@ -9,8 +9,8 @@ const { Entropy } = require('entropy-string');
 const dotenv = require("dotenv");
 dotenv.config();
 const PORT2 = process.env.PORT || 3001;
-var moment = require('moment');
-moment().format();
+//var moment = require('moment');
+//moment().format();
 
 module.exports = function(app) {
   app.post("/api/user/new", (req, res) => {
