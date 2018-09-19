@@ -133,8 +133,9 @@ class App extends Component {
           <PrivateRoute path="/profile" component={ProfilePage} />
            {/*  end I want this to be protected */}
           {/* <Route component = {Homepage}/> */}
-          <Route path='/reply/:_id' component= {ReplyPage}/>
+          <Route path='/reply/:_id' component= {ReplyPage} exact/>
           <PrivateRoute path='/chat' component = {Chat} exact/>
+          <Route path='/api/user/resetreq/:name/:emailver' component={LoginPage} exact/>
           <Route path='*' component = {ShowAllProducts} name ='catchAll' />
 
         </Switch>

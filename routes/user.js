@@ -303,8 +303,8 @@ module.exports = function(app) {
  app.post("/api/user/reset/", (req, res) => {
   let urlHelper = "http://localhost:3001"
   if (process.env.NODE_ENV === "production") {
-    urlHelper = "https://austin-reviews.herokuapp.com:";
-    urlHelper=urlHelper+PORT2
+    urlHelper = "https://austin-reviews.herokuapp.com";
+    //urlHelper=urlHelper+PORT2
   }
   // console.log("in reset route")
   // console.log(req.body)

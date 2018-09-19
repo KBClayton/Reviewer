@@ -20,6 +20,25 @@ class LoginPage extends Component {
     resetemail:'',
     resetmessage:''
   }
+  loadLocations = () => {
+
+    const { match: { params } } = this.props;
+    if(params.name && params.emailver){
+    axios.get( `/api/user/resetreq/${params.name}/${params.emailver}`)
+      .then(res => {
+      // console.log(res.data);
+      // console.log('Something Hapened')
+        this.setState({resetmessage: res.data.message})
+        // console.log(this.state.data.replies)
+      })
+    }
+  }
+      // Run loadLocations after posting *****
+
+  componentDidMount(){
+    this.loadLocations();
+  }
+
   reset = (event)=>{
     event.preventDefault();
     let resetthing={
