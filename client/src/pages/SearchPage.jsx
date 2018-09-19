@@ -485,7 +485,7 @@ class SearchPage extends Component {
     this.foodRandomizer();
   }
   //save an album recommendation
-  handleSubmitMusic = (event) => {
+  handleSubmitMusic = async (event) => {
     event.preventDefault();
     // Create newUser Post
     const newLocation = {
@@ -523,7 +523,7 @@ class SearchPage extends Component {
     this.albumRandomizer();
   }
   //save a book recommendation
-  handleSubmitBook = (event) => {
+  handleSubmitBook = async (event) => {
     event.preventDefault();
     // Create newUser Post
     const newLocation = {
@@ -561,7 +561,7 @@ class SearchPage extends Component {
     this.bookRandomizer();
   }
   //save a book recommendation
-  handleSubmitDo512 = (event) => {
+  handleSubmitDo512 = async (event) => {
     event.preventDefault();
     // Create newUser Post
     const newLocation = {
@@ -599,7 +599,7 @@ class SearchPage extends Component {
     this.do512Randomizer();
   }
   //save an obscura recommendation
-  handleSubmitObscura = (event) => {
+  handleSubmitObscura = async (event) => {
     event.preventDefault();
     // Create newUser Post
     const newLocation = {
@@ -637,7 +637,7 @@ class SearchPage extends Component {
     this.obscuraRandomizer();
   }
   //save a trail recommendation
-  handleSubmitTrail = (event) => {
+  handleSubmitTrail = async (event) => {
     event.preventDefault();
     //REVERSE GEOCODING GOES HERE
     let addressHelper = this.state.randomTrail.lat + "," + this.state.randomTrail.long;
@@ -682,6 +682,7 @@ class SearchPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+    await this.setProductState()
     this.trailRandomizer();
   }
 
