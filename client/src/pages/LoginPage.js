@@ -37,7 +37,7 @@ class LoginPage extends Component {
       })
     }else if(params.account && params.id){
       axios.get( `/api/user/verify/${params.account}/${params.id}`)
-      .then(res => {
+      .then((res,err) => {
       // console.log(res.data);
       // console.log('Something Hapened')
       if(res){
