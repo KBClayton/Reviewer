@@ -318,7 +318,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.albumRandomizer();
+      this.loadRecommendations();
   } 
   //scrape book recs and add new recs to the database
   bookScraper = async (event) => {
@@ -332,7 +332,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.bookRandomizer();
+      this.loadRecommendations();
   } 
   //scrape daily recs and add them to the database
   dailyScraper = async () => {
@@ -345,7 +345,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.do512Randomizer();
+      this.loadRecommendations();
   } 
   //delete all daily recs, scrape new recs and add these to the database
   do512Refresh = async (event) => {
@@ -428,7 +428,7 @@ class SearchPage extends Component {
       this.loadRecommendations();
   }  
     componentDidMount(){
-      this.trailRandomizer()
+      this.loadRecommendations()
     }
   //save a restaurant recommendation
   handleSubmitFood = async (event) => {
@@ -469,8 +469,9 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          this.setProductState();
-          console.log(this.state.product);
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
         }
         // If Unsuccessful
         else{
@@ -506,8 +507,9 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          this.setProductState();
-          console.log(this.state.product);
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
         }
         // If Unsuccessful
         else{
@@ -543,8 +545,9 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          this.setProductState();
-          console.log(this.state.product);
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
         }
         // If Unsuccessful
         else{
@@ -580,8 +583,9 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          this.setProductState();
-          console.log(this.state.product);
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
         }
         // If Unsuccessful
         else{
@@ -617,8 +621,9 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          this.setProductState();
-          console.log(this.state.product);
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
         }
         // If Unsuccessful
         else{
@@ -664,8 +669,9 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          this.setProductState();
-          console.log(this.state.product);
+          //this.setState({productSuccess: 'true' });
+          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
+          // this.props.history.push('/home')
         }
         // If Unsuccessful
         else{
@@ -703,7 +709,7 @@ class SearchPage extends Component {
             type = "restaurant"
             addEnabled = {this.state.foodPrevent.saved === false ? "inherit" : "none"}
             addDisabled = {this.state.foodPrevent.saved === true ? "inherit" : "none"}
-            userAdded = {this.state.foodPrevent.user}
+            userAdded = {this.state.foodPrevent.user + " on " + this.state.foodPrevent.date + "."}
             addedHelper = {this.state.foodPrevent.saved === true ? " was added by " : ""}
             titleAdded = {this.state.foodPrevent.title ? '"' + this.state.foodPrevent.title + '"' : this.state.foodPrevent.title}
             submitMe = {this.handleSubmitFood}
@@ -734,7 +740,7 @@ class SearchPage extends Component {
             type = "album"
             addEnabled = {this.state.albumPrevent.saved === false ? "inherit" : "none"}
             addDisabled = {this.state.albumPrevent.saved === true ? "inherit" : "none"}
-            userAdded = {this.state.albumPrevent.user}
+            userAdded = {this.state.albumPrevent.user + " on " + this.state.albumPrevent.date + "."}
             addedHelper = {this.state.albumPrevent.saved === true ? " was added by " : ""}
             titleAdded = {this.state.albumPrevent.title ? '"' + this.state.albumPrevent.title + '"' : this.state.albumPrevent.title}
             submitMe = {this.handleSubmitMusic}
@@ -765,7 +771,7 @@ class SearchPage extends Component {
             type = "book"
             addEnabled = {this.state.bookPrevent.saved === false ? "inherit" : "none"}
             addDisabled = {this.state.bookPrevent.saved === true ? "inherit" : "none"}
-            userAdded = {this.state.bookPrevent.user}
+            userAdded = {this.state.bookPrevent.user + " on " + this.state.bookPrevent.date + "."}
             addedHelper = {this.state.bookPrevent.saved === true ? " was added by " : ""}
             titleAdded = {this.state.bookPrevent.title ? '"' + this.state.bookPrevent.title + '"' : this.state.bookPrevent.title}
             submitMe = {this.handleSubmitBook}
@@ -796,7 +802,7 @@ class SearchPage extends Component {
             type = "event"
             addEnabled = {this.state.dailyPrevent.saved === false ? "inherit" : "none"}
             addDisabled = {this.state.dailyPrevent.saved === true ? "inherit" : "none"}
-            userAdded = {this.state.dailyPrevent.user}
+            userAdded = {this.state.dailyPrevent.user + " on " + this.state.dailyPrevent.date + "."}
             addedHelper = {this.state.dailyPrevent.saved === true ? " was added by " : ""}
             titleAdded = {this.state.dailyPrevent.title ? '"' + this.state.dailyPrevent.title + '"' : this.state.dailyPrevent.title}
             submitMe = {this.handleSubmitDo512}
@@ -823,7 +829,7 @@ class SearchPage extends Component {
             type = "weird place"
             addEnabled = {this.state.obscuraPrevent.saved === false ? "inherit" : "none"}
             addDisabled = {this.state.obscuraPrevent.saved === true ? "inherit" : "none"}
-            userAdded = {this.state.obscuraPrevent.user}
+            userAdded = {this.state.obscuraPrevent.user + " on " + this.state.obscuraPrevent.date + "."}
             addedHelper = {this.state.obscuraPrevent.saved === true ? " was added by " : ""}
             titleAdded = {this.state.obscuraPrevent.title ? '"' + this.state.obscuraPrevent.title + '"' : this.state.obscuraPrevent.title}
             submitMe = {this.handleSubmitObscura}
@@ -851,7 +857,7 @@ class SearchPage extends Component {
             type = "trail"
             addEnabled = {this.state.trailPrevent.saved === false ? "inherit" : "none"}
             addDisabled = {this.state.trailPrevent.saved === true ? "inherit" : "none"}
-            userAdded = {this.state.trailPrevent.user}
+            userAdded = {this.state.trailPrevent.user + " on " + this.state.trailPrevent.date + "."}
             addedHelper = {this.state.trailPrevent.saved === true ? " was added by " : ""}
             titleAdded = {this.state.trailPrevent.title ? '"' + this.state.trailPrevent.title + '"' : this.state.trailPrevent.title}
             submitMe = {this.handleSubmitTrail}
