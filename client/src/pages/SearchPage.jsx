@@ -9,6 +9,9 @@ import RecDisplay from '../components/RecommendationDisplay/recDisplay'
 // import './main.css'
 import axios from 'axios'
 
+var moment = require('moment');
+moment().format();
+
 class SearchPage extends Component {
 
   // State
@@ -33,32 +36,38 @@ class SearchPage extends Component {
     foodPrevent: {
       saved: false,
       title: "",
-      user: ""
+      user: "",
+      date: ""
     },
     albumPrevent: {
       saved: false,
       title: "",
-      user: ""
+      user: "",
+      date: ""
     },
     bookPrevent: {
       saved: false,
       title: "",
-      user: ""
+      user: "",
+      date: ""
     },
     dailyPrevent: {
       saved: false,
       title: "",
-      user: ""
+      user: "",
+      date: ""
     },
     obscuraPrevent: {
       saved: false,
       title: "",
-      user: ""
+      user: "",
+      date: ""
     },
     trailPrevent: {
       saved: false,
       title: "",
-      user: ""
+      user: "",
+      date: ""
     }
    }
   //function to set the "product" state
@@ -69,7 +78,8 @@ class SearchPage extends Component {
     for (let z=0; z<res.data.length ; z++) {
     let productObject = {
         title: res.data[z].title,
-        user: res.data[z].username
+        user: res.data[z].username,
+        date: moment(res.data[z].dateCreated).format("MMM Do YYYY")
         }
       productArray.push(productObject);
       }
@@ -87,7 +97,8 @@ class SearchPage extends Component {
         this.setState({foodPrevent: {
           saved: true,
           title: this.state.randomRestaurant.title,
-          user: this.state.product[w].user  
+          user: this.state.product[w].user,
+          date: this.state.product[w].date 
         }
         
       })
@@ -97,7 +108,8 @@ class SearchPage extends Component {
         this.setState({foodPrevent: {
           saved: false,
           title: "",
-          user: "" 
+          user: "",
+          date: "" 
         }
       })
     }
@@ -112,7 +124,8 @@ class SearchPage extends Component {
         this.setState({albumPrevent: {
           saved: true,
           title: this.state.randomAlbum.title,
-          user: this.state.product[w].user  
+          user: this.state.product[w].user,
+          date: this.state.product[w].date  
         }
       })
       break;
@@ -121,7 +134,8 @@ class SearchPage extends Component {
         this.setState({albumPrevent: {
           saved: false,
           title: "",
-          user: "" 
+          user: "",
+          date: "" 
         }
       })
     }
@@ -136,7 +150,8 @@ class SearchPage extends Component {
         this.setState({bookPrevent: {
           saved: true,
           title: this.state.randomBook.title,
-          user: this.state.product[w].user  
+          user: this.state.product[w].user,
+          date: this.state.product[w].date   
         }
       })
       break;
@@ -145,7 +160,8 @@ class SearchPage extends Component {
         this.setState({bookPrevent: {
           saved: false,
           title: "",
-          user: "" 
+          user: "",
+          date: "" 
         }
       })
     }
@@ -161,7 +177,8 @@ class SearchPage extends Component {
         this.setState({dailyPrevent: {
           saved: true,
           title: this.state.randomDo512events.title,
-          user: this.state.product[w].user  
+          user: this.state.product[w].user,
+          date: this.state.product[w].date  
         }
       })
       break;
@@ -170,7 +187,8 @@ class SearchPage extends Component {
         this.setState({dailyPrevent: {
           saved: false,
           title: "",
-          user: "" 
+          user: "",
+          date: "" 
         }
       })
     }
@@ -186,7 +204,8 @@ class SearchPage extends Component {
         this.setState({obscuraPrevent: {
           saved: true,
           title: this.state.randomObscura.title,
-          user: this.state.product[w].user  
+          user: this.state.product[w].user,
+          date: this.state.product[w].date  
         }
       })
       break;
@@ -195,7 +214,8 @@ class SearchPage extends Component {
         this.setState({obscuraPrevent: {
           saved: false,
           title: "",
-          user: "" 
+          user: "",
+          date: "" 
         }
       })
     }
@@ -210,7 +230,8 @@ class SearchPage extends Component {
         this.setState({trailPrevent: {
           saved: true,
           title: this.state.randomTrail.title,
-          user: this.state.product[w].user  
+          user: this.state.product[w].user,
+          date: this.state.product[w].date 
         }
       })
       break;
@@ -219,7 +240,8 @@ class SearchPage extends Component {
         this.setState({trailPrevent: {
           saved: false,
           title: "",
-          user: "" 
+          user: "",
+          date: "" 
         }
       })
     }
@@ -283,7 +305,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-    this.loadRecommendations();
+    this.foodRandomizer();
   } 
   //scrape album recs and add new recs to the database
   albumScraper = async () => {
@@ -296,7 +318,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.loadRecommendations();
+      this.albumRandomizer();
   } 
   //scrape book recs and add new recs to the database
   bookScraper = async (event) => {
@@ -310,7 +332,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.loadRecommendations();
+      this.bookRandomizer();
   } 
   //scrape daily recs and add them to the database
   dailyScraper = async () => {
@@ -323,7 +345,7 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.loadRecommendations();
+      this.do512Randomizer();
   } 
   //delete all daily recs, scrape new recs and add these to the database
   do512Refresh = async (event) => {
@@ -406,7 +428,7 @@ class SearchPage extends Component {
       this.loadRecommendations();
   }  
     componentDidMount(){
-      this.loadRecommendations()
+      this.trailRandomizer()
     }
   //save a restaurant recommendation
   handleSubmitFood = async (event) => {
@@ -447,9 +469,8 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          //this.setState({productSuccess: 'true' });
-          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
-          // this.props.history.push('/home')
+          this.setProductState();
+          console.log(this.state.product);
         }
         // If Unsuccessful
         else{
@@ -485,9 +506,8 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          //this.setState({productSuccess: 'true' });
-          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
-          // this.props.history.push('/home')
+          this.setProductState();
+          console.log(this.state.product);
         }
         // If Unsuccessful
         else{
@@ -523,9 +543,8 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          //this.setState({productSuccess: 'true' });
-          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
-          // this.props.history.push('/home')
+          this.setProductState();
+          console.log(this.state.product);
         }
         // If Unsuccessful
         else{
@@ -561,9 +580,8 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          //this.setState({productSuccess: 'true' });
-          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
-          // this.props.history.push('/home')
+          this.setProductState();
+          console.log(this.state.product);
         }
         // If Unsuccessful
         else{
@@ -599,9 +617,8 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          //this.setState({productSuccess: 'true' });
-          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
-          // this.props.history.push('/home')
+          this.setProductState();
+          console.log(this.state.product);
         }
         // If Unsuccessful
         else{
@@ -647,9 +664,8 @@ class SearchPage extends Component {
         console.log(response)
         // If Successfully Posted
         if (response.status === 200){
-          //this.setState({productSuccess: 'true' });
-          console.log("IF YOU CAN SEE THIS, MAKE SURE THE DATABASE IS BEING UPDATED")
-          // this.props.history.push('/home')
+          this.setProductState();
+          console.log(this.state.product);
         }
         // If Unsuccessful
         else{
