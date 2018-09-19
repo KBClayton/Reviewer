@@ -303,8 +303,8 @@ module.exports = function(app) {
  app.post("/api/user/reset/", (req, res) => {
   let urlHelper = "http://localhost:3001"
   if (process.env.NODE_ENV === "production") {
-    urlHelper = "https://austin-reviews.herokuapp.com";
-    urlHelper=urlHelper+":"+toString(process.env.PORT)
+    urlHelper = "https://austin-reviews.herokuapp.com:";
+    urlHelper=urlHelper+PORT2
   }
   // console.log("in reset route")
   // console.log(req.body)
@@ -338,7 +338,7 @@ module.exports = function(app) {
         to: dbreply.email, // list of receivers
         subject: 'requested password reset', // Subject line
         text: 'Click the link reset your password, this link is only good for 1 hour', // plain text body
-        html: '<a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
+        html: '<p>Click the link reset your password, this link is only good for 1 hour</p><br><a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
       };
       // console.log(mailOptions)
       // console.log("past mailoptions, going inasdfsdfto transporter")
