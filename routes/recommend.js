@@ -8,10 +8,27 @@ const customHeaderRequest = request.defaults({
             'Connection': 'keep-alive'}
   });
 const Nightmare = require('nightmare');
-const nightmare = Nightmare({
-  loadTimeout: 30000,
+let nightmare = Nightmare({
+  gotoTimeout: 15000,
+  loadTimeout: 15000,
   executionTimeout: 12000
 });
+//import initNightmare from 'nightmare';
+
+// Some options I set for all instances
+//const nightmareOptions = {
+//  gotoTimeout: 10000,
+//  loadTimeout: 15000
+//};
+
+//class Nightmare {
+//  static getNewNightmare() {
+//    return initNightmare(nightmareOptions);
+//  }
+//}
+
+//export default Nightmare;
+
 const jquery = require("jquery");
 const cron = require('node-cron');
 //Food Helper Arrays
@@ -64,14 +81,17 @@ module.exports = function(app) {
       }).then(async function(response) {
             imgHelperFood = [];
             locHelperFood = [];
+            descHelperFood = [];
             console.log(linkHelperFood);
             for (let i = 0; i<linkHelperFood.length ; i++){
               await axios.get(linkHelperFood[i]).then(function(response) {
                 const $ = cheerio.load(response.data);
                 let chronImageFood = $("div.copy").children("div.imageRight").children("a").children("img").attr("src") ? "https://www.austinchronicle.com" + $("div.copy").children("div.imageRight").children("a").children("img").attr("src") : $("div.story-image.top-image").children("a.lightbox").attr("href") ? "https://www.austinchronicle.com" + $("div.story-image.top-image").children("a.lightbox").attr("href") : "https://via.placeholder.com/300x300";
                 let chronLocFood = $("div.description").children("b").text() ? $("div.description").children("b").text() : $("div.copy").children("h3").next("b").text() ? $("div.copy").children("h3").next("b").text() : "301 W 2nd St, Austin, TX 78701";
+                let chronDescFood = $("div.copy").children("p").first().text() ? $("div.copy").children("p").first().text() : "Sorry, no description is available. Please vist the link for more information";
                 imgHelperFood.push(chronImageFood);
                 locHelperFood.push(chronLocFood);
+                descHelperFood.push(chronDescFood);
                 console.log(i);
                 })
                 .catch(function(err) {
@@ -79,6 +99,8 @@ module.exports = function(app) {
                   imgHelperFood.push(chronImageFood);
                   chronLocFood = "301 W 2nd St, Austin, TX 78701";
                   locHelperFood.push(chronLocFood);
+                  chronDescFood = "Sorry, no description available. Please visit the link for more information";
+                  descHelperFood.push(chronDescFood)
                   console.log(err);
                   })
               };
@@ -102,10 +124,7 @@ module.exports = function(app) {
                 .replace("Restaurant Review: ", "")
                 .replace("Far Flung Correspondence: ", "")
                 .replace("Review: ", "");
-                result.description = $(this)
-                  .next("div.description")
-                  .text()
-                  .replace("?", "") + "...";
+                result.description = descHelperFood[i];
                 result.address = locHelperFood[i]
                   .split(", www")[0]
                   .split(", 512")[0]
@@ -165,7 +184,7 @@ module.exports = function(app) {
                   const $ = cheerio.load(response.data);
                   let chronImageMusic = $("div.copy").children("div.imageRight.top-image.sans-border").children("a.lightbox").attr("href") ? "https://www.austinchronicle.com" + $("div.copy").children("div.imageRight.top-image.sans-border").children("a.lightbox").attr("href") : "https://via.placeholder.com/300x300";
                   imgHelperMusic.push(chronImageMusic);
-                  let chronDescMusic = $("div.copy").children("p").text().split(".")[0] ? $("div.copy").children("p").text().split(".")[0] + "..." : "";
+                  let chronDescMusic = $("div.copy").children("p").text() ? $("div.copy").children("p").text() + ".." : "";
                   descHelperMusic.push(chronDescMusic);
                   console.log(i);
                   })
@@ -259,7 +278,7 @@ module.exports = function(app) {
               imgHelperBooks.push(chronImageBooks);
               let chronTitleBooks = $("div.copy").children("h3").children("i").text() ? $("div.copy").children("h3").children("i").text()  : "";
               titleHelperBooks.push(chronTitleBooks);
-              let chronSynBooks = $("div.copy").children("p").text().split(".")[1] ? $("div.copy").children("p").text().split(".")[0] + "." + $("div.copy").children("p").text().split(".")[1] + "..." : $("div.copy").children("p").text().split(".")[0] ? $("div.copy").children("p").text().split(".")[0] : "";
+              let chronSynBooks = $("div.copy").next("p").text() ? $("div.copy").next("p").text() + "..." :  "";
               synHelperBooks.push(chronSynBooks);
               let chronAuthBooks = $("div.copy").children("h3").next("b").text().replace("by ", "") ? $("div.copy").children("h3").next("b").text().replace("by ", "") : "";
               authorHelperBooks.push(chronAuthBooks);
@@ -736,81 +755,28 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/recommend/obscuraP1/images", function(req, res) {
-    nightmare
-      .goto("http://www.atlasobscura.com/things-to-do/austin-texas/places")
-      .wait(4000)
-      .evaluate(() => {
-        let collection = []
-        $("div.index-card-wrap").each(function(i, element) {
-          let obscureObject = {};
-          obscureObject.title = $(this)
-            .children("a.content-card-place")
-            .children("div.content-card-text")
-            .children("h3.content-card-title")
-            .children("span")
-            .text();
-          obscureObject.image = $(this)
-            .children("a.content-card-place")
-            .children("figure.content-card-figure")
-            .children("img")
-            .attr("data-src");
-          collection.push(obscureObject);
-      });
-      return collection})
-      .end()
-      .then(async function(response) {
-        let obImageArray = [];
-        console.log(response);
-        for (i=0; i<response.length; i++) {
-          await Recommend.findOneAndUpdate({title: response[i].title}, {image: response[i].image}).then((result) => {
-            obImageArray.push(response[i]);
-            //console.log(result)
-          }).catch(function(err) {
-            // If an error occurred, log it
-            console.log(err);
-              });
-        }
-        res.json(obImageArray);
-        console.log(obImageArray.length + " images added to db");
-        })
-        .catch(function(err) {
-          // If an error occurred, log it
-          console.log(err);
-        }).then(_ => {
-          // finally cleanup
-          nightmare.end();
-          // kill the Electron process explicitly to ensure no orphan child processes
-          nightmare.proc.disconnect();
-          nightmare.proc.kill();
-          nightmare.ended = true;
-          nightmare = null;
-        }).catch(function(err) {
-          // If an error occurred, log it
-          console.log(err);
-        });
-        nightmare.halt();
-      });
-  
-  
-  app.get("/recommend/obscuraP2/images", async function(req, res) {
+  app.get("/recommend/obscura/images", async function(req, res) {
+    //declare a new nightmare
+    let nightmare = Nightmare({
+      gotoTimeout: 15000,
+      loadTimeout: 15000,
+      executionTimeout: 12000
+    });
     console.log(req.query);
-    let titleHelper = req.query.title
-    let imageHelper = "";
+    let titleHelper = req.query.title;
     nightmare
       .goto(req.query.link)
       .wait(4000);
-    await nightmare.evaluate(() =>{
+    await nightmare.evaluate(() => {
         let obscureObject = {};
         obscureObject.image = $("figure.js-item-image.slick-slide.slick-current.slick-active")
           .children("a.js-trigger-lightbox.gallery-image-container")
           .children("img")
           .attr("src");
-          console.log(obscureObject.image + "HELLO HELLO HELLO");
-        return obscureObject
-      }).then(async (response) => {
+        return obscureObject;
+      }).then((response) => {
         console.log(response.image);
-        await Recommend.findOneAndUpdate({title: titleHelper}, {image: response.image}).then((result) => {
+        Recommend.findOneAndUpdate({title: titleHelper}, {image: response.image}).then(async(result) => {
             console.log(result);
             res.json(result);
             console.log("image added")
@@ -821,26 +787,28 @@ module.exports = function(app) {
     }).catch(function(err) {
       // If an error occurred, log it
       console.log(err);
-    }).then(() => {
+    });
       // finally cleanup
       nightmare.end();
       // kill the Electron process explicitly to ensure no orphan child processes
       nightmare.proc.disconnect();
       nightmare.proc.kill();
       nightmare.ended = true;
-    }).catch(function(err) {
-      // If an error occurred, log it
-      console.log(err);
-    });
-    nightmare.halt();
+      //set nightmare = null to kill the current nightmare
+      nightmare=null;
 });
         
-  app.get("/recommend/trails", function(req, res) {
+  app.get("/recommend/trails", async function(req, res) {
+    let nightmare = Nightmare({
+      gotoTimeout: 15000,
+      loadTimeout: 15000,
+      executionTimeout: 20000
+    });
     // First, we grab the body of the html with request
     nightmare
     .goto("https://www.alltrails.com/us/texas/austin")
     .wait(2000)
-    .evaluate(async() => {
+    await nightmare.evaluate(async() => {
       let collection =[];
       const objectA = $("section#nearby-trails").children("div").attr("data-react-props");
       const objectB = JSON.parse(objectA).results;
@@ -879,7 +847,6 @@ module.exports = function(app) {
         collection.push(trail);
     });
     return collection})
-    .end()
     .then(async function(result) {
       let trailArray = [];
       for (i=0; i<result.length ; i++) {
@@ -907,18 +874,16 @@ module.exports = function(app) {
       .catch(function(err) {
         // If an error occurred, log it
         console.log(err);
-      }).then(_ => {
+      });
         // finally cleanup
         nightmare.end();
         // kill the Electron process explicitly to ensure no orphan child processes
         nightmare.proc.disconnect();
         nightmare.proc.kill();
         nightmare.ended = true;
+        //set nightmare = null to kill the current nightmare
         nightmare = null;
-      }).catch(function(err) {
-        // If an error occurred, log it
-        console.log(err);
-      });
+      
     });
 
   //route to get all restaurant recommendations

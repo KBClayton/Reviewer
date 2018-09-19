@@ -200,40 +200,33 @@ class SearchPage extends Component {
       // If an error occurred, log it
       console.log(err);
       });
-      this.loadRecommendations();
+      this.obscuraRandomizer();
   }
   //scrape obscura images for current recs based on the boolean values of obscuraP1 and obscuraP2
   obscuraImager = async () => {
-    console.log(this.state.randomObscura);
-    if (this.state.randomObscura.obscuraP1 === true) {
-      await axios.get("recommend/obscuraP1/images", {
+    console.log(this.state.randomObscura)
+      await axios.get("recommend/obscura/images", {
         params: {
           title: this.state.randomObscura.title,
           link: this.state.randomObscura.link
         }
-      }).then(res => {
-      console.log(res);
-      console.log("OBSCURA IMAGE UPDATED (1)");
-    }).catch(function(err) {
-      // If an error occurred, log it
-      console.log(err);
-      });
-    }
-    else {
-      await axios.get("recommend/obscuraP2/images", {
-        params: {
-          title: this.state.randomObscura.title,
-          link: this.state.randomObscura.link
-        }
-      }).then(res => {
+      }).then(async res => {
         console.log(res);
-        console.log("OBSCURA IMAGE UPDATED (2)");
-      }).catch(function(err) {
+        console.log("OBSCURA IMAGE UPDATED");
+        await axios.get("/recommend/obscura/all")
+        .then(res => {
+          //console.log(res.data);
+          this.setState({obscura: res.data})
+          console.log("db updated");
+        }).catch(function(err) {
+          // If an error occurred, log it
+          console.log(err);
+          });
+        }).catch(function(err) {
         // If an error occurred, log it
         console.log(err);
-        });
-      }
-    this.obscuraRandomizer();
+      });
+      this.obscuraRandomizer();
     }
   //scrape trail recs and add new recs to the database
   trailScraper = async () => {
@@ -596,8 +589,8 @@ class SearchPage extends Component {
             title = {this.state.randomDo512events.title}
             author = {this.state.randomDo512events.location + " at " + this.state.randomDo512events.time}
             description = "Visit the link for event details"
-            storePrefix = {this.state.txAvailable == true ? " or get tickets " : "."}
-            store = "here"
+            storePrefix = {this.state.txAvailable === true ? " or get tickets " : "."}
+            store = {this.state.txAvailable === true ? "here" : ""}
             storeLink = {this.state.randomDo512events.ticketLink}
             storeSuffix = "."
             imageURL = {this.state.randomDo512events.image}
@@ -629,7 +622,7 @@ class SearchPage extends Component {
             type = "weird place"
             submitMe = {this.handleSubmitObscura}
             refresh = {this.obscuraRandomizer}
-            retrieveImage = ""
+            retrieveImage = {this.obscuraImager}
           /> : 
           <DefaultRecDisplay
             type = "weird places"
