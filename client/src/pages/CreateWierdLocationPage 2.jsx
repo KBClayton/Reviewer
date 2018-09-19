@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { withRouter } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
@@ -44,11 +44,11 @@ class CreateWierdLocation extends Component {
     
     axios.post('/api/product', newLocation)
       .then((response) => {
-        // console.log(response)
+        console.log(response)
         // If Successfully Posted
         if (response.status === 200){
           this.setState({productSuccess: 'true' });
-          this.props.history.push(`/searchResults/${response.data.title}`)
+          // this.props.history.push('/home')
         }
         // If Unsuccessful
         else{
@@ -64,7 +64,8 @@ class CreateWierdLocation extends Component {
   searchAPILocations = (event) => {
     event.preventDefault();
     if (this.state.location !== ''){
-    // console.log('You ran the function')
+    console.log('You ran the function')
+    var queryURL = ("https://en.wikipedia.org/w/api.php?format=json&titles=" + this.state.locationName + "&action=query&prop=extracts&exintro=&explaintext=");
     var queryURLBasic =   ("https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + this.state.locationName +"&srwhat=text&srprop=timestamp&continue=&format=json");
 
     axios({
@@ -72,7 +73,8 @@ class CreateWierdLocation extends Component {
       adapter: jsonpAdapter
       // callbackParamName: 'c' // optional, 'callback' by default
     }).then((res) => {
-      // console.log(res)
+      console.log(res)
+      const pageTitle = res.data.query.search[0].title
       const pageID = res.data.query.search[0].pageid
 
       axios({
@@ -84,14 +86,13 @@ class CreateWierdLocation extends Component {
         this.setState({description: annoyed})
       })
     });
-    let googleURL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" + this.state.locationName + "&inputtype=textquery&fieldsplace_id&locationbias=circle:2000@47.6918452,-122.2226413&key=AIzaSyCta4EWC0H7ZXJUnr4h2Dq7zD-d6LCa10A"
+    let googleURL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" + this.state.locationName +"&inputtype=textquery&fieldsplace_id&locationbias=circle:2000@47.6918452,-122.2226413&key=AIzaSyCta4EWC0H7ZXJUnr4h2Dq7zD-d6LCa10A"
     axios({
       url: googleURL,
       adapter: jsonpAdapter
     })
       .then((googleresponse) => {
-        // console.log('Google Response,')
-        // console.log(googleresponse)
+        console.log(googleresponse)
         if (googleresponse.data.results[0]){
           this.setState({address: googleresponse.data.results[0].formatted_address})          
         }

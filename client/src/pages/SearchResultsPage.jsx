@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
-import RateProductStars from '../components/RatingStars/ratingstars'
-import LinkWrapper from '../components/LinkWrapper/LinkWrapper'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+// import RateProductStars from '../components/RatingStars/ratingstars'
+// import LinkWrapper from '../components/LinkWrapper/LinkWrapper'
+import { Link } from 'react-router-dom'
 
 // import './main.css'
 import axios from 'axios'
-import RatingStars from '../components/RatingStars/ratingstars';
+// import RatingStars from '../components/RatingStars/ratingstars';
 
 class SearchResultsPage extends Component {
 
@@ -32,7 +32,7 @@ class SearchResultsPage extends Component {
 
         axios.post( `/api/product/search/${this.props.match.params.query}`, descriptionSearch)
         .then(res => {
-          console.log(this.props.match.params.query)
+          // console.log(this.props.match.params.query)
 
           if (res.data.length === 0){
             // console.log('failed')
@@ -54,7 +54,7 @@ class SearchResultsPage extends Component {
 
   componentDidMount(){
     this.setState({temp: this.props.match.params.query})
-    console.log(this.state.temp)
+    // console.log(this.state.temp)
     this.loadLocations();
   }
 
@@ -68,7 +68,7 @@ class SearchResultsPage extends Component {
     if (this.props.match.params.query !== this.state.temp){
       this.loadLocations();
     }
-    console.log(this)
+    // console.log(this)
 
     return (
       <div>          

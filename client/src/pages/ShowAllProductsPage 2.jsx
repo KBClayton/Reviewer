@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
-// import RateProductStars from '../components/RatingStars/ratingstars'
-// import LinkWrapper from '../components/LinkWrapper/LinkWrapper'
-import { Link } from 'react-router-dom'
+import RateProductStars from '../components/RatingStars/ratingstars'
+import LinkWrapper from '../components/LinkWrapper/LinkWrapper'
+import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 // import './main.css'
 import axios from 'axios'
-// import RatingStars from '../components/RatingStars/ratingstars';
+import RatingStars from '../components/RatingStars/ratingstars';
 
 class ShowAllProducts extends Component {
 
@@ -26,7 +26,7 @@ class ShowAllProducts extends Component {
     .then(res => {
     // console.log(res.data);
       this.setState({locations: res.data})
-      // console.log(this.state.locations)
+      console.log(this.state.locations)
     })
   }
 
@@ -40,7 +40,6 @@ class ShowAllProducts extends Component {
 
   // Render to Screen
   render() { 
-    // console.log(this.props)
     return (
       <div>          
         <Header 
@@ -67,8 +66,7 @@ class ShowAllProducts extends Component {
             </Link>
           </div>
         ))}
-        <Footer 
-        /> 
+        <Footer /> 
       </div>
       
     );

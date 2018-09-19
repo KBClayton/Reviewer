@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+// import { BrowserRouter, Route, Link } from 'react-router-dom'
 import './locationdisplay.css'
 
 // console.log(this.props.location.search);
@@ -10,11 +10,20 @@ const LocationDisplay = props => (
       <div className = 'card p-3 m-3 bg-light'>
       <div className="row">
         <div className="col-12">
-          <a href={`//${props.link}`} target='_blank' >
+          
+
+          
             <div className='p-2 bg-light border border-secondary text-dark mb-2'>
               <h3 className='mb-0 text-info'>
                 <b>
-                  {props.title}                   
+                {props.link ? (
+                    <a href={`//${props.link}`} target='_blank'>
+                     {props.title}
+                    </a>               
+                  ):(
+                    <div>{props.title}</div>
+                )}
+              
                 </b>
               </h3>
               <p className='mb-0'>
@@ -23,7 +32,7 @@ const LocationDisplay = props => (
                 </small>
               </p>
             </div>
-          </a>
+          
         </div>
       </div>
       <div className="row">
@@ -49,7 +58,7 @@ const LocationDisplay = props => (
             }
             <p>{props.noOfRatings}</p>
             {/* <button className=' mt-3 btn btn-outline-danger' onClick={props.SubmitHandler}>Submit Rating</button> */}
-
+            {props.submitButton}
           </div>
         </div>
       </div>

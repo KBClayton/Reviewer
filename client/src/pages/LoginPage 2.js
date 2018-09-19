@@ -3,7 +3,11 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
 import {
-  Redirect
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  withRouter
 } from "react-router-dom";
 
 
@@ -55,13 +59,13 @@ class LoginPage extends Component {
       return <Redirect to={from} />;
     }
     return (
-      <div>          
+      <div className = 'card mb-5'>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
 
-        <form className='container bg-info'>
+        <form className='container'>
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg}</p>
           <input 
             className='m-2'
