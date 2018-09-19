@@ -36,3 +36,9 @@
 .mt-30 {
   margin-top: 90px;
 }
+.loggedInUN {
+  letter-spacing: 3px;
+  color: orange;
+  padding-left: 1rem;
+
+}

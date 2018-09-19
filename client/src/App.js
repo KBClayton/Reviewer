@@ -1,8 +1,9 @@
+import './Main.css';
 import React, { Component } from 'react';
 
 
 import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
-import './Main.css';
+
 // import Homepage from './pages/Homepage';
 import AboutPage from './pages/About-Page';
 import CreateUserPage from './pages/CreateUserPage';
@@ -136,6 +137,7 @@ class App extends Component {
           <Route path='/reply/:_id' component= {ReplyPage} exact/>
           <PrivateRoute path='/chat' component = {Chat} exact/>
           <Route path='/api/user/resetreq/:name/:emailver' component={LoginPage} exact/>
+          <Route path='/api/user/verify/:account/:id' component={LoginPage} exact/>
           <Route path='*' component = {ShowAllProducts} name ='catchAll' />
 
         </Switch>
