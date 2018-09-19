@@ -50,7 +50,7 @@ class ShowAllProducts extends Component {
         <div className="container">
           <div className="row">
             {this.state.locations.map(location => (
-              <div key={location._id} className='col-md-6 col-lg-4 col-xl-3'>
+              <div key={location._id} className='col-md-6 col-lg-4'>
                 <Link to={'/location/' + location._id}>
                   <LocationDisplay
                     key = { location._id}
