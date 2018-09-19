@@ -48,10 +48,15 @@ const RecDisplay = props => (
             
         </div>
         <div>
-          <button className=' mt-3 btn btn-outline-danger' onClick={props.submitMe}>Add this {props.type} </button>
+          <button className=' mt-3 btn btn-outline-danger' style={{display: props.addEnabled}} onClick={props.submitMe}>Add this {props.type} </button>
           <button className=' mt-3 btn btn-outline-primary' onClick={props.refresh}>Show me a new {props.type} </button>
           <button className=' mt-3 btn btn-outline-success' style={{display: props.imageAvailable}} onClick={props.retrieveImage}>Refresh image</button>
           <button className=' mt-3 btn btn-outline-success' style={{display: props.areYou512}} onClick={props.refreshEvents}>Refresh events</button>
+        </div>
+        <div style={{display: props.addDisabled}}>
+          <small>
+            {props.titleAdded}{props.addedHelper}{props.userAdded}
+          </small>
         </div>
       </div>
     </div>
