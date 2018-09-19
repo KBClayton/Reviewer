@@ -25,18 +25,26 @@ class LoginPage extends Component {
     const { match: { params } } = this.props;
     if(params.name && params.emailver){
     axios.get( `/api/user/resetreq/${params.name}/${params.emailver}`)
-      .then(res => {
+      .then((res, err) => {
       // console.log(res.data);
       // console.log('Something Hapened')
+      if(res){
         this.setState({resetmessage: res.data.message})
+      }else if(err){
+        this.setState({resetmessage: "something went wrong"})
+      }
         // console.log(this.state.data.replies)
       })
     }else if(params.account && params.id){
       axios.get( `/api/user/verify/${params.account}/${params.id}`)
-      .then(res => {
+      .then((res,err) => {
       // console.log(res.data);
       // console.log('Something Hapened')
+      if(res){
         this.setState({resetmessage: res.data.message})
+      }else if(err){
+        this.setState({resetmessage: "something went wrong"})
+      }
         // console.log(this.state.data.replies)
       })
     }

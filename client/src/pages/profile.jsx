@@ -5,9 +5,11 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
 import axios from 'axios'
+import CommentDisplay from '../components/Comments/Comments'
 // import { BrowserRouter, Route, Link } from 'react-router-dom'
 // import CreateUserForm from '../components/CreateUserForm/createuserform';
-
+var moment = require('moment');
+moment().format();
 
 class ProfilePage extends Component {
   // super(props)
@@ -23,17 +25,20 @@ state = {
     emailVerified: false,
     locations:[],
     comments:[],
-    replys:[],
+    replies:[],
     reviews:[],
     ratings:[],
+    avgProdRate:0,
+    revUp:0,
+    revDown:0
    }
 
  //get the user's data
  loadProfile = () => {
     axios.get( `/api/user/allstuff`)
       .then(res => {
-      console.log("returned data from get")
-      console.log(res.data);
+      //console.log("returned data from get")
+      //console.log(res.data);
       // console.log('Something Hapened')
         this.setState({username:res.data.username})
         this.setState({email:res.data.email})
@@ -44,7 +49,14 @@ state = {
         this.setState({productRating: res.data.productRatings})
         this.setState({title:res.data.username+"'s Profile"})
         this.setState({ratings:res.data.reviewRatings})
-        console.log(this.state);
+        this.setState({replies:res.data.replies})
+        //console.log(this.state);
+        axios.get('/api/user/averagereview').then(res=>{
+            console.log(res)
+            this.setState({avgProdRate:res.data.averageProductRating})
+            this.setState({revDown:res.data.revDown})
+            this.setState({revUp:res.data.revUp})
+        })
         // console.log(this.state.comments.length)
         //this.calculateRating();
     })
@@ -162,7 +174,7 @@ state = {
 
         {this.state.locations.length > 0 ? (
             <div>
-            <h4>You have posted {this.state.locations.length} wierd things</h4>
+            <h4 className='text-center'>You have posted {this.state.locations.length} wierd things</h4>
             {this.state.locations.map(location => (
             <div key={location._id}>
                 <Link to={'/location/' + location._id}>
@@ -188,24 +200,50 @@ state = {
         )
         }
         {this.state.reviews.length>0?(
-            <h4>You have reviewed {this.state.reviews.length} wierd things</h4>
+            <div>
+                <h4 className='text-center'>You have reviewed {this.state.reviews.length} wierd things</h4>
+                {this.state.reviews.map(review => (
+                    <CommentDisplay
+                    key = {review._id}
+                    id = {review._id}
+                    textComment = {review.text}
+                    replies = {review.replies}
+                    onChange={e => this.setState({ newReply: e.target.value})}
+                    CommentType = {'Reply - ' + review.username + ' ' + moment(review.dateCreated).format("MMM Do YYYY")}
+        
+                    />
+                ))}  
+            </div>
         ):(
             <p className='text-center text-danger'>You have not reviewd anything</p>
         )}
         {this.state.comments.length>0?(
-            <h4>You have commented on {this.state.comments.length} reviews</h4>
-        ):(
-            <p className='text-center text-danger'>You have not commented on anything</p>
-        )}
-        {this.state.reviews.length>0?(
-            <h4>You have commented on {this.state.comments.length} reviews</h4>
+            <div>
+            <h4 className='text-center'>You have commented on {this.state.comments.length} reviews</h4>
+            {this.state.replies.map(review => (
+            <CommentDisplay
+              key = {review._id}
+              id = {review._id}
+              textComment = {review.text}
+              replies = {review.replies}
+              onChange={e => this.setState({ newReply: e.target.value})}
+              CommentType = {'Reply - ' + review.username + ' ' + moment(review.dateCreated).format("MMM Do YYYY")}
+
+            />
+          ))}   
+            </div>
         ):(
             <p className='text-center text-danger'>You have not commented on anything</p>
         )}
         {this.state.ratings.length>0?(
-            <h4>You have rated {this.state.ratings.length} wierd things</h4>
+            <h4 className='text-center'>You have rated {this.state.ratings.length} wierd things, with an average rating of {this.state.avgProdRate} </h4>
         ):(
             <p className='text-center text-danger'>You have not rated anything</p>
+        )}
+        {this.state.reviews.length>0?(
+            <h4 className='text-center'>You have rated {this.state.comments.length} reviews with {this.state.revUp} thumps up and {this.state.revDown} thumbs down</h4>
+        ):(
+            <p className='text-center text-danger'>You have not rated any reviews</p>
         )}
 
 
