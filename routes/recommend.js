@@ -329,8 +329,7 @@ module.exports = function(app) {
                 result.address = bookAddressArray[u];
                 result.lat = bookLatArray[u];
                 result.long = bookLongArray[u];
-                result.ticketLink = bookStoreNameArray[u] === "BookPeople" ? bookTicketLinkArray[u] + 
-                "/search/site/" + result.title.replace(/\ /g, "%20")
+                result.ticketLink = bookStoreNameArray[u] === "BookPeople" ? bookTicketLinkArray[u] + "/search/site/" + result.title.replace(/\ /g, "%20")
                   .replace(/\,/g, "%2C")
                   .replace(/\:/g, "%3A")
                   .replace(/\$/g, "%24")
