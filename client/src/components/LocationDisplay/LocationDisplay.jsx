@@ -66,9 +66,9 @@ const LocationDisplay = props => (
         <p style = {{textDecoration: 'none'}} className='text-secondary text-center'><small><span className='font-weight-bold'> {props.lengthNo}</span> Comments</small></p>
           
               
-        {props.noOfRatings === 0 &&
+        {/* {props.noOfRatings === 0 &&
           <p style = {{textDecoration: 'none'}} className = 'mb-0'><b>{props.Rating} Lemon</b></p>
-        }
+        } */}
         
         {/* <button className=' mt-3 btn btn-outline-danger' onClick={props.SubmitHandler}>Submit Rating</button> */}
         {props.submitButton}
