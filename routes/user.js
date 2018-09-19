@@ -58,7 +58,7 @@ module.exports = function(app) {
         to: user.email, // list of receivers
         subject: 'Verify Account', // Subject line
         text: 'Click the link to verify your account', // plain text body
-        html: '<a href="'+urlHelper+'/api/user/verify/'+user.username+`/`+string+'" target="_blank"><b>Verify me</b></a>' // html body
+        html: '<p>Hello '+user.username+', click the link to verify your email account</p><br><a href="'+urlHelper+'/api/user/verify/'+user.username+`/`+string+'" target="_blank"><b>Verify me</b></a>' // html body
       };
 
       //console.log(user);
@@ -77,7 +77,8 @@ module.exports = function(app) {
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-              return console.log(error);
+              console.log(error);
+
           }
           console.log('Message sent: %s'+info.messageId);
           // Preview only available when sending through an Ethereal account
@@ -124,7 +125,7 @@ module.exports = function(app) {
       //console.log(vault.read(req))
     User.findOne({
       username: req.body.username
-    }, (err, user) => {
+    },  (err, user) => {
       if(!user){
         res.status(401).send({success: false, message: "wrong username"});
       } else {
@@ -233,7 +234,7 @@ module.exports = function(app) {
       res.status(401).send({success: false, message: "you are not logged in"});
       return;
     }
-    User.findOne({_id:req.session.uid})
+    User.findOne({_id:req.session.uid}, 'username roles picture email emailVerified averageRating products reviews chats replies productRatings reviewRatings')
     .populate("products")
     .populate("reviews")
     .populate("replies")
@@ -250,17 +251,33 @@ module.exports = function(app) {
     // );
   })
 
+  app.get("/api/user/alluser", async (req, res) => {
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
+    User.find({}, 'username roles picture email emailVerified averageRating products reviews chats replies productRatings reviewRatings')
+    .exec( function(err, dbreply) {
+      if (err) {res.json(err)};
+      res.json(dbreply);
+    });
+  })
+
   app.get("/api/user/averagereview", (req, res) => {
-    User.findOne({_id:req.session.uid})
+    let prodAvg=0;
+    let revUp=0;
+    let revDown=0;
+    User.findOne({_id:req.session.uid}, 'averageRating  productRatings reviewRatings')
     .populate("productRatings")
     .populate("reviewRatings")
-    .exec(function(err, dbreply) {
+    .then((dbreply, err)=> {
       if(err){
         res.json(err)
       }
-      let prodAvg=0;
-      let revAvg=0
-      //console.log(dbreply);
+      // console.log("in average reveiw exec")
+      // console.log(dbreply);
+      if(dbreply){
       if(dbreply.productRatings){
         for(let i=0; i<dbreply.productRatings.length; i++){
           prodAvg+=dbreply.productRatings[i].rating;
@@ -268,12 +285,19 @@ module.exports = function(app) {
       }
       if(dbreply.reviewRatings){
         for(let i=0; i<dbreply.reviewRatings.length; i++){
-          revAvg+=dbreply.reviewRatings[i].rating;
+          if(dbreply.reviewRatings[i].rating===-1){
+            revDown++
+          }else if (dbreply.reviewRatings[i].rating===1){
+            revUp++
+          }
         }
       }
       prodAvg=prodAvg/dbreply.productRatings.length;
-      revAvg=revAvg/dbreply.reviewRatings.length;
-      res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, averageReviewRating: revAvg, numberReviewRatings:dbreply.reviewRatings.length})      
+
+      // console.log(revDown)
+      // console.log(revUp)
+      }
+      res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, revUp: revUp, revDown:revDown, numberReviewRatings:dbreply.reviewRatings.length})      
     })
   })
 
@@ -284,7 +308,7 @@ module.exports = function(app) {
     }
     //console.log("in verify route")
     //console.log(req.params)
-    User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.id}, {username:req.params.name}]}, {emailVerified:true, emailVerifyKey:null},{upsert:true}).then((err, dbreply) =>{
+    User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.id}, {username:req.params.name}]}, {emailVerified:true, emailVerifyKey:null},{upsert:true}).then((dbreply, err) =>{
       // if(err){
       //   console.log(err)
       //   res.set('Content-Type', 'text/html');
@@ -292,10 +316,14 @@ module.exports = function(app) {
       // }
       if(dbreply){
         if(dbreply.emailVerified===true){
-          res.set('Content-Type', 'text/html');
-          res.send(new Buffer(`<h2>Your email has been verified, <a href="${urlHelper}" target="_blank">go to main page.</a></h2>`));
-          //res.json({sucess:true, message:"Your email has been verified"})
+          // res.set('Content-Type', 'text/html');
+          // res.send(new Buffer(`<h2>Your email has been verified, <a href="${urlHelper}" target="_blank">go to main page.</a></h2>`));
+          res.json({sucess:true, message:"Your email has been verified"})
+
         }
+      }else if(err){
+        res.json({sucess:false, message:"something wen wrong"})
+        //res.json(err)
       }
     })
   })
@@ -338,7 +366,7 @@ module.exports = function(app) {
         to: dbreply.email, // list of receivers
         subject: 'requested password reset', // Subject line
         text: 'Click the link reset your password, this link is only good for 1 hour', // plain text body
-        html: '<p>Click the link reset your password, this link is only good for 1 hour</p><br><a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
+        html: '<p>Hello '+dbreply.username+',click the link reset your password, this link is only good for 1 hour</p><br><a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
       };
       // console.log(mailOptions)
       // console.log("past mailoptions, going inasdfsdfto transporter")

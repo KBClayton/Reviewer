@@ -41,7 +41,11 @@ const Auth = {
         for(let i=0; i<cookieArray.length; i++){
         //console.log("in cookiearray if")
           if(cookieArray[i]==="username"){
-            username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+            if(cookieArray[i+1][cookieArray[i+1].length]===";"){
+              username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+            }else{
+              username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+            }
           }
           if(cookieArray[i]==="port"){
             port=parseInt(cookieArray[i+1])
@@ -137,6 +141,7 @@ class App extends Component {
           <Route path='/reply/:_id' component= {ReplyPage} exact/>
           <PrivateRoute path='/chat' component = {Chat} exact/>
           <Route path='/api/user/resetreq/:name/:emailver' component={LoginPage} exact/>
+          <Route path='/api/user/verify/:account/:id' component={LoginPage} exact/>
           <Route path='*' component = {ShowAllProducts} name ='catchAll' />
 
         </Switch>
