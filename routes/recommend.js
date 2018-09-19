@@ -333,13 +333,13 @@ module.exports = function(app) {
                     .text()
                     .split(' by ' + result.location)[0]
                       : titleHelperBooks[i].split(' by ' + result.location)[0];
-                result.description = /*synHelperBooks[i] === ""
-                  ? $(this)
+                result.description = synHelperBooks[i] === ""
+                ? $(this)
+                  .next("div.description")
+                  .text()
+                    : titleHelperBooks[i].split(" ")[0] == $(this)
                     .next("div.description")
-                    .text()
-                      : titleHelperBooks[i].split(" ")[0] == $(this)
-                      .next("div.description")
-                      .text() ? synHelperBooks[i] :*/ synHelperBooks[i];
+                    .text() ? synHelperBooks[i] : synHelperBooks[i];
                 result.link = linkHelperBooks[i];
                 result.image = imgHelperBooks[i];
                 result.address = bookAddressArray[u];
