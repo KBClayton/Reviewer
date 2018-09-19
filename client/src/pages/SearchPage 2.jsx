@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 // import { Redirect, withRouter } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
+import RecommendationDisplay from '../components/RecommendationDisplay/recommendationDisplay'
 import DefaultRecDisplay from '../components/RecommendationDisplay/defaultRecDisplay'
-import RecDisplay from '../components/RecommendationDisplay/recDisplay'
-// import { BrowserRouter, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 // import './main.css'
 import axios from 'axios'
@@ -26,9 +26,9 @@ class SearchPage extends Component {
     randomBook: {},
     randomDo512events: {},
     randomObscura: {},
-    randomTrail: {},
-    obscuraImageAvailable: true,
-    txAvailable: false
+    randomTrail: {}
+
+
    }
 
   //set new randomRestaurant
@@ -47,15 +47,13 @@ class SearchPage extends Component {
     console.log(this.state.randomBook);
   }
   //set new randomDo512events
-  do512Randomizer = async () => {
-    await this.setState({randomDo512events: this.state.do512events[Math.floor(Math.random()*this.state.do512events.length)]})
-    this.state.randomDo512events ? this.state.randomDo512events.ticketLink ? this.setState({txAvailable: true}) : this.setState({txAvailable: false}) : console.log("efforting");
+  do512Randomizer = () => {
+    this.setState({randomDo512events: this.state.do512events[Math.floor(Math.random()*this.state.do512events.length)]})
     console.log(this.state.randomDo512events);
   }
   //set new randomRandomObscura
-  obscuraRandomizer = async () => {
-    await this.setState({randomObscura: this.state.obscura[Math.floor(Math.random()*this.state.obscura.length)]})
-    this.state.randomObscura ? this.state.randomObscura.image  == "https://via.placeholder.com/300x300" ? this.setState({obscuraImageAvailable: false}) : this.setState({obscuraImageAvailable: true}) : console.log("efforting");
+  obscuraRandomizer = () => {
+    this.setState({randomObscura: this.state.obscura[Math.floor(Math.random()*this.state.obscura.length)]})
     console.log(this.state.randomObscura);
   }
   //set new randomTrail
@@ -111,7 +109,7 @@ class SearchPage extends Component {
   //scrape restaurant recs and add new recs to the database
   foodScraper = async () => {
     document.getElementById("findFood").style.display="none";
-    document.getElementById("foodDefaultMessage").innerText="Currently searching for restaurant recommendations, the page will reload automatically when recommendations are found."
+    document.getElementById("defaultCardText").innerText="Currently searching for restaurant recommendations, the page will reload automatically when recommendations are found."
     await axios.get("recommend/acFood").then(res => {
       console.log(res);
       console.log("RESTAURANT RECS UPDATED");
@@ -124,7 +122,7 @@ class SearchPage extends Component {
   //scrape album recs and add new recs to the database
   albumScraper = async () => {
     document.getElementById("findAlbums").style.display="none";
-    document.getElementById("musicDefaultMessage").innerText="Currently searching for album recommendations, the page will reload automatically when recommendations are found."
+    document.getElementById("defaultCardText").innerText="Currently searching for album recommendations, the page will reload automatically when recommendations are found."
     await axios.get("recommend/acMusic").then(res => {
       console.log(res);
       console.log("ALBUM RECS UPDATED");
@@ -138,7 +136,7 @@ class SearchPage extends Component {
   bookScraper = async (event) => {
     event.preventDefault();
     document.getElementById("findBooks").style.display="none";
-    document.getElementById("bookDefaultMessage").innerText="Currently searching for book recommendations, the page will reload automatically when recommendations are found."
+    document.getElementById("defaultCardText").innerText="Currently searching for book recommendations, the page will reload automatically when recommendations are found."
     await axios.get("recommend/acBooks").then(res => {
       console.log(res);
       console.log("BOOK RECS UPDATED");
@@ -152,7 +150,7 @@ class SearchPage extends Component {
   dailyScraper = async () => {
     await axios.get("recommend/daily").then(res => {
       document.getElementById("findDaily").style.display="none";
-      document.getElementById("dailyDefaultMessage").innerText="Currently searching for event recommendations, the page will reload automatically when recommendations are found."
+      document.getElementById("defaultCardText").innerText="Currently searching for event recommendations, the page will reload automatically when recommendations are found."
       console.log(res);
       console.log("DAILY RECS UPDATED");
     }).catch(function(err) {
@@ -161,31 +159,10 @@ class SearchPage extends Component {
       });
       this.loadRecommendations();
   } 
-  //delete all daily recs, scrape new recs and add these to the database
-  do512Refresh = async (event) => {
-    event.preventDefault();
-    await axios.delete("recommend/daily/delete").then(async res => {
-      console.log(res);
-      console.log("YESTERDAY'S RECS DELETED");
-      await axios.get("recommend/daily").then(res => {
-        //document.getElementById("findDaily").style.display="none";
-        //document.getElementById("dailyDefaultMessage").innerText="Currently searching for event recommendations, the page will reload automatically when recommendations are found."
-        console.log(res);
-        console.log("DAILY RECS UPDATED");
-      }).catch(function(err) {
-        // If an error occurred, log it
-        console.log(err);
-        });
-    }).catch(function(err) {
-      // If an error occurred, log it
-      console.log(err);
-      });
-      this.do512Randomizer();
-  } 
   //scrape obscura recs from both pages, add appropriate images and add new recs to the database
   obscuraScraper = async () => {
     document.getElementById("findObscura").style.display="none";
-    document.getElementById("obscuraDefaultMessage").innerText="Currently searching for recommendations, the page will reload automatically when recommendations are found."
+    document.getElementById("defaultCardText").innerText="Currently searching for recommendations, the page will reload automatically when recommendations are found."
     await axios.get("recommend/obscuraP1").then(async res1 => {
       console.log(res1);
       console.log("OBSCURA STEP 1 COMPLETE");
@@ -202,43 +179,10 @@ class SearchPage extends Component {
       });
       this.loadRecommendations();
   }
-  //scrape obscura images for current recs based on the boolean values of obscuraP1 and obscuraP2
-  obscuraImager = async () => {
-    console.log(this.state.randomObscura);
-    if (this.state.randomObscura.obscuraP1 === true) {
-      await axios.get("recommend/obscuraP1/images", {
-        params: {
-          title: this.state.randomObscura.title,
-          link: this.state.randomObscura.link
-        }
-      }).then(res => {
-      console.log(res);
-      console.log("OBSCURA IMAGE UPDATED (1)");
-    }).catch(function(err) {
-      // If an error occurred, log it
-      console.log(err);
-      });
-    }
-    else {
-      await axios.get("recommend/obscuraP2/images", {
-        params: {
-          title: this.state.randomObscura.title,
-          link: this.state.randomObscura.link
-        }
-      }).then(res => {
-        console.log(res);
-        console.log("OBSCURA IMAGE UPDATED (2)");
-      }).catch(function(err) {
-        // If an error occurred, log it
-        console.log(err);
-        });
-      }
-    this.obscuraRandomizer();
-    }
   //scrape trail recs and add new recs to the database
   trailScraper = async () => {
     document.getElementById("findTrails").style.display="none";
-    document.getElementById("trailDefaultMessage").innerText="Currently searching for trail recommendations, the page will reload automatically when recommendations are found."
+    document.getElementById("defaultCardText").innerText="Currently searching for trail recommendations, the page will reload automatically when recommendations are found."
     await axios.get("recommend/trails").then(res => {
       console.log(res);
       console.log("TRAIL RECS UPDATED");
@@ -256,8 +200,8 @@ class SearchPage extends Component {
     event.preventDefault();
     //GEOCODING API CALL GOES HERE
     let addressArray = this.state.randomRestaurant.address.split(",");
-    let addressHelper = addressArray.length === 1 ? this.state.randomRestaurant.address + " Austin TX" : this.state.randomRestaurant.address + " TX";
-    let formattedAddress = addressHelper.split(' ').length === 3 ? "Austin+TX" : addressHelper.replace(/\./g, "").split(' ').join('+');
+    let addressHelper = addressArray.length == 1 ? this.state.randomRestaurant.address + " Austin TX" : this.state.randomRestaurant.address + " TX";
+    let formattedAddress = addressHelper.split(' ').length == 3 ? "Austin+TX" : addressHelper.replace(/\./g, "").split(' ').join('+');
     let finalAddress = formattedAddress.split('+').join(' ')
     console.log(formattedAddress);
     let googleHelper = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + formattedAddress + "key=AIzaSyDoQLe8s7JUbTZ_ubXhGY4cUmLiNqWvQxw"
@@ -279,7 +223,7 @@ class SearchPage extends Component {
       description: this.state.randomRestaurant.description,
       picture: this.state.randomRestaurant.image,
       link: this.state.randomRestaurant.link,
-      address: addressHelper.split(' ').length === 3 ? this.state.randomRestaurant.address : finalAddress,
+      address: addressHelper.split(' ').length == 3 ? this.state.randomRestaurant.address : finalAddress,
       gpsdata: this.state.gpsdata
     }
 
@@ -515,17 +459,15 @@ class SearchPage extends Component {
           subpage = {this.state.subpage}
         />
           {this.state.randomRestaurant ? 
-          <RecDisplay
+          <RecommendationDisplay
             key = { this.state.randomRestaurant._id}
             id = {this.state.randomRestaurant._id}
             link = {this.state.randomRestaurant.link}
             title = {this.state.randomRestaurant.title}
             description = {this.state.randomRestaurant.description}
             urlLink = {this.state.randomRestaurant.link}
-            imageURL = {this.state.randomRestaurant.image}
-            imageAvailable = "none"
+            imageLink = {this.state.randomRestaurant.image}
             address = {this.state.randomRestaurant.address}
-            areYou512 = "none"
             type = "restaurant" 
             submitMe = {this.handleSubmitFood}
             refresh = {this.foodRandomizer}
@@ -534,24 +476,17 @@ class SearchPage extends Component {
             type = "restaurants"
             buttonID = "findFood"
             recScraper = {this.foodScraper}
-            pID = "foodDefaultMessage"
           />}
           {this.state.randomAlbum ? 
-          <RecDisplay
+          <RecommendationDisplay
             key = { this.state.randomAlbum._id}
             id = {this.state.randomAlbum._id}
             link = {this.state.randomAlbum.link}
             title = {this.state.randomAlbum.location}
-            author = {this.state.randomAlbum.title}
-            description = {this.state.randomAlbum.description}
-            storePrefix = "pick up a copy at "
-            store = {this.state.randomAlbum.storeName}
-            storeSuffix = "."
-            storeLink = {this.state.randomAlbum.ticketLink}
-            imageURL = {this.state.randomAlbum.image}
-            imageAvailable = "none"
+            description = {this.state.randomAlbum.description + "pick up a copy at " + this.state.randomAlbum.storeName + "."}
+            urlLink = {this.state.randomAlbum.link}
+            imageLink = {this.state.randomAlbum.image}
             address = {this.state.randomAlbum.address}
-            areYou512 = "none"
             type = "album"
             submitMe = {this.handleSubmitMusic}
             refresh = {this.albumRandomizer}
@@ -560,24 +495,17 @@ class SearchPage extends Component {
             type = "albums"
             buttonID = "findAlbums"
             recScraper = {this.albumScraper}
-            pID = "musicDefaultMessage"
           />}
           {this.state.randomBook ? 
-          <RecDisplay
+          <RecommendationDisplay
             key = { this.state.randomBook._id}
             id = {this.state.randomBook._id}
             link = {this.state.randomBook.link}
             title = {this.state.randomBook.title}
-            author = {this.state.randomBook.location}
-            description = {this.state.randomBook.description}
-            storePrefix = "pick up a copy at "
-            store = {this.state.randomBook.storeName}
-            storeSuffix = "."
-            storeLink = {this.state.randomBook.ticketLink}
-            imageURL = {this.state.randomBook.image}
-            imageAvailable = "none"
+            description = {this.state.randomBook.description + "pick up a copy at " + this.state.randomBook.storeName + "."}
+            urlLink = {this.state.randomBook.link}
+            imageLink = {this.state.randomBook.image}
             address = {this.state.randomBook.address}
-            areYou512 = "none"
             type = "book"
             submitMe = {this.handleSubmitBook}
             refresh = {this.bookRandomizer}
@@ -586,69 +514,55 @@ class SearchPage extends Component {
             type = "books"
             buttonID = "findBooks"
             recScraper = {this.bookScraper}
-            pID = "bookDefaultMessage"
           />}
           {this.state.randomDo512events ?
-          <RecDisplay
+          <RecommendationDisplay
             key = { this.state.randomDo512events._id}
             id = {this.state.randomDo512events._id}
             link = {this.state.randomDo512events.link}
             title = {this.state.randomDo512events.title}
-            author = {this.state.randomDo512events.location + " at " + this.state.randomDo512events.time}
-            description = "Visit the link for event details"
-            storePrefix = {this.state.txAvailable == true ? " or get tickets " : "."}
-            store = "here"
-            storeLink = {this.state.randomDo512events.ticketLink}
-            storeSuffix = "."
-            imageURL = {this.state.randomDo512events.image}
-            imageAvailable = "none"
+            description = {this.state.randomDo512events.location + " at " + this.state.randomDo512events.time}
+            urlLink = {this.state.randomDo512events.link}
+            imageLink = {this.state.randomDo512events.image}
             address = {this.state.randomDo512events.address}
-            areYou512 = "inherit"
             type = "event"
             submitMe = {this.handleSubmitDo512}
             refresh = {this.do512Randomizer}
-            refreshEvents = {this.do512Refresh}
           /> : 
           <DefaultRecDisplay
             type = "events"
             buttonID = "findDaily"
             recScraper = {this.dailyScraper}
-            pID = "dailyDefaultMessage"
           />}
           {this.state.randomObscura ? 
-          <RecDisplay
+          <RecommendationDisplay
             key = { this.state.randomObscura._id}
             id = {this.state.randomObscura._id}
             link = {this.state.randomObscura.link}
             title = {this.state.randomObscura.title}
             description = {this.state.randomObscura.description}
-            imageURL = {this.state.randomObscura.image}
-            imageAvailable = {this.state.obscuraImageAvailable == true ? "none" : "inherit"}
+            urlLink = {this.state.randomObscura.link}
+            imageLink = {this.state.randomObscura.image}
             address = {this.state.randomObscura.address}
-            areYou512 = "none"
             type = "weird place"
             submitMe = {this.handleSubmitObscura}
             refresh = {this.obscuraRandomizer}
-            retrieveImage = ""
           /> : 
           <DefaultRecDisplay
             type = "weird places"
             buttonID = "findObscura"
             recScraper = {this.obscuraScraper}
-            pID = "obscuraDefaultMessage"
           />}
           {this.state.randomTrail ?
-          <RecDisplay
+          <RecommendationDisplay
             key = { this.state.randomTrail._id}
             id = {this.state.randomTrail._id}
             link = {this.state.randomTrail.link}
             title = {this.state.randomTrail.title}
-            author = {"at " + this.state.randomTrail.location}
             description = {"Located at " + this.state.randomTrail.location + ", " + this.state.randomTrail.title + " " + this.state.randomTrail.description}
-            imageURL = {this.state.randomTrail.image}
-            imageAvailable = "none"
+            urlLink = {this.state.randomTrail.link}
+            imageLink = {this.state.randomTrail.image}
             address = {this.state.randomTrail.address}
-            areYou512 = "none"
             type = "trail"
             submitMe = {this.handleSubmitTrail}
             refresh = {this.trailRandomizer}
@@ -657,7 +571,6 @@ class SearchPage extends Component {
             type = "trails"
             buttonID = "findTrails"
             recScraper = {this.trailScraper}
-            pID = "trailDefaultMessage"
           />}
         <Footer /> 
       </div>

@@ -18,6 +18,8 @@ const recommendSchema = new Schema ({
   music: { type: Boolean, required: true, default: false},
   books: { type: Boolean, required: true, default: false },
   obscura: { type: Boolean, required: true, default: false},
+  obscuraP1: { type: Boolean, required: true, default: false},
+  obscuraP2: { type: Boolean, required: true, default: false},
   outdoor: { type: Boolean, required: true, default: false},
   artsEvent: { type: Boolean, required: true, default: false},
 })
