@@ -58,7 +58,7 @@ module.exports = function(app) {
         to: user.email, // list of receivers
         subject: 'Verify Account', // Subject line
         text: 'Click the link to verify your account', // plain text body
-        html: '<a href="'+urlHelper+'/api/user/verify/'+user.username+`/`+string+'" target="_blank"><b>Verify me</b></a>' // html body
+        html: '<p>Hello '+user.username+', click the link to verify your email account</p><br><a href="'+urlHelper+'/api/user/verify/'+user.username+`/`+string+'" target="_blank"><b>Verify me</b></a>' // html body
       };
 
       //console.log(user);
@@ -284,7 +284,7 @@ module.exports = function(app) {
     }
     //console.log("in verify route")
     //console.log(req.params)
-    User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.id}, {username:req.params.name}]}, {emailVerified:true, emailVerifyKey:null},{upsert:true}).then((err, dbreply) =>{
+    User.findOneAndUpdate( {$and:[{emailVerifyKey:req.params.id}, {username:req.params.name}]}, {emailVerified:true, emailVerifyKey:null},{upsert:true}).then((dbreply, err) =>{
       // if(err){
       //   console.log(err)
       //   res.set('Content-Type', 'text/html');
@@ -295,9 +295,11 @@ module.exports = function(app) {
           // res.set('Content-Type', 'text/html');
           // res.send(new Buffer(`<h2>Your email has been verified, <a href="${urlHelper}" target="_blank">go to main page.</a></h2>`));
           res.json({sucess:true, message:"Your email has been verified"})
+
         }
       }else if(err){
-        res.json(err)
+        res.json({sucess:false, message:"something wen wrong"})
+        //res.json(err)
       }
     })
   })
