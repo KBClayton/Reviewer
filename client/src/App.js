@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 
-import { BrowserRouter, Route, Switch, Redirect, withRouter, Link} from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
 import './Main.css';
-import Homepage from './pages/Homepage';
+// import Homepage from './pages/Homepage';
 import AboutPage from './pages/About-Page';
 import CreateUserPage from './pages/CreateUserPage';
 import CreateWierdLocation from './pages/CreateWierdLocationPage';
@@ -13,35 +13,34 @@ import ShowOneLocation from './pages/AddCommentPage'
 import SearchPage from './pages/SearchPage';
 import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
-import requireAuth from './components/Auth';
+// import requireAuth from './components/Auth';
 import SearchResultsPage from './pages/SearchResultsPage';
 
 import ProfilePage from './pages/profile'
+// import { ENETRESET } from 'constants';
+    let cookieObj={};
 
 const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
     let cookieVars=document.cookie;
-    let cookieObj={};
-    console.log(cookieVars);
+
+    // console.log(cookieVars);
     if(cookieVars!==undefined){
       //console.log("in cookievars if")
     cookieVars=cookieVars.replace(/=/g, " ")
     let cookieArray= cookieVars.split(" ")
     //console.log(cookieArray)
-    let bumper=0;
     let url;
     let hash;
     let port;
     let username;
-        if(cookieArray[0]==="heroku-session-affinity"){
-            bumper=2;
-        }
+
       if(cookieArray.length>6){
         for(let i=0; i<cookieArray.length; i++){
         //console.log("in cookiearray if")
           if(cookieArray[i]==="username"){
-            username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+            username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
           }
           if(cookieArray[i]==="port"){
             port=parseInt(cookieArray[i+1])
@@ -57,12 +56,14 @@ const Auth = {
         cookieObj.port=port;
         cookieObj.hash=hash;
         cookieObj.url=url;
-        console.log("this is cookie object")
-        console.log(cookieObj)
+        // console.log("this is cookie object")
+        // console.log(cookieObj)
+        
         if(cookieObj.username!==undefined && cookieObj.username.length>5)
         {
           //console.log(cookieObj.username)
         //this.setState({ redirectToReferrer: true });
+        
         this.isAuthenticated = true;
         return true;
         }
@@ -98,16 +99,18 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
 
+
 class App extends Component {
   
   state = { 
-    redirectToReferrer: true
-    
    }
-  render() { 
-    const { from } = { from: { pathname: "/allproducts" } };
-    const { redirectToReferrer } = this.state;
 
+
+
+  render() { 
+    Auth.authenticate()
+    // const { from } = { from: { pathname: "/allproducts" } };
+    // console.log(cookieObj);
 
     return ( 
       <BrowserRouter>

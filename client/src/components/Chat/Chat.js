@@ -20,7 +20,7 @@ class Chat extends React.Component{
         super(props);
         let cookieVars=document.cookie;
         let cookieObj={};
-        console.log(cookieVars);
+        // console.log(cookieVars);
         let url;
         let hash;
         let port;
@@ -53,16 +53,16 @@ class Chat extends React.Component{
                     url="austin-reviews.herokuapp.com";
                     what=url;
                 }
-                console.log(url)
+                // console.log(url)
                 cookieObj.username=username;
                 cookieObj.port=port;
                 cookieObj.hash=hash;
                 cookieObj.url=url;
-                console.log(cookieObj)
+                // console.log(cookieObj)
             }
 
         }
-        console.log(what)
+        // console.log(what)
         this.socket = io(what);
         //this.socket = io('localhost:3001');
         this.socket.on('RECEIVE_MESSAGE', function(data){
@@ -77,11 +77,11 @@ class Chat extends React.Component{
         };
         const addMessage = data => {
             let id=this.idgen()
-            console.log(id)
-            console.log(data);
+            // console.log(id)
+            // console.log(data);
             data.id=id;
             this.setState({messages: [...this.state.messages, data]});
-            console.log(this.state.messages);
+            // console.log(this.state.messages);
         };
 
         this.sendMessage = ev => {
@@ -98,6 +98,7 @@ class Chat extends React.Component{
         }
     }
     render(){
+        // console.log(this.props.globUsername)
         return (
             <div className="container" >
                 <div className="row">

@@ -3,11 +3,7 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
 import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect,
-  withRouter
+  Redirect
 } from "react-router-dom";
 
 

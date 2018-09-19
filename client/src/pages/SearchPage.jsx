@@ -4,7 +4,7 @@ import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import RecommendationDisplay from '../components/RecommendationDisplay/recommendationDisplay'
 import DefaultRecDisplay from '../components/RecommendationDisplay/defaultRecDisplay'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+// import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 // import './main.css'
 import axios from 'axios'
@@ -200,8 +200,8 @@ class SearchPage extends Component {
     event.preventDefault();
     //GEOCODING API CALL GOES HERE
     let addressArray = this.state.randomRestaurant.address.split(",");
-    let addressHelper = addressArray.length == 1 ? this.state.randomRestaurant.address + " Austin TX" : this.state.randomRestaurant.address + " TX";
-    let formattedAddress = addressHelper.split(' ').length == 3 ? "Austin+TX" : addressHelper.replace(/\./g, "").split(' ').join('+');
+    let addressHelper = addressArray.length === 1 ? this.state.randomRestaurant.address + " Austin TX" : this.state.randomRestaurant.address + " TX";
+    let formattedAddress = addressHelper.split(' ').length === 3 ? "Austin+TX" : addressHelper.replace(/\./g, "").split(' ').join('+');
     let finalAddress = formattedAddress.split('+').join(' ')
     console.log(formattedAddress);
     let googleHelper = "https://maps.googleapis.com/maps/api/geocode/json?&address=" + formattedAddress + "key=AIzaSyDoQLe8s7JUbTZ_ubXhGY4cUmLiNqWvQxw"
@@ -223,7 +223,7 @@ class SearchPage extends Component {
       description: this.state.randomRestaurant.description,
       picture: this.state.randomRestaurant.image,
       link: this.state.randomRestaurant.link,
-      address: addressHelper.split(' ').length == 3 ? this.state.randomRestaurant.address : finalAddress,
+      address: addressHelper.split(' ').length === 3 ? this.state.randomRestaurant.address : finalAddress,
       gpsdata: this.state.gpsdata
     }
 
