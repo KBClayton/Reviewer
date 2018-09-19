@@ -88,7 +88,7 @@ module.exports = function(app) {
                 const $ = cheerio.load(response.data);
                 let chronImageFood = $("div.copy").children("div.imageRight").children("a").children("img").attr("src") ? "https://www.austinchronicle.com" + $("div.copy").children("div.imageRight").children("a").children("img").attr("src") : $("div.story-image.top-image").children("a.lightbox").attr("href") ? "https://www.austinchronicle.com" + $("div.story-image.top-image").children("a.lightbox").attr("href") : "https://via.placeholder.com/300x300";
                 let chronLocFood = $("div.description").children("b").text() ? $("div.description").children("b").text() : $("div.copy").children("h3").next("b").text() ? $("div.copy").children("h3").next("b").text() : "301 W 2nd St, Austin, TX 78701";
-                let chronDescFood = $("div.copy").children("p").first().text() ? $("div.copy").children("p").first().text() : "Sorry, no description is available. Please vist the link for more information";
+                let chronDescFood = $("div.copy").children("p").first().text() ? $("div.copy").children("p").first().text() : "Sorry, no description is available. Please vist the link for more information.";
                 imgHelperFood.push(chronImageFood);
                 locHelperFood.push(chronLocFood);
                 descHelperFood.push(chronDescFood);
@@ -99,7 +99,7 @@ module.exports = function(app) {
                   imgHelperFood.push(chronImageFood);
                   chronLocFood = "301 W 2nd St, Austin, TX 78701";
                   locHelperFood.push(chronLocFood);
-                  chronDescFood = "Sorry, no description available. Please visit the link for more information";
+                  chronDescFood = "Sorry, no description available. Please visit the link for more information.";
                   descHelperFood.push(chronDescFood)
                   console.log(err);
                   })
@@ -125,6 +125,10 @@ module.exports = function(app) {
                 .replace("Far Flung Correspondence: ", "")
                 .replace("Review: ", "");
                 result.description = descHelperFood[i];
+                result.location = $(this)
+                  .next("div.description")
+                  .text()
+                  .replace("?", "") + "...";
                 result.address = locHelperFood[i]
                   .split(", www")[0]
                   .split(", 512")[0]
@@ -184,14 +188,14 @@ module.exports = function(app) {
                   const $ = cheerio.load(response.data);
                   let chronImageMusic = $("div.copy").children("div.imageRight.top-image.sans-border").children("a.lightbox").attr("href") ? "https://www.austinchronicle.com" + $("div.copy").children("div.imageRight.top-image.sans-border").children("a.lightbox").attr("href") : "https://via.placeholder.com/300x300";
                   imgHelperMusic.push(chronImageMusic);
-                  let chronDescMusic = $("div.copy").children("p").text() ? $("div.copy").children("p").text() + ".." : "";
+                  let chronDescMusic = $("div.copy").children("p").first().text() ? $("div.copy").children("p").first().text() + ".." : "Sorry, no description is available. Please vist the link for more information.";
                   descHelperMusic.push(chronDescMusic);
                   console.log(i);
                   })
                   .catch(function(err) {
                     chronImageMusic = "https://via.placeholder.com/300x300";
                     imgHelperMusic.push(chronImageMusic);
-                    chronDescMusic = "";
+                    chronDescMusic = "Sorry, no description is available. Please vist the link for more information.";
                     descHelperMusic.push(chronDescMusic);
                     console.log(err);
                     })
@@ -329,13 +333,13 @@ module.exports = function(app) {
                     .text()
                     .split(' by ' + result.location)[0]
                       : titleHelperBooks[i].split(' by ' + result.location)[0];
-                result.description = synHelperBooks[i] === ""
+                result.description = /*synHelperBooks[i] === ""
                   ? $(this)
                     .next("div.description")
                     .text()
                       : titleHelperBooks[i].split(" ")[0] == $(this)
                       .next("div.description")
-                      .text() ? synHelperBooks[i] : synHelperBooks[i];
+                      .text() ? synHelperBooks[i] :*/ synHelperBooks[i];
                 result.link = linkHelperBooks[i];
                 result.image = imgHelperBooks[i];
                 result.address = bookAddressArray[u];

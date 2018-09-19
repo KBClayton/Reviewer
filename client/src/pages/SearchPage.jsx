@@ -513,6 +513,7 @@ class SearchPage extends Component {
             id = {this.state.randomRestaurant._id}
             link = {this.state.randomRestaurant.link}
             title = {this.state.randomRestaurant.title}
+            author = {this.state.randomRestaurant.location}
             description = {this.state.randomRestaurant.description}
             urlLink = {this.state.randomRestaurant.link}
             imageURL = {this.state.randomRestaurant.image}
