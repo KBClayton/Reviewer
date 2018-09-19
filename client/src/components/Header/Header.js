@@ -155,7 +155,7 @@ class Header extends React.Component {
                 <br/>
                 <Link to = '/login'>Log In</Link>
                 <div className='mb-3'/>
-                <Link to = '/createnewlocation'>Post New Oddity</Link>
+                {/* <Link to = '/createnewlocation'>Post New Oddity</Link> */}
                 <br/>
                 <Link to = '/allproducts'>All Oddities</Link>
                 <br/>
