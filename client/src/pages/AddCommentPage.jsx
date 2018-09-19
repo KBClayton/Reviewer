@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+// import { BrowserRouter, Route, Link } from 'react-router-dom'
 import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
-import Replies from '../components/Replies/Replies'
+// import Replies from '../components/Replies/Replies'
 import RateProductStars from '../components/RatingStars/ratingstars'
-import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
+// import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 // import './main.css'
 import axios from 'axios'
-console.log(document.cookie.username)
+// console.log(document.cookie.username)
 
 var moment = require('moment');
 moment().format();
@@ -30,8 +30,7 @@ class ShowOneLocation extends Component {
     rating: [],
     UserSetRating: 0,
     averageRating: 0,
-    userRating: 0,
-    UserSetRating: false
+    userRating: 0
   }
 
   // Loads All Articles
@@ -40,7 +39,7 @@ class ShowOneLocation extends Component {
     const { match: { params } } = this.props;
     axios.get( `/api/product/${params._id}`)
       .then(res => {
-      console.log(res.data);
+      // console.log(res.data);
       // console.log('Something Hapened')
         this.setState({locations: res.data})
         this.setState({comments: res.data.reviews})
@@ -53,8 +52,8 @@ class ShowOneLocation extends Component {
       // Run loadLocations after posting *****
 
   componentDidMount(){
-    console.log("in the didmount, username:")
-    console.log(document.cookie);
+    // console.log("in the didmount, username:")
+    // console.log(document.cookie);
     this.loadLocations();
   }
 
@@ -67,7 +66,7 @@ class ShowOneLocation extends Component {
       this.setState({newComment: ''})
     axios.post('/api/review', newComment)
       .then(res=>{
-        console.log(this.state.newComment);
+        // console.log(this.state.newComment);
         this.loadLocations();
         
     })
@@ -81,7 +80,7 @@ class ShowOneLocation extends Component {
     //  console.log(temp);
     })
     let average = temp/arrayLength;
-    console.log(average)
+    // console.log(average)
 
     if (!average){
       this.setState({averageRating: 0})
@@ -97,10 +96,10 @@ class ShowOneLocation extends Component {
       parentProduct: this.state.locations._id,
       rating: event.target.id
     }
-    console.log(newRating);
+    // console.log(newRating);
     axios.post('/api/productrate', newRating)
       .then(res=>{
-        console.log(res);
+        // console.log(res);
         this.loadLocations();
     })
   }
@@ -116,7 +115,7 @@ class ShowOneLocation extends Component {
       parentReview: event.target.id,
       rating: thumbs
     }
-    console.log(ThumbsRating)
+    // console.log(ThumbsRating)
 
     axios.post('/api/reviewrate', ThumbsRating)
       .then(res=>{

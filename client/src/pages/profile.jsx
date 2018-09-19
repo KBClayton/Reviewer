@@ -125,17 +125,17 @@ state = {
           <p className='m-0 p-0 text-danger'></p>
           <input
             className='m-2'
-            name='Old passcode'
-            placeholder='Passcode'
+            name='password_o'
+            placeholder='Old Passcode'
             type="password"
             value={this.state.password_o}
-            onChange={e => this.setState({ password: e.target.value})}
+            onChange={e => this.setState({ password_o: e.target.value})}
           />
           <br/>
           <input
             className='m-2'
-            name='New password'
-            placeholder='Passcode'
+            name='password'
+            placeholder='New Passcode'
             type="password"
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value})}

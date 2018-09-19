@@ -1,6 +1,6 @@
-import React, {Component} from "react";
+import React from "react";
 import { withRouter } from 'react-router';
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './Header.css';
 import logo from './oddball4.png';
 import axios from 'axios'
@@ -59,7 +59,7 @@ class Header extends React.Component {
     this.checkCookie =()=>{
       let cookieVars=document.cookie;
       let cookieObj={};
-      console.log(cookieVars);
+      // console.log(cookieVars);
       if(cookieVars!==undefined){
         //console.log("in cookievars if")
       cookieVars=cookieVars.replace(/=/g, " ")
@@ -94,7 +94,6 @@ class Header extends React.Component {
 
   }
   render() { 
-
 
     return (  
       <div>
@@ -135,16 +134,17 @@ class Header extends React.Component {
             {this.state.username.length > 0 ? (
               <div>
                 <p className = 'mb-0'>Logged in as {this.state.username}</p>
-                <br/>
                 <Link to = '/profile'>My Profile</Link>
+                <p className='mb-0' onClick={this.logOut}>LogOut</p>
               </div>
             ):(
                 <div> 
                   <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
+                  <br/>
                   <Link to = '/login'>Log In</Link>
                 </div>
             )}
-            <p className='mb-0' onClick={this.logOut}>LogOut</p>
+            
             <div className='mb-3'/>
             <Link to = '/createnewlocation'>Post New Oddity</Link>
             <br/>

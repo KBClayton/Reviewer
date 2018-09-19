@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 // import { Redirect, withRouter } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
-import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
-import ProductComment from '../components/ProductComment/productComment'
+// import LocationDisplay from '../components/LocationDisplay/LocationDisplay'
+// import { BrowserRouter, Route, Link } from 'react-router-dom'
+// import ProductComment from '../components/ProductComment/productComment'
 import CommentDisplay from '../components/Comments/Comments'
-import Replies from '../components/Replies/Replies'
-import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
+// import Replies from '../components/Replies/Replies'
+// import AddCommentModal from '../components/AddComment-Modal/AddComment-modal'
 
 // import './main.css'
 import axios from 'axios'
+
+var moment = require('moment');
+moment().format();
 
 class ReplyPage extends Component {
 
@@ -33,7 +36,7 @@ class ReplyPage extends Component {
       // console.log('Something Hapened')
         this.setState({data: res.data})
         this.setState({replies: res.data.replies})
-        console.log(this.state.data.replies)
+        // console.log(this.state.data.replies)
       })
   }
       // Run loadLocations after posting *****
@@ -47,7 +50,7 @@ class ReplyPage extends Component {
       text: this.state.text,
       parentReview: this.state.data._id
     }
-    console.log(newReply)
+    // console.log(newReply)
     axios.post('/api/reply', newReply)
       .then(res=>{
         console.log(res);
@@ -83,7 +86,7 @@ class ReplyPage extends Component {
               textComment = {review.text}
               replies = {review.replies}
               onChange={e => this.setState({ newReply: e.target.value})}
-              CommentType = {'Reply - ' + review.username + ' ' + Date(review.dateCreated)}
+              CommentType = {'Reply - ' + review.username + ' ' + moment(review.dateCreated).format("MMM Do YYYY")}
 
             />
           ))}   
