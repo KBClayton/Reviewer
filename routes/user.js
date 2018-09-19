@@ -250,6 +250,19 @@ module.exports = function(app) {
     // );
   })
 
+  app.get("/api/user/alluser", async (req, res) => {
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
+    User.find({})
+    .exec( function(err, dbreply) {
+      if (err) {res.json(err)};
+      res.json(dbreply);
+    });
+  })
+
   app.get("/api/user/averagereview", (req, res) => {
     User.findOne({_id:req.session.uid})
     .populate("productRatings")
