@@ -16,6 +16,7 @@ import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
 // import requireAuth from './components/Auth';
 import SearchResultsPage from './pages/SearchResultsPage';
+import OtherProfilePage from './pages/OtherUserProfile';
 
 import ProfilePage from './pages/profile'
 // import { ENETRESET } from 'constants';
@@ -142,6 +143,7 @@ class App extends Component {
           <PrivateRoute path='/chat' component = {Chat} exact/>
           <Route path='/api/user/resetreq/:name/:emailver' component={LoginPage} exact/>
           <Route path='/api/user/verify/:account/:id' component={LoginPage} exact/>
+          <PrivateRoute path='/user/: _id' component={OtherProfilePage} exact/>
           <Route path='*' component = {ShowAllProducts} name ='catchAll' />
 
         </Switch>
