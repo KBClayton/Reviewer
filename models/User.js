@@ -16,6 +16,9 @@ const UserSchema = new Schema({
     //   message: props => `password is insufficently complex`
     // }, 
   },
+  profileInfo:{type:String},
+  banned:{type: Boolean},
+  bannedToDate: {type: Date},
   roles:{type:Array, default:["user"]},
   picture:{type:String, default:"https://via.placeholder.com/200x200"},
   email:{type:mongoose.SchemaTypes.Email, required:true, unique:true},

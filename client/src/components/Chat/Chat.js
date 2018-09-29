@@ -1,7 +1,7 @@
 import React from "react";
 import io from "socket.io-client";
 
-// var socket = require('socket.io');
+// import socket = require('socket.io');
 // const server = require('http').createServer()
 // io.socket(server);
 
@@ -13,7 +13,7 @@ import io from "socket.io-client";
 //     })
 // });
 
-
+let socket;
 
 class Chat extends React.Component{
     constructor(props){
@@ -63,18 +63,41 @@ class Chat extends React.Component{
 
         }
         // console.log(what)
-        this.socket = io(what);
+
+
+
+
+        socket = io(what);
         //this.socket = io('localhost:3001');
-        this.socket.on('RECEIVE_MESSAGE', function(data){
-            addMessage(data);
+
+        socket.on('connect', ()=>{
+
+            socket.emit('authentication', {username: "John", password: "secret"});
+                socket.on('authenticated', ()=> {
+                    socket.on('RECEIVE_MESSAGE', function(data){
+                        addMessage(data);
+                    });
+
+                   
+                });
         });
 
-        this.state = {
+        state = {
             username: cookieObj.username,
             message: '',
             messages: [],
             id:[]
         };
+
+        this.sendMessage = (ev) => {
+            ev.preventDefault();
+            this.socket.emit('SEND_MESSAGE', {
+                author: this.state.username,
+                message: this.state.message
+            })
+            this.setState({message: ''});
+        } 
+
         const addMessage = data => {
             let id=this.idgen()
             // console.log(id)
@@ -84,21 +107,13 @@ class Chat extends React.Component{
             // console.log(this.state.messages);
         };
 
-        this.sendMessage = ev => {
-            ev.preventDefault();
-            this.socket.emit('SEND_MESSAGE', {
-                author: this.state.username,
-                message: this.state.message
-            })
-            this.setState({message: ''});
-
-        }
         this.idgen = ()=>{
             return Math.floor(Math.random()*1000000000000);
         }
     }
     render(){
         // console.log(this.props.globUsername)
+
         return (
             <div className="container" >
                 <div className="row">
