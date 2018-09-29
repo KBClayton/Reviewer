@@ -270,7 +270,7 @@ module.exports = function(app) {
   })
 
 
-  app.post("/api/user/userview/", async (req, res) => {
+  app.post("/api/user/userview", async (req, res) => {
     if(!await verify.loggedin(req)){
       console.log("failed validation")
       res.status(401).send({success: false, message: "you are not logged in"});
