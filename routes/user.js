@@ -107,6 +107,9 @@ module.exports = function(app) {
         res.cookie("url", url2, {
             //signed:true, 
         expires:new Date(Date.now() + 36000000)})
+        res.cookie("token", token, {
+          //signed:true, 
+          expires:new Date(Date.now() + 36000000)})
 
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
@@ -167,7 +170,9 @@ module.exports = function(app) {
               res.cookie("url", url2, {
                   //signed:true, 
               expires:new Date(Date.now() + 36000000)})
-      
+              res.cookie("token", token, {
+                //signed:true, 
+                expires:new Date(Date.now() + 36000000)})
               res.json({success: true, token: token, hash: process.env.googlelocation, port:PORT2});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
@@ -265,13 +270,13 @@ module.exports = function(app) {
   })
 
 
-  app.get("/api/user/userview/:id", async (req, res) => {
+  app.post("/api/user/userview", async (req, res) => {
     if(!await verify.loggedin(req)){
       console.log("failed validation")
       res.status(401).send({success: false, message: "you are not logged in"});
       return;
     }
-    User.find({username:req.params.id}, 'username picture averageRating products reviews chats replies productRatings reviewRatings')
+    User.find({username:req.body.username}, 'username picture averageRating products reviews chats replies productRatings reviewRatings')
     .exec( function(err, dbreply) {
       if (err) {res.json(err)};
       res.json(dbreply);
@@ -289,8 +294,8 @@ module.exports = function(app) {
       if(err){
         res.json(err)
       }
-      console.log("in average reveiw exec")
-      console.log(dbreply);
+      // console.log("in average reveiw exec")
+      // console.log(dbreply);
       if(dbreply){
       if(dbreply.productRatings){
         for(let i=0; i<dbreply.productRatings.length; i++){
@@ -308,8 +313,8 @@ module.exports = function(app) {
       }
       prodAvg=prodAvg/dbreply.productRatings.length;
 
-      console.log(revDown)
-      console.log(revUp)
+      // console.log(revDown)
+      // console.log(revUp)
       }
       res.json({averageProductRating: prodAvg, numberProductReviews:dbreply.productRatings.length, revUp: revUp, revDown:revDown, numberReviewRatings:dbreply.reviewRatings.length})      
     })
@@ -380,7 +385,7 @@ module.exports = function(app) {
         to: dbreply.email, // list of receivers
         subject: 'requested password reset', // Subject line
         text: 'Click the link reset your password, this link is only good for 1 hour', // plain text body
-        html: '<p>Click the link reset your password, this link is only good for 1 hour</p><br><a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
+        html: '<p>Hello '+dbreply.username+',click the link reset your password, this link is only good for 1 hour</p><br><a href="'+urlHelper+'/api/user/resetreq/'+dbreply.username+`/`+string+'" target="_blank"><b>Reset my password</b></a>' // html body
       };
       // console.log(mailOptions)
       // console.log("past mailoptions, going inasdfsdfto transporter")

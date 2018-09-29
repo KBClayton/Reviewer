@@ -1,8 +1,9 @@
+import './Main.css';
 import React, { Component } from 'react';
 
 
 import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
-import './Main.css';
+
 // import Homepage from './pages/Homepage';
 import AboutPage from './pages/About-Page';
 import CreateUserPage from './pages/CreateUserPage';
@@ -40,7 +41,11 @@ const Auth = {
         for(let i=0; i<cookieArray.length; i++){
         //console.log("in cookiearray if")
           if(cookieArray[i]==="username"){
-            username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+            if(cookieArray[i+1][cookieArray[i+1].length]===";"){
+              username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+            }else{
+              username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+            }
           }
           if(cookieArray[i]==="port"){
             port=parseInt(cookieArray[i+1])

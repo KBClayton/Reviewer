@@ -1,5 +1,6 @@
 import React from "react";
 import io from "socket.io-client";
+import './Chat.css';
 
 // import socket = require('socket.io');
 // const server = require('http').createServer()
@@ -34,7 +35,11 @@ class Chat extends React.Component{
                 for(let i=0; i<cookieArray.length; i++){
                     //console.log("in cookiearray if")
                     if(cookieArray[i]==="username"){
-                        username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                        if(cookieArray[i+1][cookieArray[i+1].length]===";"){
+                            username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                          }else{
+                            username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+                          }
                     }
                     if(cookieArray[i]==="port"){
                         port=parseInt(cookieArray[i+1])
@@ -115,33 +120,30 @@ class Chat extends React.Component{
         // console.log(this.props.globUsername)
 
         return (
-            <div className="container" >
-                <div className="row">
-                    <div className="">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className="card-title">Global Chat</div>
-                                <hr/>
-                                <div className="messages">
-                                    {this.state.messages.map(message => {
-                                        return (
-                                            <div key={message.id}>{message.author}: {message.message} </div>
-                                        )
-                                    })}
+            <div className="" >
+            <div className='container'>
+                <div className="card border border-dark p-3">
+                    <div className="card-title">Global Chat</div>
+                    <hr/>
+                    <div className="messages">
+                        {this.state.messages.map(message => {
+                            return (
+                                <div key={message.id}>
+                                <p className='mb-0'><span className='text-info'>{message.author}</span>: {message.message}</p>
                                 </div>
-
-                            </div>
-                            <div className="card-footer">
-                                {/* <input type="text" placeholder="Username" value={this.state.username} onChange={ev => this.setState({username: ev.target.value})} className="form-control"/> */}
-                                <br/>
-                                <input type="text" placeholder="Message" className="form-control" value={this.state.message} onChange={ev => this.setState({message: ev.target.value})}/>
-                                <br/>
-                                <button onClick={this.sendMessage} className="btn btn-primary form-control">Send</button>
-                            </div>
-                        </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
+            <div className="fixedCard">
+                {/* <input type="text" placeholder="Username" value={this.state.username} onChange={ev => this.setState({username: ev.target.value})} className="form-control"/> */}
+                <textarea type="text" placeholder="Message" className="form-control mb-1" value={this.state.message} onChange={ev => this.setState({message: ev.target.value})}/>
+                <div className='text-center'>
+                    <button onClick={this.sendMessage} className="btn btn-primary btn-sm ">Send</button>
+                </div>
+            </div>
+        </div>
         );
     }
 }

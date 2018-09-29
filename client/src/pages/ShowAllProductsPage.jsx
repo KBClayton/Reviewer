@@ -47,26 +47,30 @@ class ShowAllProducts extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
-        {this.state.locations.map(location => (
-          <div key={location._id}>
-            <Link to={'/location/' + location._id}>
-              <LocationDisplay
-                key = { location._id}
-                id = {location._id}
-                imageUrl = {location.picture}
-                address = {location.address}
-                // link = {location.link}
-                title = {location.title}
-                description = {location.description}
-                // urlLink = {'/location/' + location._id}
-                lengthNo = {location.reviews.length}
-                Rating = {'Average Rating: ' + location.averageRating + ' Stars'}
-                noOfRatings = {location.ratings.length + ' Ratings'}
-              />
-              {/* <RateProductStars/> */}
-            </Link>
+        <div className="container">
+          <div className="row">
+            {this.state.locations.map(location => (
+              <div key={location._id} className='col-md-6 col-lg-4'>
+                <Link to={'/location/' + location._id}>
+                  <LocationDisplay
+                    key = { location._id}
+                    id = {location._id}
+                    imageUrl = {location.picture}
+                    address = {location.address}
+                    // link = {location.link}
+                    title = {location.title}
+                    description = {location.description}
+                    // urlLink = {'/location/' + location._id}
+                    lengthNo = {location.reviews.length}
+                    Rating = {location.averageRating}
+                    noOfRatings = {location.ratings.length}
+                  />
+                  {/* <RateProductStars/> */}
+                </Link>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
         <Footer 
         /> 
       </div>

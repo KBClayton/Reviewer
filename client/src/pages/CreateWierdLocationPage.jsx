@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import axios from 'axios'
+import '../Main.css'
 
 let jsonpAdapter = require('axios-jsonp');
  
@@ -40,7 +41,7 @@ class CreateWierdLocation extends Component {
       gpsdata: this.state.gpsdata
     }
 
-    console.log(newLocation)
+    // console.log(newLocation)
     
     axios.post('/api/product', newLocation)
       .then((response) => {
@@ -102,73 +103,79 @@ class CreateWierdLocation extends Component {
   // Render to Screen
   render() { 
     return (
-      <div className = ''>          
+      <div>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
-
-        <form className='container bg-light mt-3'>
-          <br/>
-          <input 
-            className='m-2'
-            name='locationName'
-            placeholder='Name of Location'
-            type='text' 
-            value={this.state.locationName}
-            onChange={e => this.setState({ locationName: e.target.value})}
-          />
-          
-          <button
-            className=' m-2 btn btn-outline-info'
-            onClick={this.searchAPILocations}
-          >
-          Search WIKI
-          </button>
-          
-          <input 
-            className='m-2'
-            name='link'
-            placeholder='Website'
-            type='url' 
-            value={this.state.link}
-            onChange={e => this.setState({ link: e.target.value})}
-          />
-          <textarea
-            className='m-2'
-            name='description'
-            placeholder='Description of Location'
-            type="text"
-            value={this.state.description}
-            onChange={e => this.setState({ description: e.target.value })}
-          />
-          <input 
-            className='m-2'
-            name='address'
-            placeholder='address'
-            type='text' 
-            value={this.state.address}
-            onChange={e => this.setState({ address: e.target.value})}
-          />
-          <input
-            className='m-2'
-            name='picture'
-            type='text'
-            placeholder='Add picture here...'
-            value={this.state.picture}
-            onChange={e => this.setState({ picture: e.target.value})}
-          />
-          <br/>
-          <button
-            className='m-2 btn btn-info btn-small'
-            onClick={this.handleSubmit}
-          >
-            Submit
-          </button>
-          <br/>
-          <p className="text-danger">{this.state.productSuccess}</p>
-        </form>
-
+        <div>
+          <form className='container bg-light border-top border-bottom border-secondary'>
+            <h3 
+              className=' mt-2 text-center text-primary indieFlower mb-0'
+            >
+              Share Something Wierd
+            </h3>
+            <h5 className='text-center indieFlower'>For Others To Rate and Review</h5>
+             <div className='input-group pt-3'>
+              <input 
+                className='form-control'
+                name='Location Name'
+                placeholder='Name of Location'
+                type='text' 
+                value={this.state.locationName}
+                onChange={e => this.setState({ locationName: e.target.value})}
+              />
+              <div className='input-group-append mb-2'>
+                <button
+                  className='btn btn-outline-info'
+                  onClick={this.searchAPILocations}
+                >
+                Find
+                </button>
+              </div>
+            </div>
+            <input 
+              className='form-control mb-2'
+              name='link'
+              placeholder='Website...'
+              type='url' 
+              value={this.state.link}
+              onChange={e => this.setState({ link: e.target.value})}
+            />
+            <textarea
+              className='form-control mb-2'
+              name='description'
+              placeholder='Description of Location'
+              type="text"
+              value={this.state.description}
+              onChange={e => this.setState({ description: e.target.value })}
+            />
+            <input 
+              className='form-control mb-2'
+              name='address'
+              placeholder='address'
+              type='text' 
+              value={this.state.address}
+              onChange={e => this.setState({ address: e.target.value})}
+            />
+            <input
+              className='form-control mb-2'
+              name='picture'
+              type='text'
+              placeholder='Add picture here...'
+              value={this.state.picture}
+              onChange={e => this.setState({ picture: e.target.value})}
+            />
+            <button
+              className='m-2 btn btn-info btn-small'
+              onClick={this.handleSubmit}
+            >
+              Submit
+            </button>
+            <br/>
+            <p className="text-danger">{this.state.productSuccess}</p>
+          </form>
+        </div>
         <Footer/>
       </div>
 

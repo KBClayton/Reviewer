@@ -23,6 +23,7 @@ state = {
     title:'',
     email: '',
     emailVerified: false,
+    productRating:[],
     locations:[],
     comments:[],
     replies:[],
@@ -38,7 +39,7 @@ state = {
     axios.get( `/api/user/allstuff`)
       .then(res => {
       //console.log("returned data from get")
-      //console.log(res.data);
+      console.log(res.data);
       // console.log('Something Hapened')
         this.setState({username:res.data.username})
         this.setState({email:res.data.email})
@@ -52,7 +53,7 @@ state = {
         this.setState({replies:res.data.replies})
         //console.log(this.state);
         axios.get('/api/user/averagereview').then(res=>{
-            console.log(res)
+            //console.log(res)
             this.setState({avgProdRate:res.data.averageProductRating})
             this.setState({revDown:res.data.revDown})
             this.setState({revUp:res.data.revUp})
@@ -188,8 +189,8 @@ state = {
                     description = {location.description}
                     // urlLink = {'/location/' + location._id}
                     lengthNo = {location.reviews.length}
-                    Rating = {'Average Rating: ' + location.averageRating + ' Stars'}
-                    noOfRatings = {location.ratings.length + ' Ratings'}
+                    Rating = {location.averageRating}
+                    noOfRatings = {location.ratings.length}
                 />
                 </Link>
             </div>
@@ -235,13 +236,13 @@ state = {
         ):(
             <p className='text-center text-danger'>You have not commented on anything</p>
         )}
-        {this.state.ratings.length>0?(
-            <h4 className='text-center'>You have rated {this.state.ratings.length} wierd things, with an average rating of {this.state.avgProdRate} </h4>
+        {this.state.productRating.length>0?(
+            <h4 className='text-center'>You have rated {this.state.productRating.length} wierd things, with an average rating of {this.state.avgProdRate} </h4>
         ):(
             <p className='text-center text-danger'>You have not rated anything</p>
         )}
-        {this.state.reviews.length>0?(
-            <h4 className='text-center'>You have rated {this.state.comments.length} reviews with {this.state.revUp} thumps up and {this.state.revDown} thumbs down</h4>
+        {this.state.ratings.length>0?(
+            <h4 className='text-center'>You have rated {this.state.ratings.length} reviews with {this.state.revUp} thumps up and {this.state.revDown} thumbs down</h4>
         ):(
             <p className='text-center text-danger'>You have not rated any reviews</p>
         )}

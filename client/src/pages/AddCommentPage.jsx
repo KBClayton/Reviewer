@@ -28,9 +28,14 @@ class ShowOneLocation extends Component {
     newComment: '',
     newReply: '',
     rating: [],
+    myRatings: [],
+    myPreviousRating: '',
+    alreadyReviewed: false,
     UserSetRating: 0,
     averageRating: 0,
-    userRating: 0
+    userRating: 0,
+    modalTrigger: false,
+    modalClass: 'd-none'
   }
 
   // Loads All Articles
@@ -47,14 +52,33 @@ class ShowOneLocation extends Component {
         
         // console.log(this.state.comments.length)
         this.calculateRating();
+        this.loadProfile();
       })
   }
-      // Run loadLocations after posting *****
+
+  loadProfile = () => {
+    axios.get( `/api/user/allstuff`)
+      .then(res => {
+        console.log(res.data.productRatings)
+        this.setState({myRatings: res.data.productRatings})
+        this.checkForPreviousRating();
+    })
+  }
+
+  checkForPreviousRating =()=>{
+    for (let i=0; i<this.state.myRatings.length; i++){
+      if (this.state.myRatings[i].parentProduct === this.props.match.params._id){
+        this.setState({alreadyReviewed: true})
+        this.setState({myPreviousRating: this.state.myRatings[i].rating})
+      }
+    }
+  }
 
   componentDidMount(){
     // console.log("in the didmount, username:")
     // console.log(document.cookie);
     this.loadLocations();
+    this.loadProfile();
   }
 
   handleSubmit = (event) => {
@@ -67,6 +91,7 @@ class ShowOneLocation extends Component {
     axios.post('/api/review', newComment)
       .then(res=>{
         // console.log(this.state.newComment);
+        this.modalTrigger();
         this.loadLocations();
         
     })
@@ -122,6 +147,20 @@ class ShowOneLocation extends Component {
         this.loadLocations();
       })
   }
+  modalTrigger = ()=>{
+    if (this.state.modalTrigger === false){
+      this.setState({modalTrigger: true})
+      this.setState({modalClass: ''})
+      console.log('open modal')
+      return;
+    }
+    else {
+      this.setState({modalTrigger: false})
+      console.log('close modal')
+      this.setState({modalClass: 'd-none'})
+      return;
+    }
+  }
 
   // Render to Screen
   render() { 
@@ -131,6 +170,14 @@ class ShowOneLocation extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
+        {this.state.alreadyReviewed === false ? (
+          <RateProductStars 
+            setRating = {this.setRating}
+          />
+        ):(
+          <p className='text-center text-danger'>You Rated This <b className='text-dark'>{this.state.myPreviousRating}</b> Stars!</p>
+        )}
+          <div className="container">
           <LocationDisplay
             key = { this.state.locations._id}
             id = {this.state.locations._id}
@@ -142,18 +189,19 @@ class ShowOneLocation extends Component {
             lengthNo = {this.state.comments.length}
             SubmitHandler = {this.ratingSubmitHandler}
             setRating = {this.setRating}
-            noOfRatings = {'Based on ' + this.state.rating.length + ' Ratings'}
-            Rating = {'Average Rating: ' + this.state.locations.averageRating + ' Stars'}
-            CommentButton = 'Back to All'
+            noOfRatings = {this.state.rating.length}
+            Rating = {this.state.locations.averageRating}
+            address = {this.state.locations.address}
+            modalTrigger = {this.modalTrigger}
           />
-          <RateProductStars 
-            setRating = {this.setRating}
-          />
-          <ProductComment
-            addComment = {this.handleSubmit}
-            textComment = {this.onChange}
-            CommentText = {this.state.newComment}
-          />
+          <div className={this.state.modalClass}>
+            <ProductComment
+              addComment = {this.handleSubmit}
+              textComment = {this.onChange}
+              CommentText = {this.state.newComment}
+              modalTrigger = {this.modalTrigger}
+            />
+          </div>
           {this.state.comments.map(review => (
             <CommentDisplay
               key = {review._id}
@@ -162,15 +210,17 @@ class ShowOneLocation extends Component {
               replies = {review.replies}
               onChange={e => this.setState({ newReply: e.target.value})}
               length = {review.replies.length + ' Replies'}
-              ReplyTxt = 'Reply'
-              CommentType = {review.username + " " + moment(review.dateCreated).format("MMM Do YYYY")}
+              ReplyTxt = 'Reply to this Review'
+              CommentUser = {review.username}
+              CommentDate = {moment(review.dateCreated).format("MMM Do YYYY")}
               thumbsUp = {this.thumbsUp}
-              thumbsUpAmount = {review.thumbsUp + ' Positive Reviews, '}
-              thumbsDownAmount = {review.thumbsDown + ' Negative Reviews'}
-              thumbsUpIcon = 'fa fa-thumbs-up'
-              thumbsDownIcon = 'fa fa-thumbs-down'
+              thumbsUpAmount = {review.thumbsUp}
+              thumbsDownAmount = {review.thumbsDown}
+              thumbsUpIcon = 'fa fa-thumbs-up ml-1 mr-1'
+              thumbsDownIcon = 'fa fa-thumbs-down ml-1'
             />
-          ))}          
+          ))}
+          </div>          
           {/* <AddCommentModal/> */}
           <Footer /> 
 
