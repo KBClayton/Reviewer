@@ -264,6 +264,20 @@ module.exports = function(app) {
     });
   })
 
+
+  app.get("/api/user/userview/:id", async (req, res) => {
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
+    User.find({username:req.params.id}, 'username picture averageRating products reviews chats replies productRatings reviewRatings')
+    .exec( function(err, dbreply) {
+      if (err) {res.json(err)};
+      res.json(dbreply);
+    });
+  })
+
   app.get("/api/user/averagereview", (req, res) => {
     let prodAvg=0;
     let revUp=0;
@@ -384,7 +398,6 @@ module.exports = function(app) {
   })
  })
 
-
   app.get("/api/user/resetreq/:name/:email", (req, res) => {
     let urlHelper = "http://localhost:3001"
     if (process.env.NODE_ENV === "production") {
@@ -450,9 +463,9 @@ module.exports = function(app) {
     if(err){
       res.json(err)
     }
-    })
-    
-    
+    })  
   })
+
+  
 
 }
