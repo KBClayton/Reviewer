@@ -15,120 +15,62 @@ class OtherProfilePage extends Component {
   // super(props)
 // State
 state = {
-    big:{},
-    username: '',
-    password_o:'',
-    password_v:'',
-    password:'',
-    title:'',
-    email: '',
-    emailVerified: false,
-    productRating:[],
-    locations:[],
-    comments:[],
-    replies:[],
-    reviews:[],
-    ratings:[],
-    avgProdRate:0,
-    revUp:0,
-    revDown:0
+    // big:{},
+    // username: '',
+    // password_o:'',
+    // password_v:'',
+    // password:'',
+    // title:'',
+    // email: '',
+    // emailVerified: false,
+    // productRating:[],
+    // locations:[],
+    // comments:[],
+    // replies:[],
+    // reviews:[],
+    // ratings:[],
+    // avgProdRate:0,
+    // revUp:0,
+    // revDown:0
+    searchInput: '',
+    results: ''
    }
 
  //get the user's data
- loadProfile = () => {
-    axios.get( `/api/user/allstuff`)
+ searchProfiles = () => {
+  //  console.log(this.props.match.params._id)
+    axios.post(` /api/user/userview/`, {username: this.state.searchInput})
       .then(res => {
-      //console.log("returned data from get")
+
       console.log(res.data);
-      // console.log('Something Hapened')
-        this.setState({username:res.data.username})
-        this.setState({email:res.data.email})
-        this.setState({emailVerified:res.data.emailVerified})
-        this.setState({locations: res.data.products})
-        this.setState({reviews: res.data.reviews})
-        this.setState({comments: res.data.replies})
-        this.setState({productRating: res.data.productRatings})
-        this.setState({title:res.data.username+"'s Profile"})
-        this.setState({ratings:res.data.reviewRatings})
-        this.setState({replies:res.data.replies})
-        //console.log(this.state);
-        axios.get('/api/user/averagereview').then(res=>{
-            //console.log(res)
-            this.setState({avgProdRate:res.data.averageProductRating})
-            this.setState({revDown:res.data.revDown})
-            this.setState({revUp:res.data.revUp})
-        })
-        // console.log(this.state.comments.length)
-        //this.calculateRating();
+
     })
   }
 
-  //start the stuff
-  componentDidMount(){
-    this.loadProfile();
+  searchInput =(event)=>{
+    this.setState({searchInput: event.target.value})
   }
 
 
-  
-
-
-  // Handle Form Submit
-  handleSubmit = (event) => {
-    event.preventDefault();
-    // Password Complexity Verification
-    var regexPassword = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/
-    if (!regexPassword.test(this.state.password.trim())){
-    	this.setState({errorMsg: {passwordTooShortError: 'Password needs to contain: 8+ characters, 1+ uppercase letter, 1+ numbers and at least one symbol'}})
-    	return false;
-    }
-    //Password Matches Verification
-    if (this.state.password !== this.state.password_v){
-      this.setState({errorMsg: {passwordDoesntMatchError: 'Passwords Do Not Match'}})
-      return false;
-    }
-
-    const newUser = {
-      password: this.state.password_o.trim(),
-      newPasssword:this.state.password.trim()
-    }
-
-    console.log(newUser)
-    
-    axios.put('/api/user/', newUser)
-      .then((response) => {
-        console.log(response)
-        // this.setState()
-        if (response.data.success === true){
-          console.log(this)
-          // this.setState({accountAccepted: true });
-          this.props.history.push('/login')
-        }
-        else{
-          alert(`This username or email is taken. Please try another.  May We Suggest BananaMan78!`)
-        }
-
-      })
-      .catch(function(error){
-        console.log(error);
-      })
-  }
-
-  redirect = (event) => {
-    if (this.state.accountAccepted){
-      return <Redirect to='/login'/>
-    }
-  }
+  // redirect = (event) => {
+  //   if (this.state.accountAccepted){
+  //     return <Redirect to='/login'/>
+  //   }
+  // }
 
   // Render to Screen
   render() { 
     return (
-      <div className = 'bg-light mb-5'>          
+      <div className = 'bg-light mb-5'>  
+        <p>Bnana</p>        
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
         
-
+        <input type="text" value={this.state.searchInput} onChange={this.searchInput} />
+        <button className="btn" onClick={ this.searchProfiles} >Submit</button>
+{/*         
         
         <form className='container'>
         
@@ -245,7 +187,7 @@ state = {
             <h4 className='text-center'>You have rated {this.state.ratings.length} reviews with {this.state.revUp} thumps up and {this.state.revDown} thumbs down</h4>
         ):(
             <p className='text-center text-danger'>You have not rated any reviews</p>
-        )}
+        )} */}
 
 
         <Footer/>

@@ -142,8 +142,8 @@ class App extends Component {
           <Route path='/reply/:_id' component= {ReplyPage} exact/>
           <PrivateRoute path='/chat' component = {Chat} exact/>
           <Route path='/api/user/resetreq/:name/:emailver' component={LoginPage} exact/>
-          <Route path='/api/user/verify/:account/:id' component={LoginPage} exact/>
-          <PrivateRoute path='/user/: _id' component={OtherProfilePage} exact/>
+          <Route path='/api/user/verify/:account/' component={LoginPage} exact/>
+          <PrivateRoute path='/usersearch/' component={OtherProfilePage} exact/>
           <Route path='*' component = {ShowAllProducts} name ='catchAll' />
 
         </Switch>
