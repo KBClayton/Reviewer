@@ -39,17 +39,24 @@ state = {
  //get the user's data
  searchProfiles = () => {
   //  console.log(this.props.match.params._id)
-    axios.post(` /api/user/userview/`, {username: this.state.searchInput})
+    axios.post(`/api/user/userfind`, {username: this.state.searchInput})
       .then(res => {
-
       console.log(res.data);
-
     })
   }
 
-  searchInput =(event)=>{
-    this.setState({searchInput: event.target.value})
-  }
+  viewProfiles = () => {
+    //  console.log(this.props.match.params._id)
+      axios.post(` /api/user/userview/`, {username: this.state.searchInput})
+        .then(res => {
+        console.log(res.data);
+      })
+    }
+  
+    searchInput =(event)=>{
+      this.setState({searchInput: event.target.value})
+    }
+
 
 
   // redirect = (event) => {
