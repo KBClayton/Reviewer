@@ -11,14 +11,48 @@ dotenv.config();
 const PORT2 = process.env.PORT || 3001;
 //var moment = require('moment');
 //moment().format();
+//Amazon 
+const AWS=require("aws-sdk");
+//const fileupload = require("express-fileupload");
+const BUCKET_NAME = 'atxreviewer';
+const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
+const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
+
+
+
 
 module.exports = function(app) {
-  app.post("/api/user/new", (req, res) => {
+  function uploadToS3(file){
+    let s3bucket = new AWS.S3({
+      accessKeyId: IAM_USER_KEY,
+      secretAccessKey: IAM_USER_SECRET,
+      Bucket: BUCKET_NAME
+    });
+    s3bucket.createBucket(function(){
+      var params = {
+        Bucket: BUCKET_NAME,
+        Key: file.name,
+        Body: file.data
+      };
+      s3bucket.upload(params, function(err, data){
+        if(err){
+          console.log('error in callback');
+          console.log(err);
+        }
+        console.log('success');
+        console.log(data);
+        return data;
+      })
+    })
+  }
+
+
+  app.post("/api/user/new", async (req, res) => {
       //console.log(`The post has hit the server, here is new User`);
       //console.log(req.body);
       //logger.info("The request has hit the server for new user");
       //logger.info(req.body);
-
+      let picdata
       const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
@@ -30,6 +64,11 @@ module.exports = function(app) {
           rejectUnauthorized: false
       }
       });
+      if(req.body.imageFile){
+        console.log("in image upload if")
+        picdata=await uploadToS3(req.body.imageFile)
+        console.log(picdata)
+      }
       //console.log(`user is: ${process.env.etherealUser}`)
 
 

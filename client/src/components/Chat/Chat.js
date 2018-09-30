@@ -14,90 +14,122 @@ import './Chat.css';
 //     })
 // });
 
-let socket;
+//let socket;
 
 class Chat extends React.Component{
     constructor(props){
+
+
+
+
+
         super(props);
-        let cookieVars=document.cookie;
-        let cookieObj={};
-        // console.log(cookieVars);
-        let url;
-        let hash;
-        let port;
-        let username;
-        let what="austin-reviews.herokuapp.com";
-        if(cookieVars!==undefined){
-             //console.log("in cookievars if")
-            cookieVars=cookieVars.replace(/=/g, " ")
-            let cookieArray= cookieVars.split(" ")
-            if(cookieArray.length>1){
-                for(let i=0; i<cookieArray.length; i++){
-                    //console.log("in cookiearray if")
-                    if(cookieArray[i]==="username"){
-                        if(cookieArray[i+1][cookieArray[i+1].length]===";"){
-                            username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
-                          }else{
-                            username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
-                          }
+
+        this.state = {
+            cookie:{},
+            username: '',
+            json:'',
+            message: '',
+            messages: [],
+            id:[],
+            what:'',
+        };
+
+
+        this.checkCookie= ()=>{
+            let cookieVars=document.cookie;
+            let cookieObj={};
+            // console.log(cookieVars);
+            let url;
+            let hash;
+            let port;
+            let username;
+            let token
+            let what="austin-reviews.herokuapp.com";
+            if(cookieVars!==undefined){
+                //console.log("in cookievars if")
+                cookieVars=cookieVars.replace(/=/g, " ")
+                let cookieArray= cookieVars.split(" ")
+                if(cookieArray.length>1){
+                    for(let i=0; i<cookieArray.length; i++){
+                        //console.log("in cookiearray if")
+                        if(cookieArray[i]==="username"){
+                            if(cookieArray[i+1][cookieArray[i+1].length]===";"){
+                                username=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                            }else{
+                                username=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+                            }
+                        }
+                        if(cookieArray[i]==="port"){
+                            port=parseInt(cookieArray[i+1])
+                        }
+                        if(cookieArray[i]==="hash"){
+                            hash=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
+                        }
+                        if(cookieArray[i]==="url"){
+                            url=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+                        }
+                        if(cookieArray[i]==="token"){
+                            token=cookieArray[i+1].substring(0, cookieArray[i+1].length)
+                            console.log("full cookiearray token element")
+                            console.log(cookieArray[i+1])
+                        }
                     }
-                    if(cookieArray[i]==="port"){
-                        port=parseInt(cookieArray[i+1])
+                    if(url==="localhost"){
+                        url="localhost:";
+                        what=url+port;
+                    }else{
+                        url="austin-reviews.herokuapp.com";
+                        what=url;
                     }
-                    if(cookieArray[i]==="hash"){
-                        hash=cookieArray[i+1].substring(0, cookieArray[i+1].length-1)
-                    }
-                    if(cookieArray[i]==="url"){
-                        url=cookieArray[i+1].substring(0, cookieArray[i+1].length)
-                    }
+                    // console.log(url)
+                    cookieObj.username=username;
+                    cookieObj.port=port;
+                    cookieObj.hash=hash;
+                    cookieObj.url=url;
+                    cookieObj.token=token;
+                    cookieObj.what=what;
+                    this.setState({cookie:cookieObj})
+                    // console.log(cookieObj)
+
+                   
                 }
-                if(url==="localhost"){
-                    url="localhost:";
-                    what=url+port;
-                }else{
-                    url="austin-reviews.herokuapp.com";
-                    what=url;
-                }
-                // console.log(url)
-                cookieObj.username=username;
-                cookieObj.port=port;
-                cookieObj.hash=hash;
-                cookieObj.url=url;
-                // console.log(cookieObj)
+
             }
+            // console.log(what)
 
         }
-        // console.log(what)
+        this.componentDidMount =async ()=>{
+            await this.checkCookie();
+            console.log("On chat page, cookieobject in state:")
+            console.log(this.state.cookie)
+        }
 
 
+        let socket = io(this.state.cookie.what);
 
-
-        socket = io(what);
         //this.socket = io('localhost:3001');
 
         socket.on('connect', ()=>{
-
-            socket.emit('authentication', {username: "John", password: "secret"});
+            socket.emit('authentication', {token:this.state.cookie.token});
                 socket.on('authenticated', ()=> {
                     socket.on('RECEIVE_MESSAGE', function(data){
                         addMessage(data);
-                    });
-
-                   
+                    });   
                 });
+                socket.on('unauthorized', function(err){
+                    console.log("There was an error with the authentication:", err.message);
+                });
+
         });
 
-        state = {
-            username: cookieObj.username,
-            message: '',
-            messages: [],
-            id:[]
-        };
+
 
         this.sendMessage = (ev) => {
             ev.preventDefault();
-            this.socket.emit('SEND_MESSAGE', {
-                author: this.state.username,
+            console.log(this.state.cookie)
+            socket.emit('SEND_MESSAGE', {
+                author: this.state.cookie.username,
                 message: this.state.message
             })
             this.setState({message: ''});

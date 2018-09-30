@@ -21,6 +21,20 @@ module.exports = function(app) {
 
 
   });
+  app.get("/api/productiter/:page", function(req, res){
+    //console.log(req.body);
+   // console.log(vault.read(req));
+  
+
+      Product.find({}).sort({'dateCreated': -1}).skip(20*req.params.page).limit(20).populate('ratings').then((dbModel, err) =>{ 
+        if(err){
+          console.log(err);
+          res.status(500).send({success:false, message:"something went wrong"})
+        }
+        res.json(dbModel)});
+
+
+  });
 
   app.get("/api/productpop", function(req, res){
     //console.log(req.body);
@@ -63,6 +77,9 @@ module.exports = function(app) {
         piclink=undefined;
       }else{
         piclink=req.body.picture;
+        if(piclink.substring(0,4)!=='http:' && piclink.substring(0,5)!=='https:'){
+          piclink="https:"+piclink;
+        }
       }
     
       newprod={
@@ -98,6 +115,14 @@ module.exports = function(app) {
       res.json(users);
   });
   });
+
+  app.post("/api/product/searchpages/:query/:page", function(req, res){
+    var re = new RegExp(req.params.query, 'i');
+    Product.find().or([{ 'description': { $regex: re }}, { 'title': { $regex: re }}, { 'catagories': { $regex: re }}]).sort({'dateCreated': 1}).skip(20*req.params.page).limit(20).exec(function(err, users) {
+      res.json(users);
+  });
+  });
+
 
   app.get("/api/product/bad", function(req, res){
     Product.find().populate.then((dbreply, err)=>{
