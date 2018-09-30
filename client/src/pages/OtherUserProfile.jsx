@@ -33,28 +33,63 @@ state = {
     // revUp:0,
     // revDown:0
     searchInput: '',
-    results: ''
+    searchresultsArray: [],
+    UserInfo: []
    }
 
  //get the user's data
  searchProfiles = () => {
   //  console.log(this.props.match.params._id)
+  if (this.state.searchInput.length > 0){
+    const userSearch ={
+      username: this.state.searchInput,
+      pageNumber: 0
+    }
+    console.log(userSearch)
     axios.post(`/api/user/userfind`, {username: this.state.searchInput})
       .then(res => {
-      console.log(res.data);
+      if (res.data.length === 1){
+
+        axios.post(` /api/user/userview/`, {username: res.data[0].username})
+          .then(response => {
+            console.log(res.data)
+          this.setState({UserInfo: response.data})
+          // this.setState({searchInput: ''})
+          this.setState({searchresultsArray: []})
+        })
+      }
+      else if (res.data.length === 0){
+        this.setState({searchresultsArray: [{username: 'There are no results'}]})
+      }
+      else{
+        this.setState({searchresultsArray: res.data})
+        this.setState({UserInfo: ''})
+      }
     })
   }
+    else{
+      this.setState({searchresultsArray: []})
+    }
+  }
 
-  viewProfiles = () => {
-    //  console.log(this.props.match.params._id)
-      axios.post(` /api/user/userview/`, {username: this.state.searchInput})
+  viewProfiles = (event) => {
+    event.persist();
+    //  console.log(event.target.id)
+      axios.post(` /api/user/userview/`, {username: event.target.id})
         .then(res => {
-        console.log(res.data);
+          // console.log(res.data)
+        this.setState({UserInfo: res.data})
+        this.setState({searchInput: ''})
+        this.setState({searchresultsArray: []})
       })
     }
   
-    searchInput =(event)=>{
-      this.setState({searchInput: event.target.value})
+    searchInput =async (event)=>{
+      await this.setState({searchInput: event.target.value})
+      // if (this.state.searchInput.length > 0){
+      //   return;
+      // }
+      this.searchProfiles();
     }
 
 
@@ -77,6 +112,19 @@ state = {
         
         <input type="text" value={this.state.searchInput} onChange={this.searchInput} />
         <button className="btn" onClick={ this.searchProfiles} >Submit</button>
+
+        {this.state.searchresultsArray.map(result =>(
+          <div>
+            <h1 key={result._id} id={result.username} onClick ={this.viewProfiles}>{result.username}</h1>
+            {/* <img src={result.picture} alt=""/> */}
+          </div>
+          
+        ))}
+    
+          <div key={this.state.UserInfo.username}>
+            <p>{this.state.UserInfo.username}</p>
+          </div>
+
 {/*         
         
         <form className='container'>
