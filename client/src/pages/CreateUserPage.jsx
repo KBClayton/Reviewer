@@ -28,7 +28,8 @@ class CreateUserPage extends Component {
       passwordDoesntMatchError: ''
     },
     accountAccepted: false,
-    imageURL: ''
+    imageURL: '',
+    picture: {}
    }
 
   // Handle Form Submit
@@ -66,7 +67,7 @@ class CreateUserPage extends Component {
       username: this.state.name.trim(),
       email: this.state.email.trim(),
       password: this.state.password.trim(),
-      imageFile: this.state.imageURL
+      imageFile: this.state.picture
     }
 
     console.log(newUser)
@@ -95,11 +96,17 @@ class CreateUserPage extends Component {
 
   //Checks for Image To be real image
   checkImage =(event)=>{
+    if(event.target.files[0].size > 1000000){
+      alert('This image exceeds the size requirements. It must be less than 2MB')
+      return false;
+    }
     let reader = new FileReader();
     reader.onload = (e) => {
-        this.setState({imageURL: e.target.result});
+      this.setState({imageURL: e.target.result});
+      // console.log(this.state.imageURL)
     };
     reader.readAsDataURL(event.target.files[0]);
+    this.setState({picture: event.target.files[0]})
   }
 
   redirect = (event) => {
