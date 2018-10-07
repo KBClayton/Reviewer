@@ -17,7 +17,8 @@ class ShowAllProducts extends Component {
   state = {
     title: "Reviewer",
     subpage: 'Show All Products',
-    locations: []
+    locations: [],
+    color: []
   }
 
   // Loads All Articles
@@ -26,7 +27,7 @@ class ShowAllProducts extends Component {
     .then(res => {
     // console.log(res.data);
       this.setState({locations: res.data})
-      // console.log(this.state.locations)
+      console.log(this.state.locations)
     })
   }
 
@@ -34,9 +35,37 @@ class ShowAllProducts extends Component {
     this.loadLocations();
   }
 
-  // saveArticle = () => {
-  //   axios.put('/api/savedArticles')
-  // }
+  starNumberRender=(stars)=>{
+    const starArray=[]
+      var starInt = Math.floor(stars.averageRating/1);
+      var starRem = stars.averageRating%1;
+       for(let i=0; i<starInt; i++){
+         starArray.push (<i className='fas fa-star'/>);
+       }
+       if (starRem > .25){
+         starArray.push(<i className='fas fa-star-half'/>)
+       }
+      return (
+        <div className={this.starColor(stars)}>
+          {starArray}
+          <small className="text-dark"> ({stars.ratings.length} Ratings)</small>
+        </div>
+      )
+  }
+
+  starColor=(stars)=>{
+    console.log(stars.averageRating)
+    if (stars.averageRating >= 4){
+      return('text-center text-success');
+    }
+    else if(stars.averageRating >= 2.5){
+      return ('text-center text-warning');
+    }
+    else{
+      return ('text-center text-danger');
+    }
+  }
+  
 
   // Render to Screen
   render() { 
@@ -50,9 +79,29 @@ class ShowAllProducts extends Component {
         <div className="container">
           <div className="row">
             {this.state.locations.map(location => (
-              <div key={location._id} className='col-md-6 col-lg-4'>
+              <div 
+                key={location._id}
+                className='col-sm-6 col-md-4 mb-3'
+              >
                 <Link to={'/location/' + location._id}>
-                  <LocationDisplay
+                  <div className="shadow-box bg-white round">
+                    <div
+                      style={{
+                        'background-image': `url(${location.picture})`,
+                        'background-position': 'center',
+                        'background-repeat': 'no-repeat',
+                        'background-size': 'cover',
+                        'opacity': '.7',
+                        'height': '150px'
+                      }}
+                    />
+                    <h6 className=' ml-2 mr-2 mb-0'>{location.title}</h6>
+                    <div className={this.starColor(location)}>
+                      {this.starNumberRender(location)}
+                    </div>
+                  </div>
+
+                  {/* <LocationDisplay
                     key = { location._id}
                     id = {location._id}
                     imageUrl = {location.picture}
@@ -64,7 +113,7 @@ class ShowAllProducts extends Component {
                     lengthNo = {location.reviews.length}
                     Rating = {location.averageRating}
                     noOfRatings = {location.ratings.length}
-                  />
+                  /> */}
                   {/* <RateProductStars/> */}
                 </Link>
               </div>

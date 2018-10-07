@@ -27,6 +27,10 @@ class CreateUserPage extends Component {
       passwordTooShortError: '',
       passwordDoesntMatchError: ''
     },
+    nameCheck: false,
+    emailCheck: false,
+    passwordCheck: false,
+    password_vCheck: false,
     accountAccepted: false,
     imageURL: '',
     picture: {}
@@ -94,6 +98,67 @@ class CreateUserPage extends Component {
       })
   }
 
+  //Checks Username
+  nameVerify=async(event)=>{
+    await this.setState({name: event.target.value})
+    if (this.state.name.length < 5){
+      this.setState({nameCheck: false})
+      return false;
+    }
+    // axios.post(`/api/user/userview/`, {username: this.state.name})
+    //   .then(res => {
+
+    //   if (res.data.length > 0){
+    //     this.setState({nameCheck: false})
+    //     this.setState({usernameError: 'This Username is taken'})
+    //     return false;
+    //   }
+    //   else{
+        // const tempArray = res.data.slice(0,9)
+        this.setState({nameCheck: true})
+    //   }
+    // })
+  }
+  // Checks Email 
+  emailVerify = async(event)=>{
+    await this.setState({email: event.target.value})
+    const regexEmail = /^([A-Za-z0-9_\-\.+])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,})$/;
+    if (!regexEmail.test(this.state.email)){
+      this.setState({emailCheck: false})
+      return false;
+    }
+    this.setState({emailCheck: true})
+  }
+  // Checks Password Strength
+  passwordVerify =async(event)=>{
+    await this.setState({password: event.target.value})
+    const regexPassword = /^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[\w!@#$%^&*]{8,}$/
+    if (!regexPassword.test(this.state.password.trim())){
+      this.setState({passwordCheck: false})
+      this.setState({password_vCheck: false})
+    	return false;
+    }
+    if (this.state.password !== this.state.password_v){
+      this.setState({password_vCheck: false})
+    }
+    if (this.state.password === this.state.password_v){
+      this.setState({password_vCheck: true})
+    }
+    this.setState({passwordCheck: true})
+  }
+  passwordMatchVerify =async(event)=>{
+    await this.setState({password_v: event.target.value})
+    if (this.state.password !== this.state.password_v){
+      this.setState({password_vCheck: false})
+      return false;
+    }
+    if (!this.state.passwordCheck){
+      this.setState({password_vCheck: false})
+      return false;     
+    }
+    this.setState({password_vCheck: true})
+  }
+
   //Checks for Image To be real image
   checkImage =(event)=>{
     if(event.target.files[0].size > 1000000){
@@ -115,6 +180,9 @@ class CreateUserPage extends Component {
     }
   }
 
+  loadImageInput =()=>{
+    document.getElementById('s3Image').click();
+  }
   // Render to Screen
   render() { 
     const { from } = { from: { pathname: "/allproducts" } };
@@ -129,8 +197,9 @@ class CreateUserPage extends Component {
           subpage = {this.state.subpage}
         />
 
-        <form className='container'>
+        <form className='container text-center'>
 
+          {/* Username */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.usernameError}</p>
           <input 
             className='m-2 animated bounce'
@@ -138,8 +207,17 @@ class CreateUserPage extends Component {
             placeholder='Full Name'
             type='text' 
             value={this.state.name}
-            onChange={e => this.setState({ name: e.target.value})}
+            onChange={this.nameVerify}
           />
+          {this.state.nameCheck === true ?
+            (
+              <span className='fas fa-check-circle text-success'/>
+            ):(
+              <span className='fas fa-times text-danger'/>
+            )
+          }
+
+          {/* Email */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.emailError}</p>
           <input
             className='m-2'
@@ -147,8 +225,17 @@ class CreateUserPage extends Component {
             placeholder='Email Address'
             type="text"
             value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value})}
+            onChange={this.emailVerify}
           />
+          {this.state.emailCheck ?
+            (
+              <span className='fas fa-check-circle text-success'/>
+            ):(
+              <span className='fas fa-times text-danger'/>
+            )
+          }
+
+          {/* Password */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordTooShortError}</p>
           <input
             className='m-2'
@@ -156,8 +243,16 @@ class CreateUserPage extends Component {
             placeholder='Passcode'
             type="password"
             value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value})}
+            onChange={this.passwordVerify}
           />
+          {this.state.passwordCheck ?
+            (
+              <span className='fas fa-check-circle text-success'/>
+            ):(
+              <span className='fas fa-times text-danger'/>
+            )
+          }
+          {/* Password Verification */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordDoesntMatchError}</p>
           <input
             className='m-2'
@@ -165,13 +260,21 @@ class CreateUserPage extends Component {
             placeholder='Retype Passcode'
             type="password"
             value={this.state.password_v}
-            onChange={e => this.setState({ password_v: e.target.value})}
+            onChange={this.passwordMatchVerify}
           />
-          <input type="file" id='s3Image' onChange={this.checkImage}/>
-          <img src={this.state.imageURL} alt=""/>
+          {this.state.password_vCheck ?
+            (
+              <span className='fas fa-check-circle text-success'/>
+            ):(
+              <span className='fas fa-times text-danger'/>
+            )
+          }
+          <br/>
+          <input type="file" id='s3Image' style={{display: 'none'}} onChange={this.checkImage}/>
+          <span onClick={this.loadImageInput} className='btn btn-info m-2'>Add Image</span> <img src={this.state.imageURL} alt="" className='img-logo'/>
           <br/>
           <button
-            className='m-2 btn btn-info btn-small'
+            className='m-2 btn btn-success btn-small'
             onClick={this.handleSubmit}
           >
             Submit

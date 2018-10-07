@@ -3,17 +3,20 @@
   width: 100%;
   z-index: 5;
   top: 0;
-  background-color: #343a40;
+  background-color: lightblue;
 }
 .img-logo {
   height: 40px;
 }
 .our-logo {
-  font-family: 'Poor Story', cursive;
+  /* font-family: 'Poor Story', cursive; */
+  font-family: 'Lobster', cursive;
   letter-spacing: 5px;
   font-size: 40px;
-  padding-left: 1rem;
-  color: #dee2e6;
+  margin-top: .5rem;
+  padding: 0;
+  color: black;
+  line-height: 32px;
 }
 .fixed-right-login{
   position: fixed;

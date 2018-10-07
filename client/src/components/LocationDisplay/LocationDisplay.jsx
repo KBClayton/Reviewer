@@ -3,64 +3,77 @@ import React from "react";
 import './locationdisplay.css'
 
 // console.log(this.props.location.search);
+this.starNumberRender=(stars)=>{
+  const starArray=[]
+    var starInt = Math.floor(stars.Rating/1);
+    var starRem = stars.Rating%1;
+     for(let i=0; i<starInt; i++){
+       starArray.push (<i className='fas fa-star'/>);
+     }
+     if (starRem > .25){
+       starArray.push(<i className='fas fa-star-half'/>)
+     }
+    return (
+      <div>
+        {starArray}
+        <small className="text-dark"> ({stars.noOfRatings} Ratings)</small>
+      </div>
+    )
+}
+this.starColor=(stars)=>{
+  if (stars.Rating >= 4){
+    return('text-center text-success')
+  }
+  else if(stars.Rating >= 2.5){
+    return ('text-center text-warning')
+  }
+  else{
+    return ('text-center text-danger ')
+  }
+}
 
 const LocationDisplay = props => (
   <div>
     {/* <Link to={props.urlLink}>{props.CommentButton} */}
-      <div className = 'card p-2 mb-3 bg-light h-100'>
-        <div className='d-flex mb-2 pb-2 border-bottom border-secondary'>
-          <div className="">
-            <img 
-              src={props.imageUrl} 
-              alt={props.title} 
-              className='img-responsive img-max60'
-            />
-          </div>
-          <div className="ml-2">
-            {props.link ? (
-              <a href={`//${props.link}`} target='_blank'>
-                <div>
-                  <h4 className='text-info poorStory'>{props.title}</h4>
-                  <p className='mb-0 text-dark'>
-                    <small>
-                      {props.address}
-                    </small>
-                  </p> 
-                </div>
-              </a>               
+      <div className = 'shadow-box mb-3 border-0 h-100'
+                style={{
+                  'background-image': `url(${props.imageUrl})`,
+                  'background-position': 'center',
+                  'background-repeat': 'no-repeat',
+                  'background-size': 'cover',
+                  'opacity': '.7'
+                }}
+      >
+        <div 
+          className='p-2 border-bottom border-secondary' 
+        >
+          {props.noOfRatings < 1 ? 
+            (
+              <p className='mb-2 text-dark clear-opacity'>{props.noOfRatings} Ratings</p>
             ):(
-              <div>
-                <h4 className='text-info mb-0 poorStory'> 
-                  {props.title}
-                </h4>
-                <p className='mb-0 text-dark'>
-                  <small>
-                    {props.address}
-                  </small>
-                </p> 
-               
-              </div>
-            )}
+              <p className={this.starColor(props)}>
+                {this.starNumberRender(props)}
+              </p>
+            )
+          } 
+        
+          <div>
+            {/* <img 
+                src={props.imageUrl} 
+                alt={props.title} 
+                className='float-left mr-2'
+                style={{'height': '30px'}}
+              /> */}
+            <div className="ml-2">
+              
+            </div>
           </div>
         </div>
-        {props.noOfRatings < 1 ? 
-          (
-            <p style = {{textDecoration: 'none'}} className='mb-2 text-dark'>{props.noOfRatings} People have rated this</p>
-          ):(
-            <div className='mb-3'>
-              {props.Rating >= 2.5 ? (
-                <span style = {{textDecoration: 'none'}} className = 'm-0 text-success'><b>{props.Rating} Stars</b></span>
-              ):(
-                <span style = {{textDecoration: 'none'}} className = 'm-0 text-danger'><b>{props.Rating} Stars</b></span>
-              )}
-
-              
-              <span style = {{textDecoration: 'none'}} className='m-0 text-dark'><small><i> ({props.noOfRatings} Ratings)</i></small></span>
-            </div>
-          )
-        } 
-      <div>
-        <div className = 'overflowTextDescription text-dark bg-white'>
+      <div className='p-2 light'>
+        <p className=''>
+          <small className='text-muted'>  {props.address}</small>
+        </p> 
+        <div className = 'overflowTextDescription text-muted bg-white border-0'>
           {props.description}
         </div>
         <p style = {{textDecoration: 'none'}} className='text-secondary text-center'><small><span className='font-weight-bold'> {props.lengthNo}</span> Comments</small></p>

@@ -151,7 +151,8 @@ class Header extends React.Component {
 
         {/* LargeScreen */}
         <div className='navTop-lg'>
-          <h1 className='our-logo text-center p-3'>OddBall</h1>
+          <h1 className='our-logo text-center mb-0'>OddBall</h1>
+          <p className='text-center mb-2'>Austin Oddity Reviews</p>
           
           {/* LOGGED IN */}
           {this.state.username.length > 0 ? (
