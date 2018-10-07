@@ -33,6 +33,7 @@ class Chat extends React.Component{
             messages: [],
             id:[],
             what:'',
+            userlist:[],
         };
 
 
@@ -71,8 +72,8 @@ class Chat extends React.Component{
                         }
                         if(cookieArray[i]==="token"){
                             token=cookieArray[i+1].substring(0, cookieArray[i+1].length)
-                            console.log("full cookiearray token element")
-                            console.log(cookieArray[i+1])
+                            //console.log("full cookiearray token element")
+                            //console.log(cookieArray[i+1])
                         }
                     }
                     if(url==="localhost"){
@@ -101,8 +102,8 @@ class Chat extends React.Component{
         }
         this.componentDidMount =async ()=>{
             await this.checkCookie();
-            console.log("On chat page, cookieobject in state:")
-            console.log(this.state.cookie)
+            //console.log("On chat page, cookieobject in state:")
+            //console.log(this.state.cookie)
         }
 
 
@@ -113,8 +114,9 @@ class Chat extends React.Component{
         socket.on('connect', ()=>{
             socket.emit('authentication', {token:this.state.cookie.token});
                 socket.on('authenticated', ()=> {
-                    socket.on('RECEIVE_MESSAGE', function(data){
+                    socket.on('RECEIVE_MESSAGE', (data)=>{
                         addMessage(data);
+                        this.setState({userlist:data.userlist})
                     });   
                 });
                 socket.on('unauthorized', function(err){
@@ -127,9 +129,9 @@ class Chat extends React.Component{
 
         this.sendMessage = (ev) => {
             ev.preventDefault();
-            console.log(this.state.cookie)
+            //console.log(this.state.cookie)
             socket.emit('SEND_MESSAGE', {
-                author: this.state.cookie.username,
+                //author: this.state.cookie.username,
                 message: this.state.message
             })
             this.setState({message: ''});
@@ -166,6 +168,17 @@ class Chat extends React.Component{
                             )
                         })}
                     </div>
+                </div>
+                <div className="card border border-dark p-3">
+                        <ul>
+                        {this.state.userlist.map(user => {
+                            return (
+                                <div key={user}>
+                                <li className='mb-0'><span className='text-info'>{user}</span></li>
+                                </div>
+                            )
+                        })}
+                        </ul>
                 </div>
             </div>
             <div className="fixedCard">

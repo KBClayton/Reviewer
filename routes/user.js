@@ -28,12 +28,14 @@ module.exports = function(app) {
       secretAccessKey: IAM_USER_SECRET,
       Bucket: BUCKET_NAME
     });
+    //console.log(file)
     s3bucket.createBucket(function(){
       var params = {
         Bucket: BUCKET_NAME,
         Key: file.name,
-        Body: file.data
+        Body: file,
       };
+      //console.log("createbucket after params")
       s3bucket.upload(params, function(err, data){
         if(err){
           console.log('error in callback');
@@ -66,6 +68,8 @@ module.exports = function(app) {
       });
       if(req.body.imageFile){
         console.log("in image upload if")
+        //console.log(req.body.imageFile)
+        //let image=req.body.imageFile
         picdata=await uploadToS3(req.body.imageFile)
         console.log(picdata)
       }
@@ -525,6 +529,24 @@ module.exports = function(app) {
     })  
   })
 
+
+  app.post("api/user/ban", async (req, res) => {
+    if(!await verify.admin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not an admin"});
+      return;
+    }
+
+  })
+
+  app.post("api/user/unban", async (req, res) => {
+    if(!await verify.admin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not an admin"});
+      return;
+    }
+
+  })
   
 
 }

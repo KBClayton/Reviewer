@@ -183,22 +183,28 @@ io = socket(server);
 
 
 const User = require("./models/User");
+//var connectioncounter=0;
+var activeUserList=[];
 io.on('connection', (socket) => { 
+    //connectioncounter++;
     console.log('Socket connected');
     socket.on('SEND_MESSAGE',  (data) => { 
         console.log('Received data');
         data.author=socket.client.user;
-        console.log(data)
+        //console.log(data)
         io.emit('RECEIVE_MESSAGE', data);
     })
-    socket.on('disconnect', () => console.log('Client disconnected'));
+    socket.on('disconnect', () => {
+      //connectioncounter--;
+      console.log('Client disconnected')
+    });
 });
 
 require('socketio-auth')(io, {
   authenticate:  (socket, data, callback) => {
     //get credentials sent by the client
-    console.log("In socket.io auth function, data follows")
-    console.log(data)
+    //console.log("In socket.io auth function, data follows")
+    //console.log(data)
     //console.log(data.session)
     var token = data.token;
      jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
@@ -206,16 +212,16 @@ require('socketio-auth')(io, {
           console.log(err);
           return false;
       }else{
-          console.log(decoded)
+          //console.log(decoded)
           checkToken=decoded;
 
-          console.log("authentication successfull, username is"+checkToken.username)
+          //console.log("authentication successfull, username is"+checkToken.username)
           //this.postAuthenticate
            User.findOne({username:checkToken.username}, 'username').then((dbreply, err)=>{
             if(err){
               console.log(err)
             }else{
-              console.log(dbreply)
+              //console.log(dbreply)
               if(dbreply.username===checkToken.username){
                 socket.client.user=dbreply.username;
                 return callback(null, true);
@@ -248,15 +254,20 @@ require('socketio-auth')(io, {
     //   socket.client.user = user;
     // });
     console.log("in postauthenticate")
-    socket.emit({author:'Austin Oddball server',message:`Welcome to the weird chat ${socket.client.username}`})
+    console.log(socket.server.eio.clientsCount)
+    activeUserList.push(socket.client.user);
+    //console.log("socket server clientscount "+socket.eio.server.clientsCount)
+    io.emit('RECEIVE_MESSAGE', {message:`${socket.client.user} has joined weird chat, there are ${socket.server.eio.clientsCount|| 0} users connected`, userlist:activeUserList})
   },
 
   disconnect: (socket)=> {
-    console.log(socket.client.username + ' disconnected');
+    activeUserList.splice(activeUserList.indexOf(socket.client.username));
+    //connectioncounter--;
+    //console.log(socket.client.eio.clientsCount)
+    //console.log(socket.server)
+    //console.log(socket.client.username + ' disconnected');
+    io.emit('RECEIVE_MESSAGE', {message:`${socket.client.user} has disconnected, there are ${socket.server.eio.clientsCount || 0} users connected`, userlist:activeUserList})
   }
-
-
-
 });
 
 io.on('unauthorized', function(err){

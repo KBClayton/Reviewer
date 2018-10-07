@@ -12,7 +12,7 @@ module.exports = function(app) {
    // console.log(vault.read(req));
   
 
-      Product.find({}).sort({'dateCreated': -1}).populate('ratings').then((dbModel, err) =>{ 
+      Product.find({expires:{'$lte' : Date.now}}).sort({'dateCreated': -1}).populate('ratings').then((dbModel, err) =>{ 
         if(err){
           console.log(err);
           res.status(500).send({success:false, message:"something went wrong"})
