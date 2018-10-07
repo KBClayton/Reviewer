@@ -11,14 +11,48 @@ dotenv.config();
 const PORT2 = process.env.PORT || 3001;
 //var moment = require('moment');
 //moment().format();
+//Amazon 
+const AWS=require("aws-sdk");
+//const fileupload = require("express-fileupload");
+const BUCKET_NAME = 'atxreviewer';
+const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
+const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
+
+
+
 
 module.exports = function(app) {
-  app.post("/api/user/new", (req, res) => {
+  function uploadToS3(file){
+    let s3bucket = new AWS.S3({
+      accessKeyId: IAM_USER_KEY,
+      secretAccessKey: IAM_USER_SECRET,
+      Bucket: BUCKET_NAME
+    });
+    s3bucket.createBucket(function(){
+      var params = {
+        Bucket: BUCKET_NAME,
+        Key: file.name,
+        Body: file.data
+      };
+      s3bucket.upload(params, function(err, data){
+        if(err){
+          console.log('error in callback');
+          console.log(err);
+        }
+        console.log('success');
+        console.log(data);
+        return data;
+      })
+    })
+  }
+
+
+  app.post("/api/user/new", async (req, res) => {
       //console.log(`The post has hit the server, here is new User`);
       //console.log(req.body);
       //logger.info("The request has hit the server for new user");
       //logger.info(req.body);
-
+      let picdata
       const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
@@ -30,6 +64,11 @@ module.exports = function(app) {
           rejectUnauthorized: false
       }
       });
+      if(req.body.imageFile){
+        console.log("in image upload if")
+        picdata=await uploadToS3(req.body.imageFile)
+        console.log(picdata)
+      }
       //console.log(`user is: ${process.env.etherealUser}`)
 
 
@@ -107,6 +146,9 @@ module.exports = function(app) {
         res.cookie("url", url2, {
             //signed:true, 
         expires:new Date(Date.now() + 36000000)})
+        res.cookie("token", token, {
+          //signed:true, 
+          expires:new Date(Date.now() + 36000000)})
 
         //res.cookie('supercookie2', {token: "JWT " + token, username:user.username}, cookieParams);
         //vault.write(req, JSON.stringify({token: "JWT " + token, username:dbreply.username}));
@@ -167,7 +209,9 @@ module.exports = function(app) {
               res.cookie("url", url2, {
                   //signed:true, 
               expires:new Date(Date.now() + 36000000)})
-      
+              res.cookie("token", token, {
+                //signed:true, 
+                expires:new Date(Date.now() + 36000000)})
               res.json({success: true, token: token, hash: process.env.googlelocation, port:PORT2});
             } else {
               res.status(401).send({success: false, message: "wrong username or password"});
@@ -263,6 +307,35 @@ module.exports = function(app) {
       res.json(dbreply);
     });
   })
+
+
+  app.post("/api/user/userview", async (req, res) => {
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
+    User.findOne({username:req.body.username}, 'username picture averageRating products reviews chats replies productRatings reviewRatings')
+    .exec( function(err, dbreply) {
+      if (err) {res.json(err)};
+      res.json(dbreply);
+    });
+  })
+
+  app.post("/api/user/userfind", async (req, res) => {
+    if(!await verify.loggedin(req)){
+      console.log("failed validation")
+      res.status(401).send({success: false, message: "you are not logged in"});
+      return;
+    }
+    var re = new RegExp(req.body.username, 'i');
+    User.find({username:{ $regex: re }}, 'username picture profileInfo')
+    .exec( function(err, dbreply) {
+      if (err) {res.json(err)};
+      res.json(dbreply);
+    });
+  })
+
 
   app.get("/api/user/averagereview", (req, res) => {
     let prodAvg=0;
@@ -384,7 +457,6 @@ module.exports = function(app) {
   })
  })
 
-
   app.get("/api/user/resetreq/:name/:email", (req, res) => {
     let urlHelper = "http://localhost:3001"
     if (process.env.NODE_ENV === "production") {
@@ -450,9 +522,9 @@ module.exports = function(app) {
     if(err){
       res.json(err)
     }
-    })
-    
-    
+    })  
   })
+
+  
 
 }

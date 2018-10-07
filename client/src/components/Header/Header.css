@@ -1,21 +1,75 @@
-.fixedWrapper {
+.navMain {
   position: fixed;
   width: 100%;
-  z-index: 1111;
+  z-index: 5;
   top: 0;
+  background-color: #343a40;
 }
 .img-logo {
   height: 40px;
-  position: relative;
 }
 .our-logo {
   font-family: 'Poor Story', cursive;
   letter-spacing: 5px;
   font-size: 40px;
-  position: relative;
-  top: -0.5rem;
   padding-left: 1rem;
+  color: #dee2e6;
 }
+.fixed-right-login{
+  position: fixed;
+  right:1rem;
+  top:1.5rem;
+}
+
+.w-20{
+  position: relative;
+  width: 20%;
+  text-align: center;
+}
+
+#locationTab, #accountTab, #searchTab{
+  display: none;
+  text-align: center;
+  left:0;
+  position: absolute;
+  background-color: #f8f9fa;
+  padding: 5px;
+  border-bottom: 1px black solid;
+  border-left: 1px black solid;
+  border-right: 1px black solid;
+}
+#locationIcon:hover + #locationTab{
+  display: inline;
+}
+#locationTab:hover{
+  display: inline;
+}
+/* #accountTab{
+  display: none;
+  position: absolute;
+  background-color: #dee2e6;
+  padding: .5rem;
+} */
+#accountTab:hover{
+  display: inline;
+}
+#accountIcon:hover + #accountTab{
+  display: inline;
+}
+/* #searchTab{
+  display: none;
+  position: absolute;
+  background-color: #dee2e6;
+  padding: .5rem;
+} */
+#searchTab:hover{
+  display: inline;
+}
+#searchIcon:hover + #searchTab{
+  display: inline;
+}
+
+/*  */
 .navStatusButton {
   position: relative;
   top: -0.5rem;
@@ -34,11 +88,21 @@
   opacity: .95;
 }
 .mt-30 {
-  margin-top: 90px;
+  margin-top: 150px;
 }
 .loggedInUN {
   letter-spacing: 3px;
   color: orange;
   padding-left: 1rem;
+}
+@media only screen and (max-width: 767.98px) {
+  .navTop-lg{
+    display: none;
+  }
 
+}
+@media only screen and (min-width: 768px) {
+  .navTop-sm{
+    display: none;
+  }
 }

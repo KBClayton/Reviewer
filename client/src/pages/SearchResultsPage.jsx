@@ -91,8 +91,8 @@ class SearchResultsPage extends Component {
                   description = {location.description}
                   // urlLink = {'/location/' + location._id}
                   lengthNo = {location.reviews.length}
-                  Rating = {'Average Rating: ' + location.averageRating + ' Stars'}
-                  noOfRatings = {location.ratings.length + ' Ratings'}
+                  Rating = {location.averageRating}
+                  noOfRatings = {location.ratings.length}
                 />
               </Link>
             </div>

@@ -16,7 +16,8 @@ const productSchema = new Schema({
   catagories:{type: Array},
   gpsdata:{type: Object, default:{lat:30.2672, long:97.7431}},
   dateCreated:{type:Date, default:Date.now},
-  dateUpdated:{type:Date, default:Date.now}
+  dateUpdated:{type:Date, default:Date.now},
+  dateExpires:{type:Date}
 });
 
 const Product = mongoose.model("Product", productSchema);

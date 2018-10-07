@@ -14,12 +14,13 @@ const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reviewdb");
 
 
+
 //Amazon stuff
-const AWS=require("aws-sdk");
+// const AWS=require("aws-sdk");
 const fileupload = require("express-fileupload");
-const BUCKET_NAME = 'atxreviewer';
-const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
-const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
+// const BUCKET_NAME = 'atxreviewer';
+// const IAM_USER_KEY = process.env.AWS_ACCESS_KEY_ID;
+// const IAM_USER_SECRET = process.env.AWS_SECRET_ACCESS_KEY;
 
 //email
 const nodemailer = require('nodemailer');
@@ -112,28 +113,28 @@ app.use(function(req, res, next) {
 
 
 //Amazon more stuff
-function uploadToS3(file){
-  let s3bucket = new AWS.S3({
-    accessKeyId: IAM_USER_KEY,
-    secretAccessKey: IAM_USER_SECRET,
-    Bucket: BUCKET_NAME
-  });
-  s3bucket.createBucket(function(){
-    var params = {
-      Bucket: BUCKET_NAME,
-      Key: file.name,
-      Body: file.data
-    };
-    s3bucket.upload(params, function(err, data){
-      if(err){
-        console.log('error in callback');
-        console.log(err);
-      }
-      console.log('success');
-      console.log(data);
-    })
-  })
-}
+// function uploadToS3(file){
+//   let s3bucket = new AWS.S3({
+//     accessKeyId: IAM_USER_KEY,
+//     secretAccessKey: IAM_USER_SECRET,
+//     Bucket: BUCKET_NAME
+//   });
+//   s3bucket.createBucket(function(){
+//     var params = {
+//       Bucket: BUCKET_NAME,
+//       Key: file.name,
+//       Body: file.data
+//     };
+//     s3bucket.upload(params, function(err, data){
+//       if(err){
+//         console.log('error in callback');
+//         console.log(err);
+//       }
+//       console.log('success');
+//       console.log(data);
+//     })
+//   })
+// }
 
 //api routes
 //require("./routes/user")(app, vault, cookieParams);
@@ -145,10 +146,10 @@ require("./routes/recommend")(app);
 require("./routes/chat")(app);
 require("./routes/reviewRating")(app);
 require("./routes/productRating")(app);
-app.post("/upload", function(req, res){
-  uploadToS3(req.files.file);
-  res.send("!")
-});
+// app.post("/upload", function(req, res){
+//   uploadToS3(req.files.file);
+//   res.send("!")
+// });
 // app.get("/api/thing", (req, res) => {
 //   res.sendfile({success:true, message:"this is hitting the server"})
 // })
@@ -178,16 +179,94 @@ server = app.listen(PORT, () => {
 });
 
 //Open websocket to listen for realtime chatting
-
 io = socket(server);
- 
+
+
+const User = require("./models/User");
 io.on('connection', (socket) => { 
     console.log('Socket connected');
     socket.on('SEND_MESSAGE',  (data) => { 
-        console.log(`Received data from`);
+        console.log('Received data');
+        data.author=socket.client.user;
+        console.log(data)
         io.emit('RECEIVE_MESSAGE', data);
     })
     socket.on('disconnect', () => console.log('Client disconnected'));
 });
+
+require('socketio-auth')(io, {
+  authenticate:  (socket, data, callback) => {
+    //get credentials sent by the client
+    console.log("In socket.io auth function, data follows")
+    console.log(data)
+    //console.log(data.session)
+    var token = data.token;
+     jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+      if(err){
+          console.log(err);
+          return false;
+      }else{
+          console.log(decoded)
+          checkToken=decoded;
+
+          console.log("authentication successfull, username is"+checkToken.username)
+          //this.postAuthenticate
+           User.findOne({username:checkToken.username}, 'username').then((dbreply, err)=>{
+            if(err){
+              console.log(err)
+            }else{
+              console.log(dbreply)
+              if(dbreply.username===checkToken.username){
+                socket.client.user=dbreply.username;
+                return callback(null, true);
+              }
+            }
+          })
+          // if(checkToken.username===req.session.username && checkToken._id===req.session.uid)
+          // {
+          //         let preidstuff=JSON.stringify( user._id);
+          //         let idstuff=preidstuff.slice(1,preidstuff.length-1)
+          //         if(user.username===req.session.username && idstuff===checkToken._id){
+          //             console.log(`${req.session.username} was verified correctly`)
+
+          //         }else{
+          //             return false;
+          //         }
+              
+          // }else{
+          //     console.log("something has broken cookies or JWT.")
+          //     return false
+          // }
+      }
+  })
+  },
+
+  postAuthenticate: (socket, data) => {
+    // var username = data.username;
+    
+    // db.findUser('User', {username:username}, function(err, user) {
+    //   socket.client.user = user;
+    // });
+    console.log("in postauthenticate")
+    socket.emit({author:'Austin Oddball server',message:`Welcome to the weird chat ${socket.client.username}`})
+  },
+
+  disconnect: (socket)=> {
+    console.log(socket.client.username + ' disconnected');
+  }
+
+
+
+});
+
+io.on('unauthorized', function(err){
+  console.log("There was an error with the authentication:", err.message);
+});
+
+// io.on('message', function () {
+  
+//  });
+
+
 
 

@@ -27,7 +27,9 @@ class CreateUserPage extends Component {
       passwordTooShortError: '',
       passwordDoesntMatchError: ''
     },
-    accountAccepted: false
+    accountAccepted: false,
+    imageURL: '',
+    picture: {}
    }
 
   // Handle Form Submit
@@ -64,7 +66,8 @@ class CreateUserPage extends Component {
     const newUser = {
       username: this.state.name.trim(),
       email: this.state.email.trim(),
-      password: this.state.password.trim()
+      password: this.state.password.trim(),
+      imageFile: this.state.picture
     }
 
     console.log(newUser)
@@ -89,6 +92,21 @@ class CreateUserPage extends Component {
       .catch(function(error){
         console.log(error);
       })
+  }
+
+  //Checks for Image To be real image
+  checkImage =(event)=>{
+    if(event.target.files[0].size > 1000000){
+      alert('This image exceeds the size requirements. It must be less than 2MB')
+      return false;
+    }
+    let reader = new FileReader();
+    reader.onload = (e) => {
+      this.setState({imageURL: e.target.result});
+      // console.log(this.state.imageURL)
+    };
+    reader.readAsDataURL(event.target.files[0]);
+    this.setState({picture: event.target.files[0]})
   }
 
   redirect = (event) => {
@@ -149,7 +167,8 @@ class CreateUserPage extends Component {
             value={this.state.password_v}
             onChange={e => this.setState({ password_v: e.target.value})}
           />
-          <input type="file"/>
+          <input type="file" id='s3Image' onChange={this.checkImage}/>
+          <img src={this.state.imageURL} alt=""/>
           <br/>
           <button
             className='m-2 btn btn-info btn-small'
