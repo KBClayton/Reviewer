@@ -72,21 +72,46 @@ module.exports = function(app) {
     }
       //console.log("in new product")
       //console.log(req.body)
-      let piclink
-      if(req.body.picture===''){
+    let piclink
+     if(req.body.picture===''){
         piclink=undefined;
       }else{
         piclink=req.body.picture;
-        if(piclink.substring(0,4)!=='http:' && piclink.substring(0,5)!=='https:'){
-          piclink="https:"+piclink;
+        if(piclink.substring(0,5)!=='http:' && piclink.substring(0,6)!=='https:'){
+          piclink="https://"+piclink;
+
+          //console.log("picture pre regex")
+          //console.log(piclink)
+        }
+        if(!piclink.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g)){
+         // console.log("picture in regex if")
+          piclink=undefined;
         }
       }
-    
+      let link
+      if(req.body.link===''){
+        link=undefined;
+      }else{
+        link=req.body.link;
+        //console.log(link.substring(0,4))
+        if(link.substring(0,5)!=='http:' && link.substring(0,6)!=='https:'){
+          link="https://"+link;
+
+          //console.log("link pre regex")
+          //console.log(link)
+        }
+        if(!link.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g)){
+          //console.log("link  in regex if")
+          link=undefined;
+        }
+      }
+      //console.log(picklink)
+      //console.log(link)
       newprod={
         title:req.body.title,
         description:req.body.description,
         picture:piclink,
-        link:req.body.link,
+        link:link,
         address:req.body.address,
         averageRating:undefined,
         gpsdata:req.body.gpsdata,
