@@ -48,7 +48,7 @@ class ShowAllProducts extends Component {
       return (
         <div className={this.starColor(stars)}>
           {starArray}
-          <small className="text-dark"> ({stars.ratings.length} Ratings)</small>
+          <small className="text-muted"> ({stars.ratings.length} Ratings)</small>
         </div>
       )
   }
@@ -56,13 +56,13 @@ class ShowAllProducts extends Component {
   starColor=(stars)=>{
     console.log(stars.averageRating)
     if (stars.averageRating >= 4){
-      return('text-center text-success');
+      return('ml-2 text-success');
     }
     else if(stars.averageRating >= 2.5){
-      return ('text-center text-warning');
+      return ('ml-2 text-warning');
     }
     else{
-      return ('text-center text-danger');
+      return ('ml-2 text-danger');
     }
   }
   
@@ -81,22 +81,33 @@ class ShowAllProducts extends Component {
             {this.state.locations.map(location => (
               <div 
                 key={location._id}
-                className='col-sm-6 col-md-4 mb-3'
+                className='col-sm-6 col-md-4 mb-3 rounded'
               >
                 <Link to={'/location/' + location._id}>
-                  <div className="shadow-box bg-white round">
+                  <div className="shadow-box bg-white h-100 rounded">
                     <div
+                      className='rounded-top'
                       style={{
                         'background-image': `url(${location.picture})`,
                         'background-position': 'center',
                         'background-repeat': 'no-repeat',
                         'background-size': 'cover',
-                        'opacity': '.7',
+                        'opacity': '.8',
                         'height': '150px'
                       }}
                     />
-                    <h6 className=' ml-2 mr-2 mb-0'>{location.title}</h6>
-                    <div className={this.starColor(location)}>
+                    <h6 
+                      className=' ml-2 mr-2 text-dark'
+                      style={{'margin-bottom': '2rem'}}
+                    >
+                      {location.title}
+                    </h6>
+                    <div
+                      style={{
+                        'position': 'absolute',
+                        'bottom':0
+                      }}
+                    >
                       {this.starNumberRender(location)}
                     </div>
                   </div>
