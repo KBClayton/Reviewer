@@ -151,7 +151,7 @@ class Header extends React.Component {
 
         {/* LargeScreen */}
         <div className='navTop-lg'>
-          <h1 className='our-logo text-center mb-0'>OddBall</h1>
+          <Link to='/'> <h1 className='our-logo text-center mb-0'>OddBall</h1></Link>
           <p className='text-center mb-2'>Austin Oddity Reviews</p>
           
           {/* LOGGED IN */}
@@ -165,7 +165,7 @@ class Header extends React.Component {
                   <p className='mb-0 text-dark font-weight-bold' id='searchIcon'>Search</p>
                   <div id='searchTab'>
                     <Link to = '/usersearch' className='mb-0 font-weight-bold'>Search Users</Link>
-                    <p className='mb-0 text-primary font-weight-bold'>Search Locations</p>
+                    <Link to='/' className='mb-0 text-primary font-weight-bold'>Search Locations</Link>
                   </div>
                 </div>
 

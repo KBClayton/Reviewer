@@ -14,6 +14,7 @@ import ShowOneLocation from './pages/AddCommentPage'
 import SearchPage from './pages/SearchPage';
 import Chat from './pages/ChatPage';
 import ReplyPage from './pages/Reply';
+import Homepage from './pages/Homepage.jsx';
 // import requireAuth from './components/Auth';
 import SearchResultsPage from './pages/SearchResultsPage';
 import OtherProfilePage from './pages/OtherUserProfile';
@@ -122,7 +123,7 @@ class App extends Component {
       <BrowserRouter>
         
         <Switch>
-          <Route path='/' component = {()=><ShowAllProducts /> } exact/>
+          <Route path='/' component = {Homepage} exact/>
           <Route path ='/About' component = {AboutPage} exact/>
     
           <Route path='/createUser' component = {CreateUserPage}/>
