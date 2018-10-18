@@ -56,8 +56,8 @@ html {
 }
 body {
   margin-bottom: 60px; /* Margin bottom by footer height */
-  /* background-color: blueviolet; */
-  background-image: url('./pexels-photo-242236.jpeg');
+  /* background-color: lightblue; */
+  /* background-image: url('./pexels-photo-242236.jpeg'); */
   background-repeat: repeat;
   background-size: 100%;
   
@@ -84,4 +84,14 @@ body {
 }
 .clear-opacity{
   opacity: 2;
+}
+
+.mainSearchInputDiv{
+  padding: 15% 0;
+}
+.mainSearchInput{
+  position: absolute;
+  /* margin-left: 20%;
+  margin-right: 20%; */
+  
 }

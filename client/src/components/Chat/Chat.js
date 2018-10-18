@@ -156,7 +156,7 @@ class Chat extends React.Component{
         return (
             <div className="" >
             <div className='container'>
-                <div className="card border border-dark p-3">
+                <div className="mt-3 card border border-dark p-3">
                     <div className="card-title">Global Chat</div>
                     <hr/>
                     <div className="messages">
@@ -180,13 +180,14 @@ class Chat extends React.Component{
                         })}
                         </ul>
                 </div>
-            </div>
+           
             <div className="fixedCard">
                 {/* <input type="text" placeholder="Username" value={this.state.username} onChange={ev => this.setState({username: ev.target.value})} className="form-control"/> */}
                 <textarea type="text" placeholder="Message" className="form-control mb-1" value={this.state.message} onChange={ev => this.setState({message: ev.target.value})}/>
                 <div className='text-center'>
                     <button onClick={this.sendMessage} className="btn btn-primary btn-sm ">Send</button>
                 </div>
+            </div>
             </div>
         </div>
         );

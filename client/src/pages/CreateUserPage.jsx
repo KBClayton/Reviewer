@@ -191,18 +191,18 @@ class CreateUserPage extends Component {
       return <Redirect to={from} />;
     }
     return (
-      <div className = 'bg-dark mb-5'>          
+      <div className = 'mb-5'>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
 
-        <form className='container text-center'>
+        <form className='container text-center bg-info'>
 
           {/* Username */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.usernameError}</p>
           <input 
-            className='m-2 animated bounce'
+            className='m-1 p-1 animated bounce'
             name='fullname'
             placeholder='Full Name'
             type='text' 
@@ -220,7 +220,7 @@ class CreateUserPage extends Component {
           {/* Email */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.emailError}</p>
           <input
-            className='m-2'
+            className='m-1 p-1'
             name='email'
             placeholder='Email Address'
             type="text"
@@ -238,7 +238,7 @@ class CreateUserPage extends Component {
           {/* Password */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordTooShortError}</p>
           <input
-            className='m-2'
+            className='m-1 p-1'
             name='password'
             placeholder='Passcode'
             type="password"
@@ -255,7 +255,7 @@ class CreateUserPage extends Component {
           {/* Password Verification */}
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg.passwordDoesntMatchError}</p>
           <input
-            className='m-2'
+            className='m-1 mb-3 p-1'
             name='password_v'
             placeholder='Retype Passcode'
             type="password"
@@ -271,17 +271,18 @@ class CreateUserPage extends Component {
           }
           <br/>
           <input type="file" id='s3Image' style={{display: 'none'}} onChange={this.checkImage}/>
-          <span onClick={this.loadImageInput} className='btn btn-info m-2'>Add Image</span> <img src={this.state.imageURL} alt="" className='img-logo'/>
+          <div className='d-flex justify-content-center'>
+            <p onClick={this.loadImageInput} className='rounded font-poppins mr-1 p-1 bg-secondary text-white'>Upload Your Avatar</p> 
+            <img src={this.state.imageURL} alt="" className='img-height-32'/>
+          </div>
           <br/>
           <button
-            className='m-2 btn btn-success btn-small'
+            className='mb-1 font-poppins p-1 p rounded bg-success text-white'
             onClick={this.handleSubmit}
           >
             Submit
           </button>
         </form>
-
-        <Footer/>
       </div>
 
     );

@@ -1,9 +1,10 @@
 .navMain {
-  position: fixed;
+  /* position: fixed; */
   width: 100%;
   z-index: 5;
   top: 0;
   background-color: lightblue;
+  color: rgb(146, 180, 192)
 }
 .img-logo {
   height: 40px;
@@ -13,8 +14,8 @@
   font-family: 'Lobster', cursive;
   letter-spacing: 5px;
   font-size: 40px;
-  margin-top: .5rem;
   padding: 0;
+  padding-top: 15px;
   color: black;
   line-height: 32px;
 }
@@ -84,14 +85,12 @@
   letter-spacing: 2px;
 }
 
-.border-custom {
+/* .border-custom {
   border-color: lightgoldenrodyellow;
-}
-.opaque {
-  opacity: .95;
-}
+} */
+
 .mt-30 {
-  margin-top: 150px;
+  margin-top: 120px;
 }
 .loggedInUN {
   letter-spacing: 3px;
@@ -102,10 +101,18 @@
   .navTop-lg{
     display: none;
   }
+  .navMain{
+    position: fixed;
+    top: 0;
+    z-index: 1100;
+  }
 
 }
 @media only screen and (min-width: 768px) {
   .navTop-sm{
+    display: none;
+  }
+  .mt-30{
     display: none;
   }
 }

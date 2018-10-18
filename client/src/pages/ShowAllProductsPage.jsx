@@ -72,69 +72,39 @@ class ShowAllProducts extends Component {
     // console.log(this.props)
     return (
       <div>          
-        <Header 
-          title = {this.state.title}
-          subpage = {this.state.subpage}
-        />
+        <Header title = {this.state.title}subpage = {this.state.subpage}/>
+        
         <div className="container">
           <div className="row">
-            {this.state.locations.map(location => (
-              <div 
-                key={location._id}
-                className='col-sm-6 col-md-4 mb-3 rounded'
-              >
-                <Link to={'/location/' + location._id}>
-                  <div className="shadow-box bg-white h-100 rounded">
+            {this.state.locations.map(result=>(
+              <div className="col-sm-6 col-md-4 col-lg-3">
+                <Link to={'/location/' + result._id} className=''>
+                  <div className="m-1">
                     <div
-                      className='rounded-top'
                       style={{
-                        'background-image': `url(${location.picture})`,
+                        'maxWidth': '100%',
+                        'background-image': `url(${result.picture})`,
                         'background-position': 'center',
                         'background-repeat': 'no-repeat',
                         'background-size': 'cover',
                         'opacity': '.8',
-                        'height': '150px'
+                        'height': '150px',
+                        'marginBottom': '8px'
                       }}
                     />
-                    <h6 
-                      className=' ml-2 mr-2 text-dark'
-                      style={{'margin-bottom': '2rem'}}
-                    >
-                      {location.title}
-                    </h6>
-                    <div
-                      style={{
-                        'position': 'absolute',
-                        'bottom':0
-                      }}
-                    >
-                      {this.starNumberRender(location)}
+                    <div style={{'height': '75px'}}>
+                    <h6 className='font-slabo'>{result.title}</h6>
+                    <div>{this.starNumberRender(result)}</div>
                     </div>
                   </div>
-
-                  {/* <LocationDisplay
-                    key = { location._id}
-                    id = {location._id}
-                    imageUrl = {location.picture}
-                    address = {location.address}
-                    // link = {location.link}
-                    title = {location.title}
-                    description = {location.description}
-                    // urlLink = {'/location/' + location._id}
-                    lengthNo = {location.reviews.length}
-                    Rating = {location.averageRating}
-                    noOfRatings = {location.ratings.length}
-                  /> */}
-                  {/* <RateProductStars/> */}
+                  
                 </Link>
               </div>
             ))}
           </div>
         </div>
-        <Footer 
-        /> 
+        <Footer/> 
       </div>
-      
     );
   }
 }

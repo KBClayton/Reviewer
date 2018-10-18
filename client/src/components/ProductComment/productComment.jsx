@@ -7,23 +7,27 @@ const ProductComment = props => (
   <div>
     <div className='modalBackground' onClick={props.modalTrigger}/>
     <div className="customModalComment">
-      <div className = 'card bg-light m-3 p-3'>
-        <p className='text-center'>Write A Review</p>
+      <div className = 'shadow-box bg-light m-3 p-3'>
+        <h6 className=' mb-2 text-center font-poppins text-info'>Write A Review</h6>
+        <div className="w-100 text-center m-1">
         <textarea 
-          className='border border-dark p-3' 
+          className='border border-dark p-1' 
           onChange={props.textComment} 
-          name="productComment" id={props._id} 
-          cols="30" rows="10" 
+          name="productComment" id={props._id}
           placeholder='Add your review here'
           value = {props.CommentText}  
         >
         </textarea>
-        <button 
-          className = 'btn btn-secondary btn-sm' 
-          onClick={props.addComment}
-        >
-          Submit Comment
-        </button>
+        </div>
+        <div className="text-center">
+          <button 
+            className = 'p-1 font-raleway bg-success text-white' 
+            onClick={props.addComment}
+            style={{'fontSize': '18px'}}
+          >
+            Submit Comment
+          </button>
+        </div>
       </div>
     </div>
   </div>

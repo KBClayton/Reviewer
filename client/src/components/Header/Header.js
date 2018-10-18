@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom'
-import './Header.css';
+// import './Header.css';
 import logo from './oddball4.png';
 import axios from 'axios'
 
@@ -131,90 +131,109 @@ class Header extends React.Component {
 
     return (  
       //Navbar Wrapper
-      <div>
-      <div className='navMain'>
+      <div className=''>
+      <div className='navMain bg-lightblue'>
 
         {/* Small Screen */}
         <div className='navTop-sm'>
-          <h1 className="mb-0 w-100 pl-3 pr-3 pt-3 text-center border-bottom border-light">
-            <div className='d-flex justify-content-between mb-1'>
-              <button onClick={this.showNavBar} className='fas fa-bars text-secondary border bg-dark border-secondary rounded navStatusButton'></button>
-              <div>
-                <img src={logo} className="img-logo" alt="oddball logo" />
-                <span className='our-logo'>OddBall</span>
-              </div>  
-              
-            </div>  
-          </h1>
+          <div className='d-flex justify-content-between p-3'>
+            <h1 className='font-marker text-white text-outline'>OddBall</h1>
+            <button id='navStatusButton' onClick={this.showNavBar} className='fas fa-bars text-secondary border bg-dark border-secondary rounded'></button> 
+          </div>  
         </div>
-
 
         {/* LargeScreen */}
         <div className='navTop-lg'>
-          <Link to='/'> <h1 className='our-logo text-center mb-0'>OddBall</h1></Link>
-          <p className='text-center mb-2'>Austin Oddity Reviews</p>
-          
-          {/* LOGGED IN */}
-          {this.state.username.length > 0 ? (
-            <div className="bg-light border-bottom border-dark">
-            <div className='container'>
-              <p className=' fixed-right-login text-info'>Logged In <i className='text-success fa fa-check-circle'/></p>
-              <div className='d-flex'>
-                {/* <p className = 'mb-3 text-secondary'>Logged in as: <b className='loggedInUN poorStory'>{this.state.username}</b> <i className='text-success fa fa-check-circle'/></p> */}
-                <div className='w-20'>
-                  <p className='mb-0 text-dark font-weight-bold' id='searchIcon'>Search</p>
-                  <div id='searchTab'>
-                    <Link to = '/usersearch' className='mb-0 font-weight-bold'>Search Users</Link>
-                    <Link to='/' className='mb-0 text-primary font-weight-bold'>Search Locations</Link>
+          {/* <div className='container'> */}
+          <div className='d-flex justify-content-between p-3'>
+            <Link to='/'>
+              <h1 className='font-marker text-white text-outline'>OddBall</h1>
+              <p className='font-raleway font-weight-bold'>Austin Oddity Reviews</p>
+            </Link>
+
+            {/* LOGGED IN */}
+            {this.state.username.length > 0 ? (
+              <div className='w-300-px d-flex justify-content-between' style={{'marginTop': '40px'}}>
+
+                <Link to='/about' className='font-poppins font-weight-bold'>About </Link>
+                
+                <div id='locationIcon'>
+                  <Link to='/allproducts'><p className='font-poppins text-dark font-weight-bold'>Oddities</p></Link>
+                  <div id='locationTab' className='d-none'>
+                    <div className='nav-arrow-up-location'/>
+                    <div className='bg-maroon p-3 rounded'> 
+                      <Link to='/' className=' d-block font-weight-bold mb-1'>Search Locations</Link>
+                      <Link to = '/allproducts' className='d-block font-weight-bold mb-1'>See All</Link>
+                      <Link to = '/createnewlocation' className='d-block font-weight-bold mb-1'>Add A Location</Link>
+                      <Link to = '/Search' className='font-weight-bold'>Suggestions</Link>
+                    </div>
                   </div>
                 </div>
 
-                <div className='w-20'>
-                  <p className='mb-0 text-dark font-weight-bold' id='locationIcon'>Locations</p>
-                  <div id='locationTab'>
-                    <Link to = '/allproducts' className='mb-0 font-weight-bold'>See All</Link>
-                    <br/>
-                    <Link to = '/createnewlocation' className='mb-0 font-weight-bold'>Add A Location</Link>
-                  </div>
-                </div>
+                <Link to = '/chat' className='font-poppins font-weight-bold text-dark'>Chat</Link>
 
-                <div className="w-20">
-                <Link to = '/Search' className='mb-0 font-weight-bold text-dark'>Suggestions</Link>
-                </div>
-                <div className="w-20">
-                <Link to = '/chat' className='mb-0 font-weight-bold text-dark'>Chat</Link>
-                </div>
-                <div className='w-20'>
-                  <p className='mb-0 font-weight-bold text-dark'  id='accountIcon'>Account</p>
-                  <div id='accountTab'>
-                    <p className='mb-0 text-success font-weight-bold'>{this.state.username}</p>
-                    <Link to = '/profile' className='text-secondary mb-0 font-weight-bold'>My Account</Link>
-                    <br/>
-                    <p className='btn text-danger mb-0 font-weight-bold p-0' onClick={this.logOut} id='logout'>LogOut</p>
+                <div id='accountIcon'>
+                  <p className='font-poppins font-weight-bold'>My Account</p>
+                  <div id='accountTab' className='d-none'>
+                    <div className='nav-arrow-up-account'/>
+                    <div className='bg-maroon p-3 rounded'>
+                      {/* <p className='mb-0 text-success font-weight-bold'>{this.state.username}</p> */}
+                      <Link to = '/profile' className='font-arial font-weight-bold d-block mb-1'>My Account</Link>
+                      <Link to = '/usersearch' className='font-arial d-block font-weight-bold mb-1'>Search Users</Link>
+                      <p className='font-arial text-danger font-weight-bold' onClick={this.logOut} id='logout'>Log Out</p>
+                    </div>
                   </div>
                 </div>
 
               </div>
-            </div>
-            </div>
-          ):(
-            // NOT LOGGED IN
-            <div className="bg-light border-bottom border-dark">
-            <div className='container'>
-              <div className='d-flex'> 
-                {/* <Link to = '/createnewlocation'>Post New Oddity</Link> */}
-                <Link to = '/allproducts' className='w-20 text-secondary font-weight-bold'>Locations</Link>
-                <Link to = '/Search' className='w-20 text-secondary font-weight-bold'>Suggestions</Link>
-
-                <Link to = '/CreateUser' className='w-20 font-weight-bold text-success'>SIGN UP</Link>
-                <Link to = '/login' className='w-20 text-secondary font-weight-bold '>Log In</Link>
-                <Link to = '/chat' className='w-20 text-secondary font-weight-bold'>Chat <i className='fas fa-lock'/></Link>
+            ):(
+              // NOT LOGGED IN
+              <div className='w-300-px d-flex justify-content-between' style={{'marginTop': '40px'}}> 
+                  {/* <Link to = '/createnewlocation'>Post New Oddity</Link> */}
+                  <Link to='/about' className='font-poppins'>About </Link>
+                  <div id='locationIcon'>
+                  <Link to='/allproducts'><p className='font-poppins text-dark font-weight-bold'>Oddities</p></Link>
+                  <div id='locationTab' className='d-none'>
+                    <div className='nav-arrow-up-location'/>
+                    <div className='bg-maroon p-3 rounded'> 
+                      <Link to='/' className=' d-block font-weight-bold'>Search Locations</Link>
+                      <Link to = '/allproducts' className='d-block font-weight-bold'>See All</Link>
+                      <Link to = '/Search' className='font-weight-bold'>Suggestions</Link>
+                    </div>
+                  </div>
+                </div>
+                  <Link to = '/CreateUser' className='font-poppins font-weight-bold text-success'>SIGN UP</Link>
+                  <Link to = '/login' className='font-poppins font-weight-bold '>Log In</Link>
+                </div>
+            )}
+            <div id='navSearchBar-lg' className={`d-none mt-3 ${this.state.searchInputClass}`}>
+              <div className='d-flex justify-content-between'>
+              <input 
+                type="text" 
+                className={`${this.state.searchInputBackgroundColor}`}
+                value={this.state.searchInput}
+                // onChange={e => this.setState({ searchInput: e.target.value})}
+                onChange = {this.searchInput}
+                placeholder="Search..." 
+              />
+              <i className='fas fa-search bg-white p-1 bg-light' style={{'height': '18px'}} onClick={this.searchAll}></i>
               </div>
-            </div>
-            </div>
-          )}
-
+              {/* Map AutoSearch Results */}
+              <div style={{'position': 'absolute'}} className='bg-maroon'>
+              {this.state.searchResults.map(result=>(
+                
+                <p  key={result._id} className=''>
+                  <a href={`/location/${result._id}`} className='pl-1 text-white' key={result._id} style={{'lineHeight': '24px'}}>
+                    {result.title}
+                  </a>
+                </p>
+                
+              ))}
+              </div>
+          </div>
+          </div>
         </div>
+      </div>
 
 
 
@@ -226,66 +245,58 @@ class Header extends React.Component {
 
 
 
-        <div style={this.state.navStyle} className='poorStory'>
+        <div style={this.state.navStyle} className='navTop-sm bg-maroon border-bottom font-poppins'>
           <div className={this.state.searchInputClass}>
-            <div className='input-group mb-0'>
+            <div className=' mb-0'>
+              <div className='d-flex justify-content-left'>
               <input 
                 type="text" 
                 className={this.state.searchInputBackgroundColor}
                 value={this.state.searchInput}
                 // onChange={e => this.setState({ searchInput: e.target.value})}
                 onChange = {this.searchInput}
-                placeholder="Search..." 
+                placeholder="Search All..." 
                 aria-label="SearchAll" 
                 aria-describedby="button-addon2"
               />
-              <div className="input-group-append" onClick={this.searchAll}>
-                <button className="btn btn-outline-secondary" type="button" id="button-addon2">
-                  <span className='fas fa-search'>
+                <button className="btn btn-outline-secondary ml-1" onClick={this.searchAll}>
+                  <span className='fas fa-search bg-success text-white'>
                   </span>
                 </button>
               </div>
               {/* Map AutoSearch Results */}
               {this.state.searchResults.map(result=>(
-                <p  key={result._id} className=''><a href={`/location/${result._id}`} className='bg-danger text-white' key={result._id}>{result.title}</a></p>
+                <p  key={result._id} className=''><a href={`/location/${result._id}`} className='bg-secondary text-white' key={result._id}>{result.title}</a></p>
               ))}
             </div>
           </div>
           <br/>
           {this.state.username.length > 0 ? (
-            <div>
-              <p className = 'mb-3 text-secondary'>Logged in as: <b className='loggedInUN poorStory'>{this.state.username}</b> <i className='text-success fa fa-check-circle'/></p>
-              <Link to = '/profile' className='text-white'>My Profile</Link>
+            <div className='text-light'>
+              <p className = 'mb-3 text-secondary'>Welcome <b className='loggedInUN font-poppins text-success'>{this.state.username}</b> <i className='text-success fa fa-check-circle'/></p>
+              <Link to = '/profile' className=' d-block font-weight-bold mb-1'>My Profile</Link>
+              <Link to = '/usersearch' className=' d-block font-weight-bold mb-1'>Find Other Users</Link>
               <br/>
-              <Link to = '/usersearch'>FindOtherUsers</Link>
+              <Link to = '/allproducts' className='d-block font-weight-bold mb-1'>See All</Link>
+              <Link to = '/' className=' d-block font-weight-bold mb-1'>Search Locations</Link>
+              <Link to = '/Search' className=' d-block font-weight-bold mb-1'>Local Suggestions</Link>
+              <Link to = '/createnewlocation' className='d-block font-weight-bold mb-1'>Add A Location</Link>
               <br/>
-              <div className='mb-3'/>
-              <Link to = '/createnewlocation'>Post New Oddity</Link>
+              <Link to = '/chat' className='d-block font-weight-bold mb-1'>Chat</Link>
               <br/>
-              <Link to = '/allproducts'>All Oddities</Link>
-              <br/>
-              <Link to = '/Search' className='text-success'>Local Suggestions</Link>
-              <div className='mb-3'/>
-              <Link to = '/chat'>Chat</Link>
-              <br/>
-              <p className='mb-0 btn pl-0 pr-0 text-danger' onClick={this.logOut}>LogOut</p>
+              <p className='d-block font-weight-bold mb-1 text-danger' onClick={this.logOut}>LogOut</p>
             </div>
           ):(
             <div> 
-              <Link to = '/CreateUser' className='text-success'>Sign Up FREE</Link>
+              <Link to = '/allproducts' className=' d-block font-weight-bold mb-1'>All Oddities</Link>
+              <Link to = '/Search' className=' d-block font-weight-bold mb-1'>Local Suggestions</Link>
               <br/>
-              <Link to = '/login'>Log In</Link>
-              <div className='mb-3'/>
-              {/* <Link to = '/createnewlocation'>Post New Oddity</Link> */}
-              <br/>
-              <Link to = '/allproducts'>All Oddities</Link>
-              <br/>
-              <Link to = '/Search' className='text-success'>Local Suggestions</Link>
-              <div className='mb-3'/>
-              <Link to = '/chat'>Chat <i className='fas fa-lock'/></Link>
+              <Link to = '/CreateUser' className=' d-block font-weight-bold mb-1'>Sign Up FREE</Link>
+              <Link to = '/login' className=' d-block font-weight-bold mb-1'>Log In</Link>
+              <Link to = '/chat' className=' d-block font-weight-bold mb-1'>Chat <i className='fas fa-lock'/></Link>
             </div>
           )}
-        </div>
+        {/* </div> */}
 
       </div>
       <div className="mt-30"></div>

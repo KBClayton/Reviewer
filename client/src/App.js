@@ -1,10 +1,11 @@
-import './Main.css';
+
 import React, { Component } from 'react';
 
 
 import { BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
 
 // import Homepage from './pages/Homepage';
+import Footer from './components/Footer/Footer';
 import AboutPage from './pages/About-Page';
 import CreateUserPage from './pages/CreateUserPage';
 import CreateWierdLocation from './pages/CreateWierdLocationPage';
@@ -18,7 +19,7 @@ import Homepage from './pages/Homepage.jsx';
 // import requireAuth from './components/Auth';
 import SearchResultsPage from './pages/SearchResultsPage';
 import OtherProfilePage from './pages/OtherUserProfile';
-
+// import './Main.css'
 import ProfilePage from './pages/profile'
 // import { ENETRESET } from 'constants';
     let cookieObj={};
@@ -120,6 +121,7 @@ class App extends Component {
     // console.log(cookieObj);
 
     return ( 
+      <div>
       <BrowserRouter>
         
         <Switch>
@@ -149,6 +151,8 @@ class App extends Component {
 
         </Switch>
       </BrowserRouter>
+      <Footer/>
+      </div>
      );
   }
 }

@@ -13,7 +13,7 @@ const Replies = props => (
       placeholder='Add your review here'>
     </textarea>
     <button 
-      className = 'btn btn-secondary btn-sm' 
+      className = 'btn bg-info p border btn-sm' 
     >
       Submit Comment
     </button>

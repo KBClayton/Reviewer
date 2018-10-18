@@ -116,7 +116,7 @@ class LoginPage extends Component {
         <form className='container bg-info'>
           <p className='m-0 p-0 text-danger'>{this.state.errorMsg}</p>
           <input 
-            className='m-2'
+            className='font-poppins m-2 p-1 rounded border-0 p'
             name='username'
             placeholder='Username'
             type='text' 
@@ -124,16 +124,15 @@ class LoginPage extends Component {
             onChange={e => this.setState({ username: e.target.value})}
           />
           <input
-            className='m-2'
+            className='font-poppins m-2 p-1 rounded border-0 p'
             name='password'
             placeholder='Passcode'
             type="password"
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value})}
           />
-          <br/>
           <button
-            className='m-2 btn btn-info btn-small'
+            className='m-2 bg-success font-poppins p p-1'
             onClick={this.handleSubmit}
           >
             Sign In
@@ -144,16 +143,15 @@ class LoginPage extends Component {
         <br/>
         <p className='m-0 p-0 text-danger'>{this.state.resetmessage}</p>
         <input 
-            className='m-2'
+            className='m-2 p-1 rounded border-0 p font-poppins'
             name='resetemail'
             placeholder='Reset my password'
             type='text' 
             value={this.state.resetemail}
             onChange={e => this.setState({ resetemail: e.target.value})}
           />
-          <br/>
           <button
-            className='m-2 btn btn-info btn-small'
+            className='m-2 bg-success font-poppins p p-1'
             onClick={this.reset}
           >
             Reset my password

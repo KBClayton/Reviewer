@@ -170,12 +170,14 @@ class ShowOneLocation extends Component {
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
-        {this.state.alreadyReviewed === false ? (
+        {this.state.alreadyReviewed === true ? (
+          <p className='text-center font-weight-bold text-danger mt-3 font-poppins'>You Rated This <b className='text-dark'>{this.state.myPreviousRating}</b> Stars!</p>
+        ):(
+          <div className="container">
           <RateProductStars 
             setRating = {this.setRating}
           />
-        ):(
-          <p className='text-center text-danger'>You Rated This <b className='text-dark'>{this.state.myPreviousRating}</b> Stars!</p>
+          </div>
         )}
           <div className="container">
           <LocationDisplay

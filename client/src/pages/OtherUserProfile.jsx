@@ -102,30 +102,34 @@ state = {
   // Render to Screen
   render() { 
     return (
-      <div className = 'bg-light mb-5'>  
-        <p>Bnana</p>        
+      <div className = 'bg-light mb-5'>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
         />
-        <div className="text-center">
-          <input type="text" value={this.state.searchInput} onChange={this.searchInput} placeholder='Type Your Search Here...'/>        
+        <div className="mainSearchInputDiv">
+          <input type="text" value={this.state.searchInput} onChange={this.searchInput} placeholder='Search All Users...'/>        
         </div>
-
+        
         {/* If multiple results */}
-        <div>
+        <div className='container mb-3'>
+          <p className="mt-1 mb-1 h4 font-poppins border-bottom">{this.state.searchresultsArray.length} Results Found</p>
           {this.state.searchresultsArray.map(result =>(
-            <div>
-              <h1 key={result._id} id={result.username} onClick ={this.viewProfiles}>{result.username}</h1>
-              {/* <img src={result.picture} alt=""/> */}
-            </div>
+              <span  
+                key={result._id} 
+                id={result.username} 
+                onClick ={this.viewProfiles}
+                className='m-1 h4 bg-white p-1 text-info font-slabo searchUserResult float-left'
+              >
+                {result.username}
+              </span>
           ))}
         </div>
-
         {/* If 1 result */}
         {this.state.UserInfo.username ? 
         (
-          <div className='p-3' key={this.state.UserInfo.username}>
+          <div className='container mb-3' key={this.state.UserInfo.username}>
+          <div className="">
             <h3>{this.state.UserInfo.username}</h3>
             <img src={this.state.UserInfo.picture}/>
             <p className='mb-0'>{this.state.UserInfo.products.length}  Posts</p>
@@ -133,13 +137,12 @@ state = {
             <p className='mb-0'>{this.state.UserInfo.reviews.length}  Reviews</p>
             <p className='mb-0'>{this.state.UserInfo.replies.length}  Replies</p>
             <p className='mb-0'>{this.state.UserInfo.productRatings.length}  Product Ratings</p>
+            </div>
           </div>
         ):(
           <div/>
         )}
-
-
-        <Footer/>
+      <div className="w-100 bg-light" style={{'height': '500px'}}>{' '}</div>  
     </div>
 
     );

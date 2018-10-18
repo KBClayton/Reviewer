@@ -122,7 +122,8 @@ state = {
   // Render to Screen
   render() { 
     return (
-      <div className = 'bg-light mb-5'>          
+      <div className="container">
+      <div className = 'mb-5'>          
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
@@ -132,12 +133,12 @@ state = {
         
         <form className='container'>
         
-        <h4>Username:  {this.state.username}</h4>
-        <h4>Email:  {this.state.email}</h4>
-        <h4>{this.state.emailVerified?(<p>Your email has been verified</p> ):(<p>Your email has not been verified</p>)}</h4>
-          <p className='m-0 p-0 text-danger'></p>
+        <h4><span className='font-weight-bold'>Username:</span>  {this.state.username}</h4>
+        <h4><span className='font-weight-bold'>Email:</span>  {this.state.email}</h4>
+        <h4 className='mb-1'>{this.state.emailVerified?(<p className='text-success'>Your email has been verified</p> ):(<p className='text-danger'>Your email has not been verified</p>)}</h4>
+          <h6 className='mt-1 mb-1 font-weight-bold'>Reset your Password</h6>
           <input
-            className='m-2'
+            className='mb-1'
             name='password_o'
             placeholder='Old Passcode'
             type="password"
@@ -146,29 +147,30 @@ state = {
           />
           <br/>
           <input
-            className='m-2'
+            className='mb-1'
             name='password'
             placeholder='New Passcode'
             type="password"
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value})}
           />
-          <p className='m-0 p-0 text-danger'></p>
+          <br/>
           <input
-            className='m-2'
+            className='mb-1'
             name='password_v'
             placeholder='Retype new Passcode'
             type="password"
             value={this.state.password_v}
             onChange={e => this.setState({ password_v: e.target.value})}
           />
+          <h6 className='p-1 mt-1 mb-2 font-weight-bold'>Upload An Avatar</h6>
           <input type="file"/>
           <br/>
           <button
-            className='m-2 btn btn-info btn-small'
+            className='mt-2 p-1 p rounded bg-success text-white font-poppins'
             onClick={this.handleSubmit}
           >
-            Submit
+            Submit Changes
           </button>
 
         </form>
@@ -246,11 +248,8 @@ state = {
         ):(
             <p className='text-center text-danger'>You have not rated any reviews</p>
         )}
-
-
-        <Footer/>
       </div>
-
+      </div>
     );
   }
 }

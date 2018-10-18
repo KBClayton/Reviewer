@@ -107,76 +107,85 @@ class CreateWierdLocation extends Component {
         <Header 
           title = {this.state.title}
           subpage = {this.state.subpage}
-        />
-        <div>
-          <form className='container bg-light border-top border-bottom border-secondary'>
-            <h3 
-              className=' mt-2 text-center text-primary indieFlower mb-0'
-            >
-              Share Something Wierd
-            </h3>
-            <h5 className='text-center indieFlower'>For Others To Rate and Review</h5>
-             <div className='input-group pt-3'>
-              <input 
-                className='form-control'
-                name='Location Name'
-                placeholder='Name of Location'
-                type='text' 
-                value={this.state.locationName}
-                onChange={e => this.setState({ locationName: e.target.value})}
-              />
-              <div className='input-group-append mb-2'>
+        /><div className='container  text-center'>
+        <div className='mt-3 bg-info d-inline-blocker'>
+          
+            <div className=''>
+              <h3 className=' pt-2 font-marker text-center text-white mb-0'>Share Something Wierd</h3>
+              <h5 className='font-slabo text-center text-white'>For Others To Rate and Review</h5>
+            </div>  
+              <div className='d-flex justify-content-center mt-3 mb-2'>
+                <input 
+                  className='input-pill rounded'
+                  style={{'width': '192px'}}
+                  name='Location Name'
+                  placeholder='Name of Location'
+                  type='text' 
+                  value={this.state.locationName}
+                  onChange={e => this.setState({ locationName: e.target.value})}
+                />
                 <button
-                  className='btn btn-outline-info'
+                  className='Search ml-1'
                   onClick={this.searchAPILocations}
                 >
                 Find
                 </button>
               </div>
+              <div className='text-center mb-2'>
+                <input
+                  style={{'width': '238px'}}
+                  className='input-pill rounded'
+                  name='link'
+                  placeholder='Website...'
+                  type='url' 
+                  value={this.state.link}
+                  onChange={e => this.setState({ link: e.target.value})}
+                />
+              </div>
+              <div className='text-center mb-2'>
+                <textarea
+                  style={{'width': '238px', 'minHeight': '100px'}}
+                  className='input-pill rounded '
+                  name='description'
+                  placeholder='Description of Location'
+                  type="text"
+                  value={this.state.description}
+                  onChange={e => this.setState({ description: e.target.value })}
+                />
+              </div>
+              <div className='text-center mb-2'>
+                <input 
+                  style={{'width': '238px'}}
+                  className='input-pill rounded '
+                  name='address'
+                  placeholder='Address'
+                  type='text' 
+                  value={this.state.address}
+                  onChange={e => this.setState({ address: e.target.value})}
+                />
+              </div>
+              <div className='text-center mb-2'>
+                <input
+                  style={{'width': '238px'}}
+                  className='input-pill rounded '
+                  name='picture'
+                  type='text'
+                  placeholder='Add picture here...'
+                  value={this.state.picture}
+                  onChange={e => this.setState({ picture: e.target.value})}
+                />
+              <div className='text-center mb-3 mt-3'>
+                <button
+                  className='input-pill'
+                  onClick={this.handleSubmit}
+                >
+                  Submit
+                </button>
+              </div>
+              <p className="text-danger">{this.state.productSuccess}</p>
             </div>
-            <input 
-              className='form-control mb-2'
-              name='link'
-              placeholder='Website...'
-              type='url' 
-              value={this.state.link}
-              onChange={e => this.setState({ link: e.target.value})}
-            />
-            <textarea
-              className='form-control mb-2'
-              name='description'
-              placeholder='Description of Location'
-              type="text"
-              value={this.state.description}
-              onChange={e => this.setState({ description: e.target.value })}
-            />
-            <input 
-              className='form-control mb-2'
-              name='address'
-              placeholder='address'
-              type='text' 
-              value={this.state.address}
-              onChange={e => this.setState({ address: e.target.value})}
-            />
-            <input
-              className='form-control mb-2'
-              name='picture'
-              type='text'
-              placeholder='Add picture here...'
-              value={this.state.picture}
-              onChange={e => this.setState({ picture: e.target.value})}
-            />
-            <button
-              className='m-2 btn btn-info btn-small'
-              onClick={this.handleSubmit}
-            >
-              Submit
-            </button>
-            <br/>
-            <p className="text-danger">{this.state.productSuccess}</p>
-          </form>
+          </div>
         </div>
-        <Footer/>
       </div>
 
     );

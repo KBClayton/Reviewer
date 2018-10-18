@@ -5,7 +5,7 @@ import React from "react";
 
 const CommentDisplay = props => (
   <div>
-    <div className = 'card p-2'>
+    <div className = 'border p-2'>
       <div className='d-flex justify-content-end'>
         <p className=''>
           {props.thumbsUpAmount}  
@@ -33,7 +33,7 @@ const CommentDisplay = props => (
       <p className='text-center'><small>{props.length}</small></p>
       {props.ReplyTxt ? (
         <a className='text-center' href={'/reply/' + props.id}>
-        <button className='btn btn-outline-info'>Reply <i className ='fas fa-comment'/>
+        <button className='bg-info p-1 font-poppins p rounded'>Reply <i className ='fas fa-comment'/>
         </button>
         
         </a>

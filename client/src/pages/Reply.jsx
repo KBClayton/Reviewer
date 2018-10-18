@@ -115,8 +115,8 @@ class ReplyPage extends Component {
               thumbsUpIcon = 'fa fa-thumbs-up ml-1 mr-1'
               thumbsDownIcon = 'fa fa-thumbs-down ml-1'
             />  
-            <div className='text-center'>
-              <h5 onClick={this.modalTrigger} className='btn btn-info text-center'>
+            <div className='text-center mb-2'>
+              <h5 onClick={this.modalTrigger} className=' font-poppins text-white bg-info p d-inline p-1 rounded'>
                 <span>Reply </span><span className='fa fa-comment'/>
               </h5>
             </div>

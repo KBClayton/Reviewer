@@ -4,8 +4,8 @@ import React from "react";
 // console.log(this.props.location.search);
 
 const RateProductStars = props => (
-  <div className="pl-3 pr-3">
-    <div className='card bg-warning animated flash'>
+  <div className="mt-3">
+    <div className='card bg-warning animated flash pt-1 pb-1'>
       <p className='text-center mb-0 text-Dark font-weight-bold'>Rate This Place</p>
       <h1 className = 'text-center'>
         <b>

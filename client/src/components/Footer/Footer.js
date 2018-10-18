@@ -18,7 +18,7 @@ class Footer extends React.Component {
       <div>
         <div style={{height: '35px'}}> </div>
         <div className="footer bg-dark text-white text-center p-0">
-          <p className='p-0 m-0'>OddBall</p>
+          <a href='#'><p className='p-0 m-0 font-marker text-white'>OddBall</p></a>
         </div>
       </div>
     );
